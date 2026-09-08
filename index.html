@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Armador de Horario LCC | Universidad Veracruzana</title>
-<!-- Librería para leer archivos Excel -->
+<!-- SheetJS para leer Excel -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
-  /* ===== Estilos existentes (se mantienen) ===== */
+  /* ============================================================ */
+  /* ESTILOS (sin cambios, los mismos de la versión anterior)     */
+  /* ============================================================ */
   :root {
     --azul-uv: #18529D;
     --azul-uv-dark: #0f3a73;
@@ -64,25 +66,7 @@
     font-size: 0.75em;
     margin-top: 6px;
   }
-  /* Botón de administración en la esquina */
-  .btn-admin {
-    position: absolute;
-    top: 10px;
-    right: 16px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.75em;
-    cursor: pointer;
-    transition: background 0.2s;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-  }
-  .btn-admin:hover { background: rgba(255,255,255,0.3); }
-
-  /* ===== Pantalla de selección ===== */
+  /* Selectores de modalidad y plan */
   .selector-modalidad, .selector-plan { padding: 32px 20px; text-align: center; }
   .selector-modalidad h2, .selector-plan h2 { color: var(--azul-uv); margin-bottom: 6px; font-size: 1.2em; }
   .selector-modalidad p.ayuda, .selector-plan p.ayuda { color: #64748b; font-size: 0.9em; margin-bottom: 24px; }
@@ -106,7 +90,7 @@
   }
   .tarjeta-plan.eq-2025 .btn-elegir { background: var(--azul-uv); }
 
-  /* ===== Layout principal ===== */
+  /* Layout principal */
   .layout { display: grid; grid-template-columns: 1fr; gap: 0; }
   @media (min-width: 850px) { .layout { grid-template-columns: 380px 1fr; } }
 
@@ -127,7 +111,6 @@
   .materia-item {
     background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;
     margin-bottom: 10px; font-size: 0.85em; position: relative; border-left: 4px solid var(--verde-uv);
-    transition: transform 0.1s;
   }
   .materia-item:active { transform: scale(0.98); }
   .materia-item.choque { border-left-color: var(--alerta); background: var(--alerta-bg); }
@@ -146,12 +129,10 @@
     width: 100%; margin-top: 10px; padding: 8px; background: var(--azul-uv); color: #fff;
     border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;
   }
-  .btn-agregar:disabled { background: #cbd5e0; cursor: not-allowed; }
   .btn-eliminar {
     position: absolute; top: 8px; right: 8px; background: none; border: none;
     color: var(--alerta); font-size: 1.3em; cursor: pointer; padding: 4px;
   }
-
   .alerta-choque {
     background: var(--alerta-bg); color: var(--alerta); padding: 12px; border-radius: 8px;
     margin-bottom: 16px; font-size: 0.9em; display: none; border: 1px solid var(--alerta);
@@ -195,68 +176,28 @@
     width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 1em; font-weight: 600;
     cursor: pointer; margin-top: 8px; background: #64748b; color: #fff;
   }
-
   footer {
     text-align: center; padding: 16px; background: var(--gris-claro);
     font-size: 0.8em; color: #64748b; border-top: 3px solid var(--verde-uv);
   }
-
   .oculto { display: none !important; }
 
-  /* ===== Panel de administración ===== */
-  .admin-panel {
-    background: #fff;
-    border-top: 4px solid var(--azul-uv);
+  /* Mensaje de carga */
+  #loadingMsg {
     padding: 20px;
+    text-align: center;
+    background: #f0f9ff;
+    color: #0369a1;
+    border-bottom: 1px solid #bae6fd;
+    font-weight: 500;
     display: none;
   }
-  .admin-panel.activo { display: block; }
-  .admin-panel h3 { color: var(--azul-uv); margin-bottom: 12px; }
-  .admin-panel .admin-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    align-items: center;
-    margin-bottom: 16px;
-    background: var(--gris-claro);
-    padding: 16px;
-    border-radius: 10px;
-  }
-  .admin-panel select, .admin-panel input[type="file"] {
-    padding: 8px 12px;
-    border: 1px solid #cbd5e0;
-    border-radius: 6px;
-    font-size: 0.9em;
-    flex: 1 1 200px;
-  }
-  .admin-panel .btn-admin-action {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    background: var(--azul-uv);
-    color: #fff;
-    font-size: 0.9em;
-  }
-  .admin-panel .btn-admin-action:hover { opacity: 0.85; }
-  .admin-panel .btn-admin-action.danger { background: #dc2626; }
-  .admin-panel .btn-admin-action.success { background: var(--verde-uv); }
-  .admin-panel .admin-status {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 6px;
-    background: var(--azul-uv-light);
-    color: var(--azul-uv-dark);
-    font-size: 0.9em;
-  }
-  .admin-panel .admin-status.error { background: #fee2e2; color: #991b1b; }
-  .admin-panel .admin-status.success { background: #dcfce7; color: #166534; }
+  #loadingMsg.activo { display: block; }
 
   @media print {
     body { background: #fff; padding: 0; }
     .panel, footer, .btn-agregar, .btn-eliminar, .btn-limpiar, .btn-print,
-    .btn-cambiar-plan, .btn-cambiar-modalidad, .buscador, .admin-panel, .btn-admin { display: none !important; }
+    .btn-cambiar-plan, .btn-cambiar-modalidad, .buscador, #loadingMsg { display: none !important; }
     .container { box-shadow: none; max-width: 100%; }
     .layout { grid-template-columns: 1fr; }
     .horario-container { overflow: visible; }
@@ -271,38 +212,12 @@
     <h1>📅 Armador de Horario LCC</h1>
     <p id="descPeriodo">Periodo Agosto 2026 - Enero 2027 · Sistema Escolarizado · Lunes a Viernes</p>
     <div class="plan-actual oculto" id="planActualBadge"></div>
-    <button class="btn-admin" id="btnAdminToggle">⚙️ Administrar</button>
   </header>
 
-  <!-- ===== PANEL DE ADMINISTRACIÓN ===== -->
-  <div class="admin-panel" id="adminPanel">
-    <h3>🔐 Administración de Oferta Académica</h3>
-    <p style="font-size:0.9em; color:#64748b; margin-bottom:16px;">
-      Sube los archivos SYRPRAC (.xlsx) para cada combinación de modalidad y plan.
-      Los datos se guardarán en tu navegador y estarán disponibles para todos los usuarios.
-    </p>
+  <!-- Mensaje de carga -->
+  <div id="loadingMsg">⏳ Cargando oferta académica desde Google Drive...</div>
 
-    <div class="admin-row">
-      <select id="adminCombinacion">
-        <option value="escolar_2004">Escolarizado - Plan 2004</option>
-        <option value="escolar_2025">Escolarizado - Plan 2025</option>
-        <option value="abierto_2004">Abierto - Plan 2004</option>
-        <option value="abierto_2025">Abierto - Plan 2025</option>
-      </select>
-      <input type="file" id="adminFileInput" accept=".xlsx,.xls">
-      <button class="btn-admin-action success" id="btnCargarArchivo">📤 Cargar y guardar</button>
-      <button class="btn-admin-action danger" id="btnRestaurarPredeterminado">↩️ Restaurar predeterminado</button>
-    </div>
-
-    <div id="adminStatus" class="admin-status">Esperando acción...</div>
-
-    <div style="margin-top:10px; font-size:0.85em; color:#64748b;">
-      <strong>Nota:</strong> Los archivos deben tener el formato estándar SYRPRAC. Se extraerán NRC, clave, título, docente y horarios.
-      La información de bloques (para modalidad abierta) se detectará automáticamente a partir del horario de sábado.
-    </div>
-  </div>
-
-  <!-- ===== PANTALLA SELECCIÓN MODALIDAD ===== -->
+  <!-- Selector modalidad -->
   <div class="selector-modalidad" id="pantallaSelectorModalidad">
     <h2>¿En qué modalidad cursas?</h2>
     <p class="ayuda">Selecciona la modalidad para ver la oferta correspondiente.</p>
@@ -314,13 +229,13 @@
       </div>
       <div class="tarjeta-modalidad" onclick="elegirModalidad('A')">
         <div class="titulo">📗 Abierto</div>
-        <div class="desc">Clases los <strong>sábados</strong> por bloques (5 matutinos y 5 vespertinos).</div>
+        <div class="desc">Clases los <strong>sábados</strong> por bloques.</div>
         <button class="btn-elegir">Soy Abierto</button>
       </div>
     </div>
   </div>
 
-  <!-- ===== PANTALLA SELECCIÓN PLAN ===== -->
+  <!-- Selector plan -->
   <div class="selector-plan oculto" id="pantallaSelectorPlan">
     <h2>¿A qué plan de estudios perteneces?</h2>
     <p class="ayuda">Esto determina qué Experiencias Educativas verás disponibles.</p>
@@ -338,31 +253,22 @@
     </div>
   </div>
 
-  <!-- ===== APP PRINCIPAL ===== -->
+  <!-- App principal -->
   <div class="layout oculto" id="appPrincipal">
     <div class="panel">
       <h2>📂 Oferta Académica <span id="etiquetaPlanPanel"></span></h2>
-
       <button class="btn-cambiar-modalidad" onclick="cambiarModalidad()">🔄 Cambiar modalidad</button>
       <button class="btn-cambiar-plan" onclick="cambiarPlan()">🔄 No soy de este plan, cambiar</button>
-
-      <div class="alerta-choque" id="alertaChoque">
-        ⚠️ ¡Choque de horario detectado! Revisa las materias marcadas en rojo.
-      </div>
-
+      <div class="alerta-choque" id="alertaChoque">⚠️ ¡Choque de horario detectado!</div>
       <input type="text" class="buscador" id="buscador" placeholder="🔎 Buscar por materia, NRC o docente..." oninput="mostrarOfertaEnLista()">
-
       <div id="listaOferta" class="lista-materias"></div>
-
       <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
       <button class="btn-limpiar" onclick="limpiarTodo()">🗑️ Limpiar Mi Horario</button>
-
       <h3 style="font-size:1em; color:var(--azul-uv); margin-top:24px; margin-bottom:10px;">
         📚 Tu Horario Actual <span id="resumenCarga" style="font-weight:400; color:#64748b;"></span>
       </h3>
       <div class="lista-materias" id="listaMaterias"></div>
     </div>
-
     <div class="horario-container">
       <div class="horario-grid" id="horarioGrid"></div>
     </div>
@@ -376,201 +282,235 @@
 
 <script>
 // ================================================================
-//  DATOS PREDETERMINADOS (se usan si no hay datos cargados por admin)
-//  (Los arrays completos se omiten por brevedad, pero en la versión final
-//   deben incluirse TODOS los registros de OFERTA_2004_ESCOLAR, etc.)
+//  CONFIGURACIÓN DE GOOGLE DRIVE (YA CON TU API KEY)
 // ================================================================
-
-// NOTA: En esta versión de demostración, los arrays predeterminados están
-//       reducidos. En tu implementación final, copia los arrays completos
-//       que ya tienes en tu código original.
-
-const OFERTA_2004_ESCOLAR = [
-  // ... (copia aquí los datos de tu versión anterior)
-  // Por brevedad, solo pongo un ejemplo
-  { nrc: "51656", clave: "FBGT-80004", titulo: "INGLES II", docente: "GLORIA OFELIA DE SOL REYES-MENDEZ", horarios: [{dia:1, inicio:"09:00", fin:"10:00", aula:"AULA 5-A", edificio:"A-CCEB"}] }
-];
-const OFERTA_2025_ESCOLAR = [];
-const OFERTA_2004_ABIERTO = [];
-const OFERTA_2025_ABIERTO = [];
-
-// Equivalencias (misma tabla que antes)
-const EQUIVALENCIAS_2004_A_2025 = { /* ... completar ... */ };
-const ALIAS_CLAVE_EQUIVALENCIA = { 'FBGT': 'FBGR' };
-
-// ================================================================
-//  LÓGICA DE ADMINISTRACIÓN
-// ================================================================
-
-// Claves de localStorage para cada combinación
-const STORAGE_KEYS = {
-  'escolar_2004': 'oferta_escolar_2004',
-  'escolar_2025': 'oferta_escolar_2025',
-  'abierto_2004': 'oferta_abierto_2004',
-  'abierto_2025': 'oferta_abierto_2025'
+const CONFIG = {
+  API_KEY: 'AIzaSyBI4tHjYhVazAn6y8CW1k2kC0zcxLX07xI',
+  FOLDER_ID: '1j6zXhkThBBJs5Ur_gnaS8Fql4iRfDNkY'
 };
 
-// Obtener oferta de localStorage o usar predeterminada
-function getOfertaGuardada(combinacion) {
-  const key = STORAGE_KEYS[combinacion];
-  const data = localStorage.getItem(key);
-  if (data) {
-    try { return JSON.parse(data); } catch(e) { return null; }
-  }
-  return null;
+const FILE_NAMES = {
+  'escolar_2004': 'SYRPRAC-04-E.xlsx',
+  'escolar_2025': 'SYRPRAC-25-E.xlsx',
+  'abierto_2004': 'SYRPRAC-04-A.xlsx',
+  'abierto_2025': 'SYRPRAC-25-A.xlsx'
+};
+
+// ================================================================
+//  FUNCIONES PARA INTERACTUAR CON GOOGLE DRIVE API
+// ================================================================
+async function listFilesInFolder(folderId, apiKey) {
+  const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents&key=${apiKey}&fields=files(name,id)`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Error al listar archivos: ' + response.status);
+  const data = await response.json();
+  return data.files || [];
 }
 
-function guardarOferta(combinacion, oferta) {
-  const key = STORAGE_KEYS[combinacion];
-  localStorage.setItem(key, JSON.stringify(oferta));
+async function downloadFile(fileId, apiKey) {
+  const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${apiKey}`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error('Error al descargar archivo: ' + response.status);
+  const arrayBuffer = await response.arrayBuffer();
+  return arrayBuffer;
 }
 
-// Procesar archivo Excel SYRPRAC
+// ================================================================
+//  PROCESAR EXCEL SYRPRAC (VERSIÓN CORREGIDA)
+// ================================================================
 function procesarExcelSYRPRAC(data) {
   const rows = XLSX.utils.sheet_to_json(data);
+  console.log('Total de filas en el archivo:', rows.length); // Depuración
+
   const materiasMap = new Map();
 
-  rows.forEach(row => {
+  rows.forEach((row, index) => {
+    // Obtener NRC
     const nrc = String(row.SSBSECT_CRN || '').trim();
-    if (!nrc) return;
+    if (!nrc) {
+      console.warn(`Fila ${index} sin NRC, omitida.`);
+      return;
+    }
 
+    // Obtener clave, título y docente
     const clave = (row.SSBSECT_SUBJ_CODE || '') + '-' + (row.SCBCRSE_CRSE_NUMB || '');
     const titulo = (row.TITULO || '').trim();
     const docente = (row.NOMBRED || '').trim();
 
-    // Extraer horarios de las columnas LUN, MAR, MIE, JUE, VIE, SAB
-    const diasMap = { 'LUN': 1, 'MAR': 2, 'MIE': 3, 'JUE': 4, 'VIE': 5, 'SAB': 6 };
+    // Mapeo de columnas de días
+    const diasMap = {
+      'LUN': 1,
+      'MAR': 2,
+      'MIE': 3,
+      'JUE': 4,
+      'VIE': 5,
+      'SAB': 6
+    };
+
     const horarios = [];
 
+    // Para cada columna de día, extraer el rango
     for (const [col, dia] of Object.entries(diasMap)) {
-      const rango = row[col];
-      if (rango && typeof rango === 'string' && rango.includes('-')) {
-        const [inicio, fin] = rango.split('-');
-        if (inicio && fin) {
-          const inicioStr = inicio.padStart(4, '0').slice(0,2) + ':' + inicio.padStart(4, '0').slice(2,4);
-          const finStr = fin.padStart(4, '0').slice(0,2) + ':' + fin.padStart(4, '0').slice(2,4);
-          horarios.push({
-            dia: dia,
-            inicio: inicioStr,
-            fin: finStr,
-            aula: row.SSRMEET_ROOM_CODE || '',
-            edificio: row.SSRMEET_BLDG_CODE || ''
-          });
+      const valor = row[col];
+      if (valor && typeof valor === 'string' && valor.trim() !== '') {
+        // El valor puede ser "900 959", "900-959", "900 1059", etc.
+        let inicioStr = '';
+        let finStr = '';
+
+        // Intentar dividir por espacio o por guion
+        const partes = valor.trim().split(/[\s\-]+/);
+        if (partes.length === 2) {
+          inicioStr = partes[0];
+          finStr = partes[1];
+        } else if (partes.length === 1 && partes[0].length === 8) {
+          // Caso especial: "0900 0959" sin separador? No, pero por si acaso.
+          // Podría ser "09000959" pero es poco probable.
+        }
+
+        if (inicioStr && finStr) {
+          // Convertir a formato HH:MM (ej. 900 -> 09:00, 959 -> 09:59)
+          const inicio = formatearHora(inicioStr);
+          const fin = formatearHora(finStr);
+          if (inicio && fin) {
+            horarios.push({
+              dia: dia,
+              inicio: inicio,
+              fin: fin,
+              aula: row.SSRMEET_ROOM_CODE || '',
+              edificio: row.SSRMEET_BLDG_CODE || ''
+            });
+          }
         }
       }
     }
 
-    if (horarios.length === 0) return;
+    // Si no se extrajo ningún horario, omitir esta fila
+    if (horarios.length === 0) {
+      console.warn(`Fila ${index} con NRC ${nrc} no tiene horarios válidos.`);
+      return;
+    }
 
-    if (!materiasMap.has(nrc)) {
+    // Si el NRC ya existe, agregar los nuevos horarios (evitar duplicados)
+    if (materiasMap.has(nrc)) {
+      const materia = materiasMap.get(nrc);
+      horarios.forEach(h => {
+        const existe = materia.horarios.some(ex =>
+          ex.dia === h.dia &&
+          ex.inicio === h.inicio &&
+          ex.fin === h.fin
+        );
+        if (!existe) materia.horarios.push(h);
+      });
+      // Actualizar título y docente si están vacíos (por si alguna fila los tiene)
+      if (!materia.titulo && titulo) materia.titulo = titulo;
+      if (!materia.docente && docente) materia.docente = docente;
+    } else {
+      // Crear nueva materia
       materiasMap.set(nrc, {
         nrc: nrc,
         clave: clave,
         titulo: titulo,
         docente: docente,
-        horarios: []
+        horarios: horarios
       });
     }
-    // Agregar horarios (puede haber varios para el mismo NRC en diferentes filas)
-    const materia = materiasMap.get(nrc);
-    horarios.forEach(h => {
-      // Evitar duplicados exactos
-      const existe = materia.horarios.some(ex => ex.dia === h.dia && ex.inicio === h.inicio && ex.fin === h.fin);
-      if (!existe) materia.horarios.push(h);
-    });
   });
 
-  return Array.from(materiasMap.values());
+  const resultado = Array.from(materiasMap.values());
+  console.log('Experiencias educativas procesadas:', resultado.length); // Depuración
+  return resultado;
+}
+
+// Función auxiliar para convertir número a hora HH:MM
+function formatearHora(valor) {
+  // valor es un string como "900" o "959" o "1059" o "1600"
+  if (!valor) return null;
+  let num = parseInt(valor, 10);
+  if (isNaN(num)) return null;
+  // Asegurar que tiene al menos 3 dígitos (ej. 900 -> 0900, 959 -> 0959)
+  let str = num.toString().padStart(4, '0');
+  // Si tiene más de 4 dígitos, tomar los últimos 4 (ej. 1600)
+  if (str.length > 4) str = str.slice(-4);
+  // Formato HH:MM
+  const hora = str.slice(0, 2);
+  const minuto = str.slice(2, 4);
+  if (parseInt(hora) < 24 && parseInt(minuto) < 60) {
+    return `${hora}:${minuto}`;
+  }
+  return null;
 }
 
 // ================================================================
-//  EVENTOS DEL PANEL DE ADMIN
+//  VARIABLES GLOBALES DE OFERTA
 // ================================================================
+let OFERTA_2004_ESCOLAR = [];
+let OFERTA_2025_ESCOLAR = [];
+let OFERTA_2004_ABIERTO = [];
+let OFERTA_2025_ABIERTO = [];
 
-document.getElementById('btnAdminToggle').addEventListener('click', function() {
-  const panel = document.getElementById('adminPanel');
-  panel.classList.toggle('activo');
-  if (panel.classList.contains('activo')) {
-    // Si se abre, pedir contraseña simple
-    const pwd = prompt('Ingresa la contraseña de administrador:', '');
-    if (pwd !== 'admin') {
-      panel.classList.remove('activo');
-      alert('Contraseña incorrecta.');
+// ================================================================
+//  CARGAR OFERTA DESDE GOOGLE DRIVE (con nombres fijos)
+// ================================================================
+async function cargarDesdeDrive() {
+  const loading = document.getElementById('loadingMsg');
+  loading.classList.add('activo');
+
+  try {
+    const files = await listFilesInFolder(CONFIG.FOLDER_ID, CONFIG.API_KEY);
+    console.log('Archivos encontrados:', files.map(f => f.name)); // Depuración
+    if (!files || files.length === 0) {
+      throw new Error('No se encontraron archivos en la carpeta.');
     }
-  }
-});
 
-document.getElementById('btnCargarArchivo').addEventListener('click', function() {
-  const fileInput = document.getElementById('adminFileInput');
-  const combinacion = document.getElementById('adminCombinacion').value;
-  const status = document.getElementById('adminStatus');
+    const fileMap = {};
+    files.forEach(f => { fileMap[f.name] = f.id; });
 
-  if (!fileInput.files || fileInput.files.length === 0) {
-    status.textContent = '❌ Selecciona un archivo primero.';
-    status.className = 'admin-status error';
-    return;
-  }
-
-  const file = fileInput.files[0];
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(sheet);
-      const oferta = procesarExcelSYRPRAC(jsonData);
-
-      if (oferta.length === 0) {
-        status.textContent = '⚠️ No se encontraron datos válidos en el archivo. Verifica el formato.';
-        status.className = 'admin-status error';
-        return;
+    const resultados = {};
+    for (const [key, name] of Object.entries(FILE_NAMES)) {
+      if (fileMap[name]) {
+        try {
+          const buffer = await downloadFile(fileMap[name], CONFIG.API_KEY);
+          const wb = XLSX.read(new Uint8Array(buffer), { type: 'array' });
+          const sheet = wb.Sheets[wb.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(sheet);
+          resultados[key] = procesarExcelSYRPRAC(json);
+        } catch (err) {
+          console.warn(`Error al descargar ${name}:`, err);
+          resultados[key] = [];
+        }
+      } else {
+        console.warn(`Archivo no encontrado: ${name}`);
+        resultados[key] = [];
       }
-
-      guardarOferta(combinacion, oferta);
-      status.textContent = `✅ ¡Datos guardados! Se procesaron ${oferta.length} experiencias educativas.`;
-      status.className = 'admin-status success';
-
-      // Si la app está activa y la combinación corresponde a la selección actual, recargar oferta
-      recargarOfertaActualSiCorresponde(combinacion);
-
-    } catch (err) {
-      status.textContent = '❌ Error al procesar el archivo: ' + err.message;
-      status.className = 'admin-status error';
     }
-  };
-  reader.readAsArrayBuffer(file);
-});
 
-document.getElementById('btnRestaurarPredeterminado').addEventListener('click', function() {
-  const combinacion = document.getElementById('adminCombinacion').value;
-  const key = STORAGE_KEYS[combinacion];
-  if (confirm(`¿Restaurar los datos predeterminados para "${combinacion}"?`)) {
-    localStorage.removeItem(key);
-    document.getElementById('adminStatus').textContent = '✅ Datos restaurados a los predeterminados.';
-    document.getElementById('adminStatus').className = 'admin-status success';
-    recargarOfertaActualSiCorresponde(combinacion);
-  }
-});
+    OFERTA_2004_ESCOLAR = resultados['escolar_2004'] || [];
+    OFERTA_2025_ESCOLAR = resultados['escolar_2025'] || [];
+    OFERTA_2004_ABIERTO = resultados['abierto_2004'] || [];
+    OFERTA_2025_ABIERTO = resultados['abierto_2025'] || [];
 
-function recargarOfertaActualSiCorresponde(combinacion) {
-  // Si la app ya está corriendo, verificar si la combinación coincide con la modalidad y plan actuales
-  if (modalidadActual && planActual) {
-    const map = {
-      'E_2004': 'escolar_2004',
-      'E_2025': 'escolar_2025',
-      'A_2004': 'abierto_2004',
-      'A_2025': 'abierto_2025'
-    };
-    const key = modalidadActual + '_' + planActual;
-    if (map[key] === combinacion) {
+    const total = OFERTA_2004_ESCOLAR.length + OFERTA_2025_ESCOLAR.length + OFERTA_2004_ABIERTO.length + OFERTA_2025_ABIERTO.length;
+    console.log(`✅ Datos sincronizados: ${total} experiencias educativas cargadas.`);
+
+    // Si la app está activa, recargar la oferta actual
+    if (modalidadActual && planActual) {
       cargarOfertaDelPlan();
     }
+
+  } catch (error) {
+    console.error('Error al cargar desde Drive:', error);
+    // Mostrar error al usuario
+    const msg = document.createElement('div');
+    msg.style.cssText = 'padding:20px;text-align:center;background:#fee2e2;color:#991b1b;margin:10px;border-radius:8px;';
+    msg.innerHTML = `⚠️ <strong>Error al cargar datos:</strong> ${error.message}. No se pudo conectar con Google Drive. Verifica tu conexión a internet y que la carpeta sea pública.`;
+    document.querySelector('.container').prepend(msg);
+  } finally {
+    loading.classList.remove('activo');
   }
 }
 
 // ================================================================
-//  FUNCIONES PRINCIPALES (MODIFICADAS PARA USAR DATOS GUARDADOS)
+//  RESTO DE LA LÓGICA DE LA APLICACIÓN (sin cambios)
 // ================================================================
 
 let modalidadActual = null;
@@ -596,12 +536,10 @@ function elegirPlan(plan) {
   localStorage.setItem('lccPlanActual', String(plan));
   document.getElementById('pantallaSelectorPlan').classList.add('oculto');
   document.getElementById('appPrincipal').classList.remove('oculto');
-
   const badge = document.getElementById('planActualBadge');
   badge.textContent = `Plan ${plan} · ${modalidadActual === 'E' ? 'Escolarizado' : 'Abierto'}`;
   badge.classList.remove('oculto');
   document.getElementById('etiquetaPlanPanel').textContent = `· Plan ${plan} · ${modalidadActual === 'E' ? 'Esc' : 'Abierto'}`;
-
   cargarOfertaDelPlan();
 }
 
@@ -626,28 +564,21 @@ function cambiarPlan() {
 }
 
 function cargarOfertaDelPlan() {
-  const combinacion = (modalidadActual === 'E' ? 'escolar' : 'abierto') + '_' + planActual;
-  let oferta = getOfertaGuardada(combinacion);
+  let oferta = [];
+  if (modalidadActual === 'E' && planActual === 2004) oferta = OFERTA_2004_ESCOLAR;
+  else if (modalidadActual === 'E' && planActual === 2025) oferta = OFERTA_2025_ESCOLAR;
+  else if (modalidadActual === 'A' && planActual === 2004) oferta = OFERTA_2004_ABIERTO;
+  else if (modalidadActual === 'A' && planActual === 2025) oferta = OFERTA_2025_ABIERTO;
 
-  // Si no hay datos guardados, usar predeterminados
-  if (!oferta) {
-    if (modalidadActual === 'E' && planActual === 2004) oferta = OFERTA_2004_ESCOLAR;
-    else if (modalidadActual === 'E' && planActual === 2025) oferta = OFERTA_2025_ESCOLAR;
-    else if (modalidadActual === 'A' && planActual === 2004) oferta = OFERTA_2004_ABIERTO;
-    else if (modalidadActual === 'A' && planActual === 2025) oferta = OFERTA_2025_ABIERTO;
-    else oferta = [];
-  }
-
-  // Asignar bloque para abierto (si no viene en los datos, se calcula)
+  // Asignar bloque para abierto (si no viene)
   if (modalidadActual === 'A') {
     oferta = oferta.map(m => {
       if (!m.bloque) {
-        // Calcular bloque según horario de sábado
         const sabado = m.horarios.find(h => h.dia === 6);
         if (sabado) {
           const horaInicio = parseInt(sabado.inicio.split(':')[0]);
-          if (horaInicio < 14) m.bloque = Math.floor((horaInicio - 7) / 2) + 1; // bloques matutinos
-          else m.bloque = Math.floor((horaInicio - 14) / 2) + 6; // vespertinos (6-10)
+          if (horaInicio < 14) m.bloque = Math.floor((horaInicio - 7) / 2) + 1;
+          else m.bloque = Math.floor((horaInicio - 14) / 2) + 6;
         }
       }
       return m;
@@ -664,37 +595,283 @@ function cargarOfertaDelPlan() {
 }
 
 // ================================================================
-//  RESTO DE FUNCIONES (mostrarOfertaEnLista, renderizar, etc.)
-//  Se mantienen igual que en el código original.
-//  Por brevedad, no se incluyen aquí, pero deben copiarse completas.
+//  FUNCIONES DE INTERFAZ
 // ================================================================
-
-// Nota: Asegúrate de copiar todas las funciones auxiliares:
-// - mostrarOfertaEnLista()
-// - agregarDesdeOferta()
-// - eliminarMateria()
-// - limpiarTodo()
-// - generarGrid()
-// - detectarChoques()
-// - renderizar()
-// - horaAIndex()
-// - buscarEquivalencia2025()
-// - etc.
-
-// Para no duplicar código, te recomiendo mantener todas esas funciones
-// exactamente como las tenías en tu versión anterior.
-
-// Inicialización
-try {
-  const modGuardada = localStorage.getItem('lccModalidad');
-  const planGuardado = localStorage.getItem('lccPlanActual');
-  if (modGuardada && (modGuardada === 'E' || modGuardada === 'A') && planGuardado && (planGuardado === '2004' || planGuardado === '2025')) {
-    elegirModalidad(modGuardada);
-    elegirPlan(parseInt(planGuardado, 10));
-  }
-} catch (e) {
-  console.warn('No se pudo leer estado guardado.', e);
+function escaparTexto(texto) {
+  const div = document.createElement('div');
+  div.textContent = texto == null ? '' : texto;
+  return div.innerHTML;
 }
+
+function mostrarOfertaEnLista() {
+  const contenedor = document.getElementById('listaOferta');
+  contenedor.innerHTML = '';
+
+  const filtro = (document.getElementById('buscador').value || '').trim().toLowerCase();
+  const oferta = filtro
+    ? ofertaProcesada.filter(m =>
+        m.titulo.toLowerCase().includes(filtro) ||
+        m.nrc.toLowerCase().includes(filtro) ||
+        m.docente.toLowerCase().includes(filtro))
+    : ofertaProcesada;
+
+  if (oferta.length === 0) {
+    contenedor.innerHTML = '<p style="text-align:center; color:#dc2626; padding:20px;">Sin resultados para tu búsqueda.</p>';
+    return;
+  }
+
+  oferta.forEach((m, idx) => {
+    const horarios = [...m.horarios].sort((a, b) => a.dia - b.dia);
+    const textoHorario = horarios
+      .map(h => `${diasSemana[h.dia].substring(0,3)} ${h.inicio}-${h.fin} · ${h.aula || 'aula por confirmar'}`)
+      .join(' | ') || 'Sin horario registrado';
+
+    let htmlEquivalencia = '';
+    if (planActual === 2004) {
+      const eq = buscarEquivalencia2025(m.clave);
+      htmlEquivalencia = eq
+        ? `<span class="equivalencia">🔄 Equivale en Plan 2025 a: <strong>${escaparTexto(eq.nombre2025)}</strong></span>`
+        : `<span class="equivalencia">🔄 Sin equivalencia directa registrada en Plan 2025</span>`;
+    }
+
+    let bloqueHtml = '';
+    if (modalidadActual === 'A' && m.bloque) {
+      bloqueHtml = `<span class="bloque-info">📌 Bloque ${m.bloque}</span>`;
+    } else if (modalidadActual === 'A') {
+      bloqueHtml = `<span class="bloque-info" style="background:#fef9c3;color:#854d0e;">Bloque no asignado</span>`;
+    }
+
+    const div = document.createElement('div');
+    div.className = 'materia-item';
+    div.innerHTML = `
+      <strong>${escaparTexto(m.titulo)}</strong>
+      <span class="meta">🔑 NRC: ${escaparTexto(m.nrc)} | 👤 ${escaparTexto(m.docente)}</span>
+      <span class="horario-texto">🕒 ${escaparTexto(textoHorario)}</span>
+      ${bloqueHtml}
+      ${htmlEquivalencia}
+      <button class="btn-agregar" onclick="agregarDesdeOferta(${idx})">+ Agregar al Horario</button>
+    `;
+    contenedor.appendChild(div);
+  });
+}
+
+function agregarDesdeOferta(idx) {
+  const m = ofertaProcesada[idx];
+  if (materiasEnHorario.some(mat => mat.nrc === m.nrc)) {
+    alert('⚠️ Esta materia ya está en tu horario.');
+    return;
+  }
+  materiasEnHorario.push({ ...m, choque: false });
+  renderizar();
+  if (window.innerWidth < 850) {
+    document.querySelector('.horario-container').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function eliminarMateria(idx) {
+  materiasEnHorario.splice(idx, 1);
+  renderizar();
+}
+
+function limpiarTodo() {
+  if (confirm('¿Estás seguro de borrar todo tu horario?')) {
+    materiasEnHorario = [];
+    renderizar();
+  }
+}
+
+// ================================================================
+//  CUADRÍCULA Y CHOQUES
+// ================================================================
+const HORA_INICIO = 7;
+const HORA_FIN = 22;
+const horas = [];
+for (let h = HORA_INICIO; h < HORA_FIN; h++) horas.push(`${h.toString().padStart(2, '0')}:00`);
+const diasSemana = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+const NUM_DIAS = 6;
+
+function generarGrid() {
+  const grid = document.getElementById('horarioGrid');
+  grid.innerHTML = '';
+  const esAbierto = modalidadActual === 'A';
+  const numDias = esAbierto ? 1 : NUM_DIAS;
+  grid.className = 'horario-grid' + (esAbierto ? ' abierto' : '');
+  grid.style.gridTemplateRows = `40px repeat(${horas.length}, 50px) 18px`;
+
+  grid.appendChild(crearCelda('grid-header', 'Hora'));
+  if (esAbierto) {
+    grid.appendChild(crearCelda('grid-header sabado', 'Sábado'));
+  } else {
+    for (let i = 1; i <= numDias; i++) {
+      grid.appendChild(crearCelda('grid-header' + (i === 6 ? ' sabado' : ''), diasSemana[i]));
+    }
+  }
+
+  horas.forEach((h, index) => {
+    grid.appendChild(crearCelda('grid-time', h));
+    for (let i = 1; i <= numDias; i++) {
+      grid.appendChild(crearCelda('grid-cell' + (i === 6 ? ' col-sabado' : ''), '', `cell-${i}-${index}`));
+    }
+  });
+
+  grid.appendChild(crearCelda('grid-time', `${HORA_FIN.toString().padStart(2,'0')}:00`));
+  for (let i = 1; i <= numDias; i++) {
+    grid.appendChild(crearCelda('grid-cell' + (i === 6 ? ' col-sabado' : '')));
+  }
+}
+
+function crearCelda(clase, texto, id = '') {
+  const div = document.createElement('div');
+  div.className = clase;
+  div.textContent = texto;
+  if (id) div.id = id;
+  return div;
+}
+
+function horaAIndex(hora) {
+  if (!hora) return 0;
+  const partes = hora.split(':');
+  const horaNum = parseInt(partes[0]) + (parseInt(partes[1]) / 60);
+  return horaNum - HORA_INICIO;
+}
+
+function detectarChoques() {
+  let hayChoque = false;
+  materiasEnHorario.forEach(m => m.choque = false);
+
+  for (let i = 0; i < materiasEnHorario.length; i++) {
+    for (let j = i + 1; j < materiasEnHorario.length; j++) {
+      const m1 = materiasEnHorario[i];
+      const m2 = materiasEnHorario[j];
+      const diasComunes = m1.horarios.filter(h1 => m2.horarios.some(h2 => h2.dia === h1.dia));
+      diasComunes.forEach(dia => {
+        const h1 = m1.horarios.find(h => h.dia === dia.dia);
+        const h2 = m2.horarios.find(h => h.dia === dia.dia);
+        const inicio1 = horaAIndex(h1.inicio);
+        const fin1 = horaAIndex(h1.fin);
+        const inicio2 = horaAIndex(h2.inicio);
+        const fin2 = horaAIndex(h2.fin);
+        if (inicio1 < fin2 && inicio2 < fin1) {
+          m1.choque = true;
+          m2.choque = true;
+          hayChoque = true;
+        }
+      });
+    }
+  }
+  document.getElementById('alertaChoque').classList.toggle('activo', hayChoque);
+}
+
+function renderizar() {
+  generarGrid();
+  detectarChoques();
+
+  const lista = document.getElementById('listaMaterias');
+  lista.innerHTML = '';
+  let minutosTotales = 0;
+
+  materiasEnHorario.forEach((m, idx) => {
+    const item = document.createElement('div');
+    item.className = `materia-item ${m.choque ? 'choque' : ''}`;
+    const textoHorario = m.horarios
+      .map(h => `${diasSemana[h.dia].substring(0,3)} ${h.inicio}-${h.fin} · ${h.aula || 'aula por confirmar'}`)
+      .join(', ');
+
+    let htmlEquivalencia = '';
+    if (planActual === 2004) {
+      const eq = buscarEquivalencia2025(m.clave);
+      if (eq) htmlEquivalencia = `<span class="equivalencia">🔄 Plan 2025: <strong>${escaparTexto(eq.nombre2025)}</strong></span>`;
+    }
+
+    let bloqueHtml = '';
+    if (modalidadActual === 'A' && m.bloque) {
+      bloqueHtml = `<span class="bloque-info">📌 Bloque ${m.bloque}</span>`;
+    } else if (modalidadActual === 'A') {
+      bloqueHtml = `<span class="bloque-info" style="background:#fef9c3;color:#854d0e;">Bloque no asignado</span>`;
+    }
+
+    item.innerHTML = `
+      <button class="btn-eliminar" onclick="eliminarMateria(${idx})">&times;</button>
+      <strong>${escaparTexto(m.titulo)}</strong>
+      <span class="meta">NRC: ${escaparTexto(m.nrc)}</span>
+      <span class="horario-texto">${escaparTexto(textoHorario)}</span>
+      ${bloqueHtml}
+      ${m.choque ? '<span style="color:#dc2626;font-weight:bold;font-size:0.85em;">⚠️ CHOQUE</span>' : ''}
+      ${htmlEquivalencia}
+    `;
+    lista.appendChild(item);
+
+    m.horarios.forEach(h => {
+      const inicioIdx = horaAIndex(h.inicio);
+      const finIdx = horaAIndex(h.fin);
+      const duracion = Math.max(0.5, finIdx - inicioIdx);
+      minutosTotales += duracion * 60;
+      const filaBase = Math.floor(inicioIdx);
+      const offsetDentroFila = (inicioIdx - filaBase) * 50;
+      const cellId = `cell-${h.dia}-${filaBase}`;
+      const cell = document.getElementById(cellId);
+      if (cell) {
+        const bloque = document.createElement('div');
+        bloque.className = `clase-bloque ${m.choque ? 'choque' : ''}`;
+        bloque.style.top = `${offsetDentroFila + 2}px`;
+        bloque.style.height = `calc(${duracion * 50}px - 4px)`;
+        bloque.innerHTML = `<strong>${escaparTexto(m.titulo.substring(0, 15))}${m.titulo.length>15?'...':''}</strong><span>${h.inicio}-${h.fin}</span><span>${escaparTexto(h.aula || 'S/A')}</span>`;
+        cell.appendChild(bloque);
+      }
+    });
+  });
+
+  document.getElementById('resumenCarga').textContent = materiasEnHorario.length
+    ? `· ${materiasEnHorario.length} materia(s) · ${(minutosTotales/60).toFixed(1)} hrs/semana`
+    : '';
+
+  try {
+    const key = `horarioLCC_${modalidadActual}_${planActual}`;
+    localStorage.setItem(key, JSON.stringify(materiasEnHorario));
+  } catch (e) {}
+}
+
+// ================================================================
+//  EQUIVALENCIAS (debes completar con tu tabla)
+// ================================================================
+const EQUIVALENCIAS_2004_A_2025 = {
+  // Aquí debes copiar la tabla completa de equivalencias
+  // Ejemplo:
+  // 'CSCA-28001': { nombre2025: 'ESTUDIOS CULTURALES LATINOAMERICANOS' },
+};
+const ALIAS_CLAVE_EQUIVALENCIA = { 'FBGT': 'FBGR' };
+
+function buscarEquivalencia2025(clave2004) {
+  clave2004 = (clave2004 || '').toUpperCase();
+  if (EQUIVALENCIAS_2004_A_2025[clave2004]) return EQUIVALENCIAS_2004_A_2025[clave2004];
+  const prefijo = clave2004.split('-')[0];
+  const alias = ALIAS_CLAVE_EQUIVALENCIA[prefijo];
+  if (alias) {
+    const claveAlterna = clave2004.replace(prefijo, alias);
+    if (EQUIVALENCIAS_2004_A_2025[claveAlterna]) return EQUIVALENCIAS_2004_A_2025[claveAlterna];
+  }
+  return null;
+}
+
+// ================================================================
+//  INICIALIZACIÓN
+// ================================================================
+(async function init() {
+  // Cargar oferta desde Drive
+  await cargarDesdeDrive();
+
+  // Restaurar selección del usuario
+  try {
+    const modGuardada = localStorage.getItem('lccModalidad');
+    const planGuardado = localStorage.getItem('lccPlanActual');
+    if (modGuardada && (modGuardada === 'E' || modGuardada === 'A') && planGuardado && (planGuardado === '2004' || planGuardado === '2025')) {
+      elegirModalidad(modGuardada);
+      elegirPlan(parseInt(planGuardado, 10));
+    }
+  } catch (e) {
+    console.warn('No se pudo leer estado guardado.', e);
+  }
+})();
 </script>
 </body>
 </html>
