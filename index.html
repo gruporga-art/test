@@ -19,14 +19,16 @@ background: white;
 border-radius: 10px;
 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 overflow: hidden;
+min-height: 100vh;
 }
-        /* HEADER INSTITUCIONAL */
+    /* HEADER INSTITUCIONAL */
     .header {
         background: #1a3a6b;
         color: white;
         padding: 20px;
         text-align: center;
         border-bottom: 4px solid #28a745;
+        position: relative;
     }
     .header .uv-badge {
         background: #28a745;
@@ -38,18 +40,9 @@ overflow: hidden;
         display: inline-block;
         margin-bottom: 10px;
     }
-    .header h1 {
-        font-size: 1.8em;
-        margin-bottom: 5px;
-    }
-    .header h1::before {
-        content: '📅 ';
-    }
-    .header .subtitle {
-        font-size: 1em;
-        opacity: 0.9;
-        margin-bottom: 10px;
-    }
+    .header h1 { font-size: 1.8em; margin-bottom: 5px; }
+    .header h1::before { content: '📅 '; }
+    .header .subtitle { font-size: 1em; opacity: 0.9; margin-bottom: 10px; }
     .header .plan-badge {
         background: rgba(255,255,255,0.2);
         padding: 5px 15px;
@@ -57,25 +50,133 @@ overflow: hidden;
         font-size: 0.9em;
         display: inline-block;
     }
+    .back-btn {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border: 2px solid rgba(255,255,255,0.5);
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.3); }
     
     /* CONTENT */
     .content { padding: 20px; }
     
-    /* SECCIÓN OFERTA */
+    /* PANTALLAS */
+    .screen { display: none; animation: fadeIn 0.4s ease-in; }
+    .screen.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    
+    /* INDICADOR DE PASOS */
+    .steps-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 30px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 10px;
+    }
+    .step { display: flex; align-items: center; gap: 8px; }
+    .step-number {
+        width: 35px; height: 35px;
+        border-radius: 50%;
+        background: #e0e0e0;
+        color: #999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+    .step.active .step-number { background: #1a3a6b; color: white; }
+    .step.completed .step-number { background: #28a745; color: white; }
+    .step-label { font-size: 0.9em; color: #999; }
+    .step.active .step-label { color: #1a3a6b; font-weight: bold; }
+    .step.completed .step-label { color: #28a745; }
+    .step-connector { width: 30px; height: 2px; background: #e0e0e0; align-self: center; }
+    
+    /* SELECCIÓN */
+    .section-title {
+        font-size: 1.5em;
+        color: #1a3a6b;
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+    .section-subtitle { color: #666; margin-bottom: 25px; line-height: 1.6; }
+    .selector-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .option-card {
+        padding: 30px;
+        border: 3px solid #e0e0e0;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #f9f9f9;
+        text-align: center;
+    }
+    .option-card:hover {
+        border-color: #1a3a6b;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(26, 58, 107, 0.15);
+    }
+    .option-card.selected {
+        border-color: #28a745;
+        background: linear-gradient(135deg, #1a3a6b 0%, #28a745 100%);
+        color: white;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(26, 58, 107, 0.3);
+    }
+    .option-card .icon { font-size: 3em; margin-bottom: 15px; }
+    .option-card h3 { font-size: 1.5em; margin-bottom: 10px; }
+    .option-card p { font-size: 0.95em; line-height: 1.6; }
+    
+    /* BOTONES NAVEGACIÓN */
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    .btn {
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 15px 35px;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .btn:hover:not(:disabled) { background: #218838; transform: translateY(-2px); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-secondary { background: #6c757d; }
+    .btn-secondary:hover:not(:disabled) { background: #5a6268; }
+    .btn-danger { background: #dc3545; }
+    .btn-danger:hover:not(:disabled) { background: #c82333; }
+    
+    /* OFERTA */
     .oferta-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 10px;
     }
-    .oferta-title {
-        font-size: 1.3em;
-        color: #1a3a6b;
-        font-weight: bold;
-    }
-    .oferta-title::before {
-        content: '📂 ';
-    }
+    .oferta-title { font-size: 1.3em; color: #1a3a6b; font-weight: bold; }
+    .oferta-title::before { content: ' '; }
     .btn-cambiar {
         background: white;
         border: 2px solid #1a3a6b;
@@ -86,10 +187,7 @@ overflow: hidden;
         font-size: 0.9em;
         transition: all 0.3s;
     }
-    .btn-cambiar:hover {
-        background: #1a3a6b;
-        color: white;
-    }
+    .btn-cambiar:hover { background: #1a3a6b; color: white; }
     
     /* STATS */
     .stats {
@@ -106,16 +204,8 @@ overflow: hidden;
         padding: 20px;
         text-align: center;
     }
-    .stat-value {
-        font-size: 2.5em;
-        font-weight: bold;
-        color: #1a3a6b;
-        margin-bottom: 5px;
-    }
-    .stat-label {
-        font-size: 0.9em;
-        color: #666;
-    }
+    .stat-value { font-size: 2.5em; font-weight: bold; color: #1a3a6b; margin-bottom: 5px; }
+    .stat-label { font-size: 0.9em; color: #666; }
     
     /* BOTÓN AGREGAR */
     .btn-agregar {
@@ -131,27 +221,14 @@ overflow: hidden;
         transition: all 0.3s;
         margin-bottom: 20px;
     }
-    .btn-agregar:hover {
-        background: #218838;
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-    }
-    .btn-agregar::before {
-        content: '➕ ';
-    }
+    .btn-agregar:hover { background: #218838; }
+    .btn-agregar::before { content: '➕ '; }
     
     /* INSTRUCCIÓN */
-    .instruccion {
-        text-align: center;
-        color: #666;
-        font-size: 0.9em;
-        margin-bottom: 20px;
-    }
-    .instruccion::before {
-        content: '👆 ';
-    }
+    .instruccion { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
+    .instruccion::before { content: '👆 '; }
     
-    /* GRID DE BLOQUES */
+    /* GRID BLOQUES */
     .bloques-grid {
         width: 100%;
         border-collapse: collapse;
@@ -161,65 +238,77 @@ overflow: hidden;
     .bloques-grid th {
         background: #7c3aed;
         color: white;
-        padding: 15px 10px;
+        padding: 12px 8px;
         text-align: center;
         font-weight: bold;
     }
-    .bloques-grid th:first-child {
-        background: #f8f9fa;
-        color: #333;
-    }
-    .bloques-grid th .bloque-num {
-        font-size: 1.1em;
-        display: block;
-        margin-bottom: 3px;
-    }
-    .bloques-grid th .bloque-fecha {
-        font-size: 0.85em;
-        font-weight: normal;
-        opacity: 0.9;
-    }
+    .bloques-grid th:first-child { background: #1a3a6b; }
+    .bloques-grid th .bloque-num { font-size: 1.1em; display: block; margin-bottom: 3px; }
+    .bloques-grid th .bloque-fecha { font-size: 0.8em; font-weight: normal; opacity: 0.95; display: block; }
     .bloques-grid td {
         border: 1px solid #e0e0e0;
-        padding: 15px 10px;
+        padding: 12px 8px;
         text-align: center;
-        min-height: 80px;
         vertical-align: middle;
     }
     .bloques-grid td:first-child {
         background: #f8f9fa;
         font-weight: bold;
         color: #1a3a6b;
-    }
-    .bloques-grid .turno-cell {
-        font-size: 1.1em;
+        font-size: 1.05em;
     }
     .bloque-cell {
         cursor: pointer;
         transition: all 0.3s;
         min-height: 80px;
     }
-    .bloque-cell:hover {
-        background: #f0f4ff;
-    }
-    .bloque-cell.empty {
-        color: #ccc;
-        font-size: 1.5em;
-    }
+    .bloque-cell:hover { background: #f0f4ff; }
+    .bloque-cell.empty { color: #ccc; font-size: 1.5em; }
     .bloque-cell.occupied {
         background: #e8f5e9;
         border: 2px solid #28a745;
     }
-    .bloque-cell .ee-nombre {
-        font-weight: bold;
-        color: #1a3a6b;
-        font-size: 0.95em;
-        margin-bottom: 5px;
+    .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
+    .bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
+    
+    /* GRID ESCOLARIZADO */
+    .horario-grid {
+        display: grid;
+        grid-template-columns: 80px repeat(5, 1fr);
+        gap: 3px;
+        margin-bottom: 20px;
     }
-    .bloque-cell .ee-info {
-        font-size: 0.8em;
-        color: #666;
-        line-height: 1.4;
+    .grid-header {
+        background: #1a3a6b;
+        color: white;
+        padding: 12px 5px;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: 0.9em;
+    }
+    .grid-time {
+        background: #f0f0f0;
+        padding: 8px 5px;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 5px;
+        font-size: 0.85em;
+    }
+    .grid-cell {
+        background: #f9f9f9;
+        border: 2px solid #e0e0e0;
+        padding: 6px;
+        min-height: 55px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.75em;
+    }
+    .grid-cell:hover { background: #e8e8e8; border-color: #1a3a6b; }
+    .grid-cell.occupied {
+        background: #e8f5e9;
+        border: 2px solid #28a745;
     }
     
     /* BOTONES INFERIORES */
@@ -238,20 +327,10 @@ overflow: hidden;
         cursor: pointer;
         transition: all 0.3s;
     }
-    .btn-imprimir {
-        background: #6c757d;
-        color: white;
-    }
-    .btn-imprimir:hover {
-        background: #5a6268;
-    }
-    .btn-limpiar {
-        background: #dc3545;
-        color: white;
-    }
-    .btn-limpiar:hover {
-        background: #c82333;
-    }
+    .btn-imprimir { background: #6c757d; color: white; }
+    .btn-imprimir:hover { background: #5a6268; }
+    .btn-limpiar { background: #dc3545; color: white; }
+    .btn-limpiar:hover { background: #c82333; }
     
     /* FOOTER */
     .footer {
@@ -263,48 +342,22 @@ overflow: hidden;
         font-size: 0.85em;
         line-height: 1.6;
     }
-    .footer a {
-        color: #1a3a6b;
-        text-decoration: none;
-    }
-    .footer a:hover {
-        text-decoration: underline;
-    }
+    .footer a { color: #1a3a6b; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
     
     /* LOADING */
-    .loading {
-        text-align: center;
-        padding: 40px;
-        color: #1a3a6b;
-    }
+    .loading { text-align: center; padding: 40px; color: #1a3a6b; }
     .loading-spinner {
         border: 4px solid #f3f3f3;
         border-top: 4px solid #1a3a6b;
         border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        width: 50px; height: 50px;
         animation: spin 1s linear infinite;
         margin: 20px auto;
     }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    .error {
-        background: #fee;
-        border: 2px solid #fcc;
-        color: #c33;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 20px 0;
-        white-space: pre-wrap;
-    }
-    .success {
-        background: #efe;
-        border: 2px solid #cfc;
-        color: #3c3;
-        padding: 20px;
-        border-radius: 10px;
-        margin: 20px 0;
-    }
+    .error { background: #fee; border: 2px solid #fcc; color: #c33; padding: 20px; border-radius: 10px; margin: 20px 0; white-space: pre-wrap; }
+    .success { background: #efe; border: 2px solid #cfc; color: #3c3; padding: 20px; border-radius: 10px; margin: 20px 0; }
     
     /* MODAL */
     .modal {
@@ -327,12 +380,7 @@ overflow: hidden;
         max-height: 85vh;
         overflow-y: auto;
     }
-    .modal-header {
-        font-size: 1.5em;
-        color: #1a3a6b;
-        margin-bottom: 20px;
-        font-weight: bold;
-    }
+    .modal-header { font-size: 1.5em; color: #1a3a6b; margin-bottom: 20px; font-weight: bold; }
     .search-box {
         width: 100%;
         padding: 12px;
@@ -342,12 +390,7 @@ overflow: hidden;
         font-size: 1em;
     }
     .search-box:focus { outline: none; border-color: #1a3a6b; }
-    .filter-bar {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-    }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
     .filter-bar select {
         padding: 10px;
         border: 2px solid #e0e0e0;
@@ -390,7 +433,6 @@ overflow: hidden;
         margin-top: 15px;
     }
     
-    /* CONFLICT WARNING */
     .conflict-warning {
         background: #fff3cd;
         border: 2px solid #ffc107;
@@ -402,106 +444,182 @@ overflow: hidden;
     }
     .conflict-warning.show { display: block; }
     
-    /* RESPONSIVE */
     @media (max-width: 768px) {
         .stats { grid-template-columns: repeat(2, 1fr); }
         .botones-inferiores { grid-template-columns: 1fr; }
         .bloques-grid { font-size: 0.75em; }
-        .bloques-grid th, .bloques-grid td { padding: 8px 5px; }
+        .horario-grid { grid-template-columns: 60px repeat(5, 1fr); font-size: 0.7em; }
+        .header h1 { font-size: 1.4em; }
+        .step-label { display: none; }
+        .selector-grid { grid-template-columns: 1fr; }
     }
     
     @media print {
         body { background: white; }
         .container { box-shadow: none; }
-        .btn-agregar, .botones-inferiores, .modal, .conflict-warning { display: none !important; }
+        .btn-agregar, .botones-inferiores, .modal, .conflict-warning, .back-btn, .steps-indicator, .nav-buttons { display: none !important; }
     }
 </style>
-    </head>
+  </head>
 <body>
 <div class="container">
 <div class="header">
+<button class="back-btn" id="back-btn" style="display:none;" onclick="goBack()">← Cambiar</button>
 <div class="uv-badge">UNIVERSIDAD VERACRUZANA</div>
 <h1>Planeador de Horarios Facico</h1>
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
 <div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
 </div>
-        <div class="content">
-        <div id="loading-section" class="loading">
-            <div class="loading-spinner"></div>
-            <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
-            <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
+      <div class="content">
+        <!-- Indicador de pasos -->
+        <div class="steps-indicator" id="steps-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Modalidad</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Plan</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Mi Horario</div>
+            </div>
         </div>
 
-        <div id="error-section" class="error" style="display: none;"></div>
-        <div id="success-section" class="success" style="display: none;"></div>
-
-        <div id="app-main" style="display: none;">
-            <div class="oferta-header">
-                <div class="oferta-title" id="oferta-title">Oferta Académica</div>
-                <button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button>
-            </div>
-
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-ee">0</div>
-                    <div class="stat-label">Experiencias Educativas</div>
+        <!-- PANTALLA 1: MODALIDAD -->
+        <div class="screen active" id="screen-1">
+            <div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
+            <p class="section-subtitle">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas. Selecciona la que corresponda a tu situación.</p>
+            <div class="selector-grid">
+                <div class="option-card" data-modalidad="E" onclick="selectModalidad('E')">
+                    <div class="icon">🏫</div>
+                    <h3>Escolarizado</h3>
+                    <p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-creditos">0</div>
-                    <div class="stat-label">Créditos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-horas">0.0</div>
-                    <div class="stat-label" id="stat-horas-label">Horas/Sábado</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-choques">0</div>
-                    <div class="stat-label">Choques</div>
+                <div class="option-card" data-modalidad="A" onclick="selectModalidad('A')">
+                    <div class="icon">📚</div>
+                    <h3>Abierto</h3>
+                    <p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>, según el calendario oficial.</p>
                 </div>
             </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button>
+            </div>
+        </div>
 
-            <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
+        <!-- PANTALLA 2: PLAN -->
+        <div class="screen" id="screen-2">
+            <div class="section-title">Paso 2: ¿A qué plan de estudios perteneces?</div>
+            <p class="section-subtitle">Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.</p>
+            <div class="selector-grid">
+                <div class="option-card" data-plan="04" onclick="selectPlan('04')">
+                    <div class="icon">📜</div>
+                    <h3>Plan 2004</h3>
+                    <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
+                </div>
+                <div class="option-card" data-plan="25" onclick="selectPlan('25')">
+                    <div class="icon">📜</div>
+                    <h3>Plan 2025</h3>
+                    <p>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las EEs vigentes.</p>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToScreen(1)">← Atrás</button>
+                <button class="btn" id="btn-next-2" disabled onclick="goToScreen(3)">Ver mi oferta académica →</button>
+            </div>
+        </div>
 
-            <div class="conflict-warning" id="conflict-warning">
-                ⚠️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+        <!-- PANTALLA 3: APP PRINCIPAL -->
+        <div class="screen" id="screen-3">
+            <div id="loading-section" class="loading">
+                <div class="loading-spinner"></div>
+                <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
+                <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
             </div>
 
-            <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
+            <div id="error-section" class="error" style="display: none;"></div>
+            <div id="success-section" class="success" style="display: none;"></div>
 
-            <table class="bloques-grid" id="bloques-grid">
-                <thead>
-                    <tr>
-                        <th>Turno</th>
-                        <th id="th-bloque-1"><span class="bloque-num">Bloque 1</span><span class="bloque-fecha" id="fecha-bloque-1">Cargando...</span></th>
-                        <th id="th-bloque-2"><span class="bloque-num">Bloque 2</span><span class="bloque-fecha" id="fecha-bloque-2">Cargando...</span></th>
-                        <th id="th-bloque-3"><span class="bloque-num">Bloque 3</span><span class="bloque-fecha" id="fecha-bloque-3">Cargando...</span></th>
-                        <th id="th-bloque-4"><span class="bloque-num">Bloque 4</span><span class="bloque-fecha" id="fecha-bloque-4">Cargando...</span></th>
-                        <th id="th-bloque-5"><span class="bloque-num">Bloque 5</span><span class="bloque-fecha" id="fecha-bloque-5">Cargando...</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="turno-cell">Matutino</td>
-                        <td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClick('M', 1)">—</td>
-                        <td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClick('M', 2)">—</td>
-                        <td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClick('M', 3)">—</td>
-                        <td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClick('M', 4)">—</td>
-                        <td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClick('M', 5)">—</td>
-                    </tr>
-                    <tr>
-                        <td class="turno-cell">Vespertino</td>
-                        <td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClick('V', 1)">—</td>
-                        <td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClick('V', 2)">—</td>
-                        <td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClick('V', 3)">—</td>
-                        <td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClick('V', 4)">—</td>
-                        <td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClick('V', 5)">—</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="app-main" style="display: none;">
+                <div class="oferta-header">
+                    <div class="oferta-title" id="oferta-title">Oferta Académica</div>
+                    <button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button>
+                </div>
 
-            <div class="botones-inferiores">
-                <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
-                <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-ee">0</div>
+                        <div class="stat-label">Experiencias Educativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-creditos">0</div>
+                        <div class="stat-label">Créditos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-horas">0.0</div>
+                        <div class="stat-label" id="stat-horas-label">Horas/Sábado</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-choques">0</div>
+                        <div class="stat-label">Choques</div>
+                    </div>
+                </div>
+
+                <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
+
+                <div class="conflict-warning" id="conflict-warning">
+                    ️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+                </div>
+
+                <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
+
+                <!-- Vista Abierto: Grid de bloques -->
+                <div id="vista-abierto" style="display:none;">
+                    <table class="bloques-grid" id="bloques-grid">
+                        <thead>
+                            <tr>
+                                <th>Turno</th>
+                                <th><span class="bloque-num">Bloque 1</span><span class="bloque-fecha" id="fecha-bloque-1">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 2</span><span class="bloque-fecha" id="fecha-bloque-2">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 3</span><span class="bloque-fecha" id="fecha-bloque-3">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 4</span><span class="bloque-fecha" id="fecha-bloque-4">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 5</span><span class="bloque-fecha" id="fecha-bloque-5">Cargando...</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Matutino</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClickBloque('M', 1)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClickBloque('M', 2)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClickBloque('M', 3)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClickBloque('M', 4)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClickBloque('M', 5)">—</td>
+                            </tr>
+                            <tr>
+                                <td>Vespertino</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClickBloque('V', 1)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClickBloque('V', 2)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClickBloque('V', 3)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClickBloque('V', 4)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClickBloque('V', 5)">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Vista Escolarizado: Grid L-V -->
+                <div id="vista-escolarizado" style="display:none;">
+                    <div class="horario-grid" id="horario-grid"></div>
+                </div>
+
+                <div class="botones-inferiores">
+                    <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
+                    <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
+                </div>
             </div>
         </div>
     </div>
@@ -513,7 +631,7 @@ overflow: hidden;
     </div>
 </div>
 
-<!-- Modal para agregar EE -->
+<!-- Modal -->
 <div class="modal" id="ee-modal">
     <div class="modal-content">
         <div class="modal-header">➕ Agregar Experiencia Educativa</div>
@@ -526,14 +644,6 @@ overflow: hidden;
                 <option value="">🕐 Todos los turnos</option>
                 <option value="M">Matutino</option>
                 <option value="V">Vespertino</option>
-            </select>
-            <select id="filter-bloque" onchange="filterEEList()">
-                <option value="">📅 Todos los bloques</option>
-                <option value="1">Bloque 1</option>
-                <option value="2">Bloque 2</option>
-                <option value="3">Bloque 3</option>
-                <option value="4">Bloque 4</option>
-                <option value="5">Bloque 5</option>
             </select>
         </div>
         <div class="ee-list" id="ee-list"></div>
@@ -556,27 +666,77 @@ overflow: hidden;
 
     // ============ ESTADO ============
     let appState = {
-        modalidad: 'A', // Abierto por defecto para esta vista
+        currentScreen: 1,
+        modalidad: null,
         plan: null,
         datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
-        bloquesInfo: {}, // Fechas de bloques
+        bloquesFechas: {},
         experienciasEducativas: [],
         horarioSeleccionado: [],
         datosCargadosOK: false
     };
 
-    // ============ INICIALIZACIÓN ============
-    document.addEventListener('DOMContentLoaded', () => {
-        loadFromGoogleDrive();
-    });
+    // ============ NAVEGACIÓN ============
+    function goToScreen(num) {
+        if (num === 2 && !appState.modalidad) return;
+        if (num === 3 && (!appState.modalidad || !appState.plan)) return;
+        
+        if (num === 3 && !appState.datosCargadosOK) {
+            loadFromGoogleDrive();
+        }
+
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(`screen-${num}`).classList.add('active');
+        appState.currentScreen = num;
+        updateStepsIndicator();
+        updateBackButton();
+        window.scrollTo(0, 0);
+    }
+
+    function goBack() {
+        if (appState.currentScreen === 3) goToScreen(2);
+        else if (appState.currentScreen === 2) goToScreen(1);
+    }
+
+    function updateStepsIndicator() {
+        document.querySelectorAll('.step').forEach(step => {
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            if (stepNum === appState.currentScreen) step.classList.add('active');
+            else if (stepNum < appState.currentScreen) step.classList.add('completed');
+        });
+    }
+
+    function updateBackButton() {
+        document.getElementById('back-btn').style.display = appState.currentScreen > 1 ? 'block' : 'none';
+    }
+
+    function selectModalidad(mod) {
+        appState.modalidad = mod;
+        document.querySelectorAll('[data-modalidad]').forEach(card => {
+            card.classList.toggle('selected', card.dataset.modalidad === mod);
+        });
+        document.getElementById('btn-next-1').disabled = false;
+    }
+
+    function selectPlan(plan) {
+        appState.plan = plan;
+        document.querySelectorAll('[data-plan]').forEach(card => {
+            card.classList.toggle('selected', card.dataset.plan === plan);
+        });
+        document.getElementById('btn-next-2').disabled = false;
+    }
 
     // ============ GOOGLE DRIVE ============
     async function loadFromGoogleDrive() {
         try {
-            showLoading();
+            document.getElementById('loading-section').style.display = 'block';
+            document.getElementById('app-main').style.display = 'none';
+            document.getElementById('error-section').style.display = 'none';
+            document.getElementById('success-section').style.display = 'none';
             
             const files = await listFilesInFolder();
-            console.log('Archivos encontrados en Drive:', files);
+            console.log('Archivos encontrados:', files);
             
             if (!files || files.length === 0) {
                 throw new Error('No se encontraron archivos en la carpeta de Google Drive.');
@@ -600,10 +760,12 @@ overflow: hidden;
                     
                     if (key === 'BLOQUES-A') {
                         const data = await downloadAndProcessBloques(file.id);
-                        appState.bloquesInfo = data;
+                        appState.bloquesFechas = data;
+                        console.log('Fechas de bloques:', data);
                     } else {
                         const data = await downloadAndProcessFile(file.id);
                         appState.datosCargados[key] = data;
+                        console.log(`✓ ${key}: ${data.length} EEs`);
                     }
                     cargados++;
                 } catch (err) {
@@ -616,19 +778,15 @@ overflow: hidden;
             }
 
             appState.datosCargadosOK = true;
-            
-            // Actualizar fechas de bloques en el grid
             updateBloquesFechas();
             
             const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
-            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs en total)`);
+            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs)`);
             
-            // Por defecto mostrar Plan 2025 Abierto
-            appState.plan = '25';
             initializeApp();
 
         } catch (error) {
-            showError('❌ Error al cargar datos: ' + error.message);
+            showError('❌ Error: ' + error.message);
             console.error(error);
         }
     }
@@ -645,15 +803,12 @@ overflow: hidden;
         const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
-        
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
-        
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-        
         return processData(jsonData);
     }
 
@@ -661,37 +816,48 @@ overflow: hidden;
         const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
         const response = await fetch(url);
         if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
-        
         const blob = await response.blob();
         const arrayBuffer = await blob.arrayBuffer();
-        
         const workbook = XLSX.read(arrayBuffer, { type: 'array' });
         const sheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[sheetName];
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
-        
         return processBloquesData(jsonData);
     }
 
     function processBloquesData(data) {
         // Estructura esperada:
-        // Bloque | Turno | Fechas
-        // 1 | Matutino | 22 y 29 ago, 5 sep
-        // 1 | Vespertino | 22 y 29 ago, 5 sep
-        // ...
+        // Row 0: ["Abierto", "", "", "", "", ""]
+        // Row 1: ["Bloques", "Bloque 1", "Bloque 2", "Bloque 3", "Bloque 4", "Bloque 5"]
+        // Row 2: ["Fechas", "22 y 29 ago, 5 sep", "12, 19 y 26 sep", ...]
         const bloques = {};
         
-        for (let i = 1; i < data.length; i++) {
+        // Buscar fila de encabezados
+        let headerRow = null;
+        let fechasRow = null;
+        
+        for (let i = 0; i < data.length; i++) {
             const row = data[i];
-            if (!row || row.length < 3) continue;
+            if (!row) continue;
+            const firstCell = String(row[0] || '').trim().toLowerCase();
+            if (firstCell === 'bloques' || firstCell.includes('bloque')) {
+                headerRow = i;
+            }
+            if (firstCell === 'fechas') {
+                fechasRow = i;
+            }
+        }
+        
+        if (headerRow !== null && fechasRow !== null) {
+            const headerCells = data[headerRow];
+            const fechasCells = data[fechasRow];
             
-            const bloque = row[0];
-            const turno = row[1];
-            const fechas = row[2];
-            
-            if (bloque && turno && fechas) {
-                const turnoKey = String(turno).toLowerCase().includes('mat') ? 'M' : 'V';
-                bloques[`bloque${bloque}_${turnoKey}`] = fechas;
+            for (let i = 1; i <= 5; i++) {
+                const bloqueNombre = String(headerCells[i] || '').trim();
+                const fechas = String(fechasCells[i] || '').trim();
+                if (bloqueNombre && fechas) {
+                    bloques[i] = fechas;
+                }
             }
         }
         
@@ -700,12 +866,9 @@ overflow: hidden;
 
     function updateBloquesFechas() {
         for (let i = 1; i <= 5; i++) {
-            const fechaM = appState.bloquesInfo[`bloque${i}_M`] || 'Fechas por definir';
-            const fechaV = appState.bloquesInfo[`bloque${i}_V`] || 'Fechas por definir';
-            
-            // Mostrar ambas fechas en el header
-            const fechaText = fechaM === fechaV ? fechaM : `${fechaM} / ${fechaV}`;
-            document.getElementById(`fecha-bloque-${i}`).textContent = fechaText;
+            const fechas = appState.bloquesFechas[i] || 'Fechas por definir';
+            const el = document.getElementById(`fecha-bloque-${i}`);
+            if (el) el.textContent = fechas;
         }
     }
 
@@ -796,9 +959,7 @@ overflow: hidden;
                 };
             }
             
-            if (salon) {
-                crnMap[crn].salones.add(salon + (edificio ? ' (' + edificio + ')' : ''));
-            }
+            if (salon) crnMap[crn].salones.add(salon + (edificio ? ' (' + edificio + ')' : ''));
             
             horariosFila.forEach(h => {
                 const existe = crnMap[crn].horarios.some(
@@ -821,10 +982,8 @@ overflow: hidden;
         if (sabado.length === 0) {
             return { tipo: 'escolarizado', turno: null };
         }
-        
         const promedio = sabado.reduce((sum, h) => sum + h.inicio, 0) / sabado.length;
         const turno = promedio < 1400 ? 'M' : 'V';
-        
         return { tipo: 'abierto', turno: turno };
     }
 
@@ -834,7 +993,7 @@ overflow: hidden;
         const datos = appState.datosCargados[key];
         
         if (!datos || datos.length === 0) {
-            showError('️ No hay datos disponibles para esta combinación de plan y modalidad.');
+            showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
             return;
         }
         
@@ -844,25 +1003,34 @@ overflow: hidden;
         document.getElementById('loading-section').style.display = 'none';
         document.getElementById('app-main').style.display = 'block';
         
-        // Actualizar header
         const modalidadTxt = appState.modalidad === 'E' ? 'Escolarizado' : 'Abierto';
         const planTxt = appState.plan === '04' ? 'Plan 2004' : 'Plan 2025';
-        document.getElementById('header-subtitle').textContent = `Periodo Agosto 2026 - Enero 2027 · Sistema ${modalidadTxt} · Sábados por bloques`;
+        document.getElementById('header-subtitle').textContent = `Periodo Agosto 2026 - Enero 2027 · ${modalidadTxt} · Sábados por bloques`;
         document.getElementById('header-plan-badge').textContent = `${modalidadTxt} · ${planTxt}`;
         document.getElementById('oferta-title').textContent = `Oferta Académica · ${modalidadTxt} · ${planTxt}`;
         
+        document.getElementById('stat-horas-label').textContent = appState.modalidad === 'A' ? 'Horas/Sábado' : 'Horas/Semana';
+        
+        if (appState.modalidad === 'A') {
+            document.getElementById('vista-abierto').style.display = 'block';
+            document.getElementById('vista-escolarizado').style.display = 'none';
+            updateBloquesFechas();
+        } else {
+            document.getElementById('vista-abierto').style.display = 'none';
+            document.getElementById('vista-escolarizado').style.display = 'block';
+        }
+        
         populateAreaFilter();
         updateStats();
-        renderBloquesGrid();
+        renderVista();
     }
 
     function cambiarPlan() {
-        // Alternar entre Plan 2004 y 2025
         appState.plan = appState.plan === '04' ? '25' : '04';
         initializeApp();
     }
 
-    // ============ UTILIDADES DE TIEMPO ============
+    // ============ UTILIDADES ============
     function timeToMinutes(time) {
         const hours = Math.floor(time / 100);
         const minutes = time % 100;
@@ -894,33 +1062,34 @@ overflow: hidden;
         document.getElementById('stat-horas').textContent = totalHoras;
         document.getElementById('stat-choques').textContent = choques;
         
-        const warning = document.getElementById('conflict-warning');
-        warning.classList.toggle('show', choques > 0);
+        document.getElementById('conflict-warning').classList.toggle('show', choques > 0);
+    }
+
+    function renderVista() {
+        if (appState.modalidad === 'A') renderBloquesGrid();
+        else renderHorarioGrid();
     }
 
     function renderBloquesGrid() {
-        // Limpiar todas las celdas
         document.querySelectorAll('.bloque-cell').forEach(cell => {
             cell.className = 'bloque-cell empty';
             cell.innerHTML = '—';
         });
         
-        // Llenar con EEs seleccionadas
         appState.horarioSeleccionado.forEach(ee => {
             const turno = ee.bloqueInfo.turno;
             if (!turno) return;
             
-            // Asignar a bloques 1-5 (distribuir equitativamente o según lógica)
-            // Por ahora, asignar al primer bloque disponible del turno
             for (let bloque = 1; bloque <= 5; bloque++) {
                 const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
                 if (cell && cell.classList.contains('empty')) {
                     cell.className = 'bloque-cell occupied';
+                    const nombreCorto = ee.nombre.length > 30 ? ee.nombre.substring(0, 30) + '...' : ee.nombre;
                     cell.innerHTML = `
-                        <div class="ee-nombre">${ee.nombre}</div>
+                        <div class="ee-nombre">${nombreCorto}</div>
                         <div class="ee-info">
-                            ${ee.docente}<br>
-                            📍 ${ee.salon}<br>
+                            ${ee.docente.substring(0, 25)}<br>
+                            📍 ${ee.salon.substring(0, 20)}<br>
                             🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
                         </div>
                     `;
@@ -930,14 +1099,13 @@ overflow: hidden;
         });
     }
 
-    function cellClick(turno, bloque) {
+    function cellClickBloque(turno, bloque) {
         const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
         if (cell.classList.contains('occupied')) {
             const eeNombre = cell.querySelector('.ee-nombre').textContent;
             if (confirm(`¿Quitar "${eeNombre}" de tu horario?`)) {
-                // Encontrar y remover la EE
                 const ee = appState.horarioSeleccionado.find(e => 
-                    e.bloqueInfo.turno === turno && e.nombre === eeNombre
+                    e.bloqueInfo.turno === turno && e.nombre.startsWith(eeNombre.replace('...', ''))
                 );
                 if (ee) {
                     appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
@@ -948,14 +1116,53 @@ overflow: hidden;
         }
     }
 
+    function renderHorarioGrid() {
+        const grid = document.getElementById('horario-grid');
+        grid.innerHTML = '';
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        
+        grid.innerHTML += '<div class="grid-header">Hora</div>';
+        dias.forEach(d => grid.innerHTML += `<div class="grid-header">${d}</div>`);
+        
+        for (let hora = 7; hora <= 21; hora++) {
+            grid.innerHTML += `<div class="grid-time">${hora}:00</div>`;
+            dias.forEach((d, di) => {
+                const ee = appState.horarioSeleccionado.find(e => 
+                    e.horarios.some(h => {
+                        const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
+                        const finH = Math.ceil(timeToMinutes(h.fin) / 60);
+                        return h.dia === di && hora >= iniH && hora < finH;
+                    })
+                );
+                let cellClass = 'grid-cell';
+                let content = '';
+                if (ee) {
+                    const h = ee.horarios.find(h => h.dia === di);
+                    const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
+                    if (hora === iniH) {
+                        cellClass += ' occupied';
+                        content = `<strong>${ee.nombre.substring(0, 25)}</strong><br><small>${ee.docente.substring(0, 20)}</small><br><small>📍 ${ee.salon.substring(0, 15)}</small>`;
+                    }
+                }
+                grid.innerHTML += `<div class="${cellClass}">${content}</div>`;
+            });
+        }
+    }
+
     function detectConflicts() {
         let conflicts = 0;
         for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
             for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
                 const ee1 = appState.horarioSeleccionado[i];
                 const ee2 = appState.horarioSeleccionado[j];
-                if (ee1.bloqueInfo.turno === ee2.bloqueInfo.turno) {
-                    conflicts++;
+                for (const h1 of ee1.horarios) {
+                    for (const h2 of ee2.horarios) {
+                        if (h1.dia === h2.dia) {
+                            const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
+                            const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
+                            if (ini1 < fin2 && ini2 < fin1) conflicts++;
+                        }
+                    }
                 }
             }
         }
@@ -971,12 +1178,10 @@ overflow: hidden;
     }
 
     function openModal() {
-        const modal = document.getElementById('ee-modal');
         const eeList = document.getElementById('ee-list');
         document.getElementById('search-ee').value = '';
         document.getElementById('filter-area').value = '';
         document.getElementById('filter-turno').value = '';
-        document.getElementById('filter-bloque').value = '';
         eeList.innerHTML = '';
 
         const diasNombre = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -989,33 +1194,24 @@ overflow: hidden;
             item.dataset.area = ee.area || '';
             item.dataset.turno = ee.bloqueInfo.turno || '';
             
-            const horariosStr = ee.horarios.map(h => {
-                return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)}`;
-            }).join(' · ');
-            
+            const horariosStr = ee.horarios.map(h => `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)}`).join(' · ');
             const yaAgregada = appState.horarioSeleccionado.some(e => e.crn === ee.crn);
             if (yaAgregada) item.classList.add('added');
             
             item.innerHTML = `
                 <h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4>
-                <p>
-                    <span class="area-badge">${ee.areaCode || 'N/A'}</span>
-                    <strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos} ${ee.maxEnrl ? '· <strong>Cupo:</strong> ' + ee.maxEnrl : ''}
-                </p>
+                <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
                 <p><strong>Docente:</strong> ${ee.docente}</p>
                 <p><strong>Salón:</strong> ${ee.salon}</p>
                 <p><strong>Horario:</strong> ${horariosStr}</p>
-                <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : 'Vespertino'}</p>
+                <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : ee.bloqueInfo.turno === 'V' ? 'Vespertino' : 'Escolarizado'}</p>
             `;
             
-            if (!yaAgregada) {
-                item.onclick = () => addEEToHorario(ee);
-            }
-            
+            if (!yaAgregada) item.onclick = () => addEEToHorario(ee);
             eeList.appendChild(item);
         });
 
-        modal.classList.add('active');
+        document.getElementById('ee-modal').classList.add('active');
     }
 
     function filterEEList() {
@@ -1031,57 +1227,41 @@ overflow: hidden;
         });
     }
 
-    function closeModal() {
-        document.getElementById('ee-modal').classList.remove('active');
-    }
+    function closeModal() { document.getElementById('ee-modal').classList.remove('active'); }
 
     function addEEToHorario(ee) {
         if (appState.horarioSeleccionado.find(e => e.crn === ee.crn)) {
-            alert('Esta experiencia educativa ya está en tu horario');
+            alert('Esta EE ya está en tu horario');
             return;
         }
         appState.horarioSeleccionado.push(ee);
         updateStats();
-        renderBloquesGrid();
+        renderVista();
         closeModal();
-        setTimeout(() => openModal(), 100);
     }
 
     function clearHorario() {
-        if (confirm('¿Estás seguro de limpiar todo el horario?')) {
+        if (confirm('¿Limpiar todo el horario?')) {
             appState.horarioSeleccionado = [];
             updateStats();
-            renderBloquesGrid();
+            renderVista();
         }
     }
 
     function printHorario() { window.print(); }
 
     // ============ MENSAJES ============
-    function showLoading() {
-        document.getElementById('loading-section').style.display = 'block';
-        document.getElementById('app-main').style.display = 'none';
-        document.getElementById('error-section').style.display = 'none';
-        document.getElementById('success-section').style.display = 'none';
-    }
-
-    function updateLoadingMessage(msg) {
-        document.getElementById('loading-message').textContent = msg;
-    }
-
+    function updateLoadingMessage(msg) { document.getElementById('loading-message').textContent = msg; }
     function showError(message) {
         document.getElementById('loading-section').style.display = 'none';
         document.getElementById('error-section').textContent = message;
         document.getElementById('error-section').style.display = 'block';
     }
-
     function showSuccess(message) {
         document.getElementById('success-section').textContent = message;
         document.getElementById('success-section').style.display = 'block';
-        setTimeout(() => {
-            document.getElementById('success-section').style.display = 'none';
-        }, 5000);
+        setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000);
     }
 </script>
-    </body>
+  </body>
 </html>
