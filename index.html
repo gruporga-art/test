@@ -48,7 +48,7 @@ background: rgba(255,255,255,0.3);
 transform: translateX(-3px);
 }
 .content { padding: 30px; }
-      /* ====== PANTALLAS ====== */
+    /* ====== PANTALLAS ====== */
     .screen {
         display: none;
         animation: fadeIn 0.4s ease-in;
@@ -462,6 +462,926 @@ transform: translateX(-3px);
         .header h1 { font-size: 1.8em; }
         .step-label { display: none; }
     }
+</style>
+  </head>
+<body>
+<div class="container">
+<div class="header">
+<button class="back-btn" id="back-btn" style="display:none;" onclick="goBack()">← Cambiar</button>
+<h1>📅 Planeador de Horarios Facico</h1>
+<p>Universidad Veracruzana</p>
+<p>Periodo Agosto 2026 - Enero 2027</p>
+</div>
+      <div class="content">
+        <!-- Indicador de pasos -->
+        <div class="steps-indicator" id="steps-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Modalidad</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Plan</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Mi Horario</div>
+            </div>
+        </div>
+
+        <!-- ============ PANTALLA 1: MODALIDAD ============ -->
+        <div class="screen active" id="screen-1">
+            <div class="section">
+                <div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
+                <p class="section-subtitle">
+                    La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas. 
+                    Selecciona la que corresponda a tu situación.
+                </p>
+                <div class="selector-grid">
+                    <div class="option-card" data-modalidad="E" onclick="selectModalidad('E')">
+                        <div class="icon">🏫</div>
+                        <h3>Escolarizado</h3>
+                        <p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p>
+                    </div>
+                    <div class="option-card" data-modalidad="A" onclick="selectModalidad('A')">
+                        <div class="icon">📚</div>
+                        <h3>Abierto</h3>
+                        <p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>, según el calendario oficial.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <div></div>
+                <button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button>
+            </div>
+        </div>
+
+        <!-- ============ PANTALLA 2: PLAN ============ -->
+        <div class="screen" id="screen-2">
+            <div class="section">
+                <div class="section-title">Paso 2: ¿A qué plan de estudios perteneces?</div>
+                <p class="section-subtitle">
+                    Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.
+                </p>
+                <div class="selector-grid">
+                    <div class="option-card" data-plan="04" onclick="selectPlan('04')">
+                        <div class="icon">📜</div>
+                        <h3>Plan 2004</h3>
+                        <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
+                    </div>
+                    <div class="option-card" data-plan="25" onclick="selectPlan('25')">
+                        <div class="icon">📜</div>
+                        <h3>Plan 2025</h3>
+                        <p>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las EEs vigentes.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToScreen(1)">← Atrás</button>
+                <button class="btn" id="btn-next-2" disabled onclick="goToScreen(3)">Ver mi oferta académica →</button>
+            </div>
+        </div>
+
+        <!-- ============ PANTALLA 3: APP PRINCIPAL ============ -->
+        <div class="screen" id="screen-3">
+            <div id="loading-section" class="loading">
+                <div class="loading-spinner"></div>
+                <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
+                <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
+            </div>
+
+            <div id="error-section" class="error" style="display: none;"></div>
+            <div id="success-section" class="success" style="display: none;"></div>
+
+            <div id="app-main" style="display: none;">
+                <!-- Info box para modalidad abierta -->
+                <div class="info-box" id="info-box" style="display:none;">
+                    <strong>📌 Modalidad Abierta:</strong> Cada Experiencia Educativa se imparte en un <strong>bloque</strong> (Del 1 al 5, matutino o vespertino) durante <strong>tres sábados</strong>. 
+                    Selecciona el bloque y turno para ver las EEs disponibles. Consulta las fechas exactas en el 
+                    <a href="https://www.uv.mx/escolar/calendarios/2026/comunicacion.html" target="_blank">calendario oficial</a>.
+                </div>
+
+                <div class="section">
+                    <div class="section-title">📂 Oferta Académica</div>
+                    <p class="section-subtitle" id="selection-summary"></p>
+                    <div class="stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-ee">0</div>
+                            <div class="stat-label">Experiencias Educativas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-creditos">0</div>
+                            <div class="stat-label">Créditos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-horas">0</div>
+                            <div class="stat-label">Horas/Semana</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-choques">0</div>
+                            <div class="stat-label">Choques</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conflict-warning" id="conflict-warning">
+                    ⚠️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola.
+                </div>
+
+                <div class="section">
+                    <button class="btn" onclick="openModal()">➕ Agregar Experiencia Educativa</button>
+                    <button class="btn btn-secondary" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
+                    <button class="btn btn-secondary" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
+                    <button class="btn btn-secondary" onclick="reloadData()">🔄 Recargar datos</button>
+                </div>
+
+                <!-- Vista Escolarizado: Grid L-V -->
+                <div id="vista-escolarizado" style="display:none;">
+                    <p style="color:#666;font-size:0.9em;margin:10px 0;">👆 Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</p>
+                    <div class="horario-grid" id="horario-grid"></div>
+                </div>
+
+                <!-- Vista Abierto: Bloques -->
+                <div id="vista-abierto" style="display:none;">
+                    <p style="color:#666;font-size:0.9em;margin:10px 0;">👆 Toca una Experiencia Educativa para quitarla. Usa el botón "➕ Agregar" para añadir EEs a cada bloque.</p>
+                    <div class="bloques-container" id="bloques-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p><strong>Facultad de Ciencias y Técnicas de la Comunicación</strong> · Universidad Veracruzana · 2026</p>
+        <p>Verifica siempre la oferta oficial en la plataforma de la UV (<a href="https://www.uv.mx/veracruz/fcc/programacion-academica" target="_blank">www.uv.mx/veracruz/fcc/programacion-academica</a>).</p>
+        <p>Herramienta de apoyo diseñada por el docente <a href="mailto:alfreyes@uv.mx">Dr. Alfredo Reyes Gutiérrez</a> para sus Tutorados.</p>
+    </div>
+</div>
+
+<!-- Modal para agregar EE -->
+<div class="modal" id="ee-modal">
+    <div class="modal-content">
+        <div class="modal-header">➕ Agregar Experiencia Educativa</div>
+        <input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o CRN..." oninput="filterEEList()">
+        <div class="filter-bar">
+            <select id="filter-area" onchange="filterEEList()">
+                <option value="">📁 Todas las áreas</option>
+            </select>
+            <select id="filter-bloque" onchange="filterEEList()" style="display:none;">
+                <option value="">📅 Todos los bloques</option>
+                <option value="1">Bloque 1</option>
+                <option value="2">Bloque 2</option>
+                <option value="3">Bloque 3</option>
+                <option value="4">Bloque 4</option>
+                <option value="5">Bloque 5</option>
+            </select>
+            <select id="filter-turno" onchange="filterEEList()" style="display:none;">
+                <option value="">🕐 Todos los turnos</option>
+                <option value="M">Matutino</option>
+                <option value="V">Vespertino</option>
+            </select>
+        </div>
+        <div class="ee-list" id="ee-list"></div>
+        <button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>
+    </div>
+</div>
+
+<script>
+    // ============ CONFIGURACIÓN ============
+    const API_KEY = 'AIzaSyBI4tHjYhVazAn6y8CW1k2kC0zcxLX07xI';
+    const FOLDER_ID = '1j6zXhkThBBJs5Ur_gnaS8Fql4iRfDNkY';
+    
+    const FILE_PATTERNS = {
+        '04-E': /SYRPRAC.*04.*E.*\.xlsx$/i,
+        '04-A': /SYRPRAC.*04.*A.*\.xlsx$/i,
+        '25-E': /SYRPRAC.*25.*E.*\.xlsx$/i,
+        '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i
+    };
+
+    // Definición de bloques para modalidad abierta
+    // Los bloques se identifican por el rango de horas del sábado
+    const BLOQUES = [
+        { num: 1, nombre: 'Bloque 1', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
+        { num: 2, nombre: 'Bloque 2', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
+        { num: 3, nombre: 'Bloque 3', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
+        { num: 4, nombre: 'Bloque 4', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
+        { num: 5, nombre: 'Bloque 5', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } }
+    ];
+
+    // ============ ESTADO ============
+    let appState = {
+        currentScreen: 1,
+        modalidad: null,
+        plan: null,
+        datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
+        experienciasEducativas: [],
+        horarioSeleccionado: [],
+        datosCargadosOK: false
+    };
+
+    // ============ NAVEGACIÓN ENTRE PANTALLAS ============
+    function goToScreen(num) {
+        // Validaciones
+        if (num === 2 && !appState.modalidad) return;
+        if (num === 3 && (!appState.modalidad || !appState.plan)) return;
+        
+        // Si vamos a pantalla 3 y no hemos cargado datos, cargar
+        if (num === 3 && !appState.datosCargadosOK) {
+            loadFromGoogleDrive();
+        }
+
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(`screen-${num}`).classList.add('active');
+        appState.currentScreen = num;
+        updateStepsIndicator();
+        updateBackButton();
+        window.scrollTo(0, 0);
+    }
+
+    function goBack() {
+        if (appState.currentScreen === 3) {
+            goToScreen(2);
+        } else if (appState.currentScreen === 2) {
+            goToScreen(1);
+        }
+    }
+
+    function updateStepsIndicator() {
+        document.querySelectorAll('.step').forEach(step => {
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            if (stepNum === appState.currentScreen) {
+                step.classList.add('active');
+            } else if (stepNum < appState.currentScreen) {
+                step.classList.add('completed');
+            }
+        });
+    }
+
+    function updateBackButton() {
+        const backBtn = document.getElementById('back-btn');
+        if (appState.currentScreen > 1) {
+            backBtn.style.display = 'block';
+        } else {
+            backBtn.style.display = 'none';
+        }
+    }
+
+    // ============ SELECCIÓN DE OPCIONES ============
+    function selectModalidad(mod) {
+        appState.modalidad = mod;
+        document.querySelectorAll('[data-modalidad]').forEach(card => {
+            card.classList.toggle('selected', card.dataset.modalidad === mod);
+        });
+        document.getElementById('btn-next-1').disabled = false;
+    }
+
+    function selectPlan(plan) {
+        appState.plan = plan;
+        document.querySelectorAll('[data-plan]').forEach(card => {
+            card.classList.toggle('selected', card.dataset.plan === plan);
+        });
+        document.getElementById('btn-next-2').disabled = false;
+    }
+
+    // ============ GOOGLE DRIVE ============
+    async function loadFromGoogleDrive() {
+        try {
+            document.getElementById('loading-section').style.display = 'block';
+            document.getElementById('app-main').style.display = 'none';
+            document.getElementById('error-section').style.display = 'none';
+            document.getElementById('success-section').style.display = 'none';
+            
+            const files = await listFilesInFolder();
+            console.log('Archivos encontrados en Drive:', files);
+            
+            if (!files || files.length === 0) {
+                throw new Error('No se encontraron archivos en la carpeta de Google Drive. Verifica que la carpeta sea pública.');
+            }
+
+            const archivosEncontrados = {};
+            for (const [key, pattern] of Object.entries(FILE_PATTERNS)) {
+                const file = files.find(f => pattern.test(f.name));
+                if (file) {
+                    archivosEncontrados[key] = file;
+                    console.log(`✓ ${key}: ${file.name}`);
+                }
+            }
+
+            let cargados = 0;
+            const total = Object.keys(archivosEncontrados).length;
+            
+            for (const [key, file] of Object.entries(archivosEncontrados)) {
+                try {
+                    updateLoadingMessage(`Cargando ${file.name}... (${cargados + 1}/${total})`);
+                    const data = await downloadAndProcessFile(file.id);
+                    appState.datosCargados[key] = data;
+                    cargados++;
+                } catch (err) {
+                    console.error(`Error procesando ${file.name}:`, err);
+                }
+            }
+
+            if (cargados === 0) {
+                throw new Error('No se pudo procesar ningún archivo.');
+            }
+
+            appState.datosCargadosOK = true;
+            const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
+            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs en total)`);
+            
+            initializeApp();
+
+        } catch (error) {
+            showError('❌ Error al cargar datos: ' + error.message);
+            console.error(error);
+        }
+    }
+
+    async function listFilesInFolder() {
+        const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+trashed=false&key=${API_KEY}&fields=files(id,name,mimeType)`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
+        return data.files || [];
+    }
+
+    async function downloadAndProcessFile(fileId) {
+        const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
+        
+        const blob = await response.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+        
+        return processData(jsonData);
+    }
+
+    function processData(data) {
+        if (!data || data.length < 2) return [];
+        
+        let headerRowIndex = 0;
+        let headers = [];
+        for (let i = 0; i < Math.min(5, data.length); i++) {
+            const row = data[i];
+            if (row && row.includes('TITULO') && row.includes('SSBSECT_CRN')) {
+                headerRowIndex = i;
+                headers = row.map(h => String(h).trim());
+                break;
+            }
+        }
+        if (headers.length === 0) {
+            headers = data[0].map(h => String(h).trim());
+        }
+        
+        const idx = {
+            titulo: headers.indexOf('TITULO'),
+            creditos: headers.indexOf('SCBCRSE_CREDIT_HR_LOW'),
+            crn: headers.indexOf('SSBSECT_CRN'),
+            docente: headers.indexOf('NOMBRED'),
+            salon: headers.indexOf('SSRMEET_ROOM_CODE'),
+            edificio: headers.indexOf('SSRMEET_BLDG_CODE'),
+            area: headers.indexOf('SMRALIB_AREA_DESC'),
+            areaCode: headers.indexOf('SMRPAAP_AREA'),
+            maxEnrl: headers.indexOf('SSBSECT_MAX_ENRL'),
+            IL: headers.indexOf('IL'), FL: headers.indexOf('FL'),
+            IM: headers.indexOf('IM'), FM: headers.indexOf('FM'),
+            II: headers.indexOf('II'), FI: headers.indexOf('FI'),
+            IJ: headers.indexOf('IJ'), FJ: headers.indexOf('FJ'),
+            IV: headers.indexOf('IV'), FV: headers.indexOf('FV'),
+            ISS: headers.indexOf('ISS'), FSS: headers.indexOf('FSS'),
+            ID: headers.indexOf('ID'), FD: headers.indexOf('FD')
+        };
+
+        const crnMap = {};
+        
+        for (let i = headerRowIndex + 1; i < data.length; i++) {
+            const row = data[i];
+            if (!row || row.length === 0) continue;
+            
+            const titulo = row[idx.titulo];
+            const crn = row[idx.crn];
+            if (!titulo || !crn) continue;
+            const tituloStr = String(titulo).trim();
+            if (tituloStr.includes('CF_DESC_LEVL') || tituloStr === 'LICENCIATURA' || tituloStr === '') continue;
+            
+            const horariosFila = [];
+            const dias = [
+                { ini: idx.IL, fin: idx.FL, dia: 0 },
+                { ini: idx.IM, fin: idx.FM, dia: 1 },
+                { ini: idx.II, fin: idx.FI, dia: 2 },
+                { ini: idx.IJ, fin: idx.FJ, dia: 3 },
+                { ini: idx.IV, fin: idx.FV, dia: 4 },
+                { ini: idx.ISS, fin: idx.FSS, dia: 5 },
+                { ini: idx.ID, fin: idx.FD, dia: 6 }
+            ];
+            
+            dias.forEach(d => {
+                if (d.ini < 0 || d.fin < 0) return;
+                const ini = parseInt(row[d.ini]);
+                const fin = parseInt(row[d.fin]);
+                if (!isNaN(ini) && !isNaN(fin) && ini > 0 && fin > 0 && fin > ini) {
+                    horariosFila.push({ dia: d.dia, inicio: ini, fin: fin });
+                }
+            });
+            
+            if (horariosFila.length === 0) continue;
+            
+            const salon = String(row[idx.salon] || '').trim();
+            const edificio = String(row[idx.edificio] || '').trim();
+            
+            if (!crnMap[crn]) {
+                crnMap[crn] = {
+                    nombre: tituloStr,
+                    creditos: parseInt(row[idx.creditos]) || 0,
+                    crn: String(crn),
+                    docente: String(row[idx.docente] || '').trim() || 'Por asignar',
+                    area: String(row[idx.area] || '').trim(),
+                    areaCode: String(row[idx.areaCode] || '').trim(),
+                    maxEnrl: parseInt(row[idx.maxEnrl]) || 0,
+                    horarios: [],
+                    salones: new Set()
+                };
+            }
+            
+            if (salon) {
+                crnMap[crn].salones.add(salon + (edificio ? ' (' + edificio + ')' : ''));
+            }
+            
+            horariosFila.forEach(h => {
+                const existe = crnMap[crn].horarios.some(
+                    eh => eh.dia === h.dia && eh.inicio === h.inicio && eh.fin === h.fin
+                );
+                if (!existe) crnMap[crn].horarios.push(h);
+            });
+        }
+        
+        return Object.values(crnMap).map(ee => {
+            ee.salon = [...ee.salones].join(', ') || 'Por asignar';
+            delete ee.salones;
+            // Clasificar por bloque y turno para modalidad abierta
+            ee.bloqueInfo = clasificarBloque(ee.horarios);
+            return ee;
+        });
+    }
+
+    // Clasifica una EE en bloque (1-5) y turno (M/V) según sus horarios del sábado
+    function clasificarBloque(horarios) {
+        // Para modalidad abierta, los horarios son solo sábados
+        const sabado = horarios.filter(h => h.dia === 5);
+        if (sabado.length === 0) {
+            // Si no hay sábado, es escolarizado
+            return { tipo: 'escolarizado', bloque: null, turno: null };
+        }
+        
+        // Determinar turno por la hora de inicio promedio
+        const promedio = sabado.reduce((sum, h) => sum + h.inicio, 0) / sabado.length;
+        const turno = promedio < 1400 ? 'M' : 'V';
+        
+        // Para los bloques 1-5, en la realidad los bloques se diferencian por fechas,
+        // no por hora. Como no tenemos esa info en el Excel, asignamos por orden de CRN
+        // El usuario podrá ver todas las EEs de su modalidad y seleccionarlas
+        return { tipo: 'abierto', bloque: null, turno: turno };
+    }
+
+    // ============ INICIALIZAR APP ============
+    function initializeApp() {
+        const key = `${appState.plan}-${appState.modalidad}`;
+        const datos = appState.datosCargados[key];
+        
+        if (!datos || datos.length === 0) {
+            showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
+            return;
+        }
+        
+        appState.experienciasEducativas = datos;
+        appState.horarioSeleccionado = [];
+        
+        document.getElementById('loading-section').style.display = 'none';
+        document.getElementById('app-main').style.display = 'block';
+        
+        // Actualizar resumen
+        const modalidadTxt = appState.modalidad === 'E' ? 'Escolarizado' : 'Abierto';
+        const planTxt = appState.plan === '04' ? 'Plan 2004' : 'Plan 2025';
+        document.getElementById('selection-summary').innerHTML = 
+            `<strong>${planTxt}</strong> · Modalidad <strong>${modalidadTxt}</strong> · ${datos.length} EEs disponibles`;
+        
+        // Mostrar vista correspondiente
+        if (appState.modalidad === 'E') {
+            document.getElementById('vista-escolarizado').style.display = 'block';
+            document.getElementById('vista-abierto').style.display = 'none';
+            document.getElementById('info-box').style.display = 'none';
+        } else {
+            document.getElementById('vista-escolarizado').style.display = 'none';
+            document.getElementById('vista-abierto').style.display = 'block';
+            document.getElementById('info-box').style.display = 'block';
+            // Mostrar filtros de bloque/turno en modal
+            document.getElementById('filter-bloque').style.display = 'block';
+            document.getElementById('filter-turno').style.display = 'block';
+        }
+        
+        populateAreaFilter();
+        updateStats();
+        renderVista();
+    }
+
+    // ============ UTILIDADES DE TIEMPO ============
+    function timeToMinutes(time) {
+        const hours = Math.floor(time / 100);
+        const minutes = time % 100;
+        return hours * 60 + minutes;
+    }
+
+    function formatTime(time) {
+        const hours = Math.floor(time / 100);
+        const minutes = time % 100;
+        return `${hours}:${String(minutes).padStart(2, '0')}`;
+    }
+
+    // ============ UI ============
+    function updateStats() {
+        const totalEE = appState.horarioSeleccionado.length;
+        const totalCreditos = appState.horarioSeleccionado.reduce((sum, ee) => sum + (ee.creditos || 0), 0);
+        
+        let totalMinutos = 0;
+        appState.horarioSeleccionado.forEach(ee => {
+            ee.horarios.forEach(h => {
+                totalMinutos += timeToMinutes(h.fin) - timeToMinutes(h.inicio);
+            });
+        });
+        const totalHoras = (totalMinutos / 60).toFixed(1);
+        const choques = detectConflicts();
+        
+        document.getElementById('stat-ee').textContent = totalEE;
+        document.getElementById('stat-creditos').textContent = totalCreditos;
+        document.getElementById('stat-horas').textContent = totalHoras;
+        document.getElementById('stat-choques').textContent = choques;
+        
+        const warning = document.getElementById('conflict-warning');
+        warning.classList.toggle('show', choques > 0);
+    }
+
+    function renderVista() {
+        if (appState.modalidad === 'E') {
+            renderHorarioGrid();
+        } else {
+            renderBloques();
+        }
+    }
+
+    // ============ VISTA ESCOLARIZADO ============
+    function renderHorarioGrid() {
+        const grid = document.getElementById('horario-grid');
+        grid.innerHTML = '';
+
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+        const numDias = 6;
+
+        grid.innerHTML += '<div class="grid-header">Hora</div>';
+        dias.forEach(dia => grid.innerHTML += `<div class="grid-header">${dia}</div>`);
+
+        for (let hora = 7; hora <= 22; hora++) {
+            grid.innerHTML += `<div class="grid-time">${hora}:00</div>`;
+            
+            for (let diaIndex = 0; diaIndex < numDias; diaIndex++) {
+                const ee = appState.horarioSeleccionado.find(e => 
+                    e.horarios.some(h => {
+                        const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
+                        const finH = Math.ceil(timeToMinutes(h.fin) / 60);
+                        return h.dia === diaIndex && hora >= iniH && hora < finH;
+                    })
+                );
+                
+                let cellClass = 'grid-cell';
+                let cellContent = '';
+                
+                if (ee) {
+                    const horario = ee.horarios.find(h => h.dia === diaIndex);
+                    const inicioHora = Math.floor(timeToMinutes(horario.inicio) / 60);
+                    
+                    if (hora === inicioHora) {
+                        cellClass += ' occupied';
+                        const nombreCorto = ee.nombre.length > 35 ? ee.nombre.substring(0, 35) + '...' : ee.nombre;
+                        const docenteCorto = ee.docente.length > 30 ? ee.docente.substring(0, 30) + '...' : ee.docente;
+                        const salonCorto = ee.salon.length > 25 ? ee.salon.substring(0, 25) + '...' : ee.salon;
+                        cellContent = `<strong>${nombreCorto}</strong><br><small>${docenteCorto}</small><br><small>📍 ${salonCorto}</small><br><small>🕐 ${formatTime(horario.inicio)}-${formatTime(horario.fin)}</small>`;
+                    }
+                }
+                
+                grid.innerHTML += `<div class="${cellClass}" onclick="cellClick(${diaIndex}, ${hora})">${cellContent}</div>`;
+            }
+        }
+        
+        markConflicts();
+    }
+
+    function cellClick(dia, hora) {
+        const ee = appState.horarioSeleccionado.find(e => 
+            e.horarios.some(h => {
+                const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
+                const finH = Math.ceil(timeToMinutes(h.fin) / 60);
+                return h.dia === dia && hora >= iniH && hora < finH;
+            })
+        );
+        
+        if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
+            appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
+            updateStats();
+            renderVista();
+        }
+    }
+
+    // ============ VISTA ABIERTO (BLOQUES) ============
+    function renderBloques() {
+        const container = document.getElementById('bloques-container');
+        container.innerHTML = '';
+
+        // Agrupar EEs seleccionadas por turno (M/V)
+        const matutinas = appState.horarioSeleccionado.filter(ee => ee.bloqueInfo.turno === 'M');
+        const vespertinas = appState.horarioSeleccionado.filter(ee => ee.bloqueInfo.turno === 'V');
+
+        // Tarjeta Matutino
+        container.innerHTML += renderBloqueCard('matutino', '🌅 Bloques Matutinos', 'Sábados de 7:00 a 14:00 aprox.', matutinas);
+        // Tarjeta Vespertino
+        container.innerHTML += renderBloqueCard('vespertino', '🌇 Bloques Vespertinos', 'Sábados de 16:00 a 21:00 aprox.', vespertinas);
+
+        // Agregar eventos
+        document.querySelectorAll('.bloque-ee-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const crn = item.dataset.crn;
+                const ee = appState.horarioSeleccionado.find(e => e.crn === crn);
+                if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
+                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== crn);
+                    updateStats();
+                    renderBloques();
+                }
+            });
+        });
+
+        markConflictsBloques();
+    }
+
+    function renderBloqueCard(tipo, titulo, descripcion, ees) {
+        let eesHTML = '';
+        if (ees.length === 0) {
+            eesHTML = '<div class="bloque-empty">Sin EEs agregadas. Usa el botón "➕ Agregar" para añadir.</div>';
+        } else {
+            ees.forEach(ee => {
+                const horariosStr = ee.horarios.map(h => `${formatTime(h.inicio)}-${formatTime(h.fin)}`).join(', ');
+                eesHTML += `
+                    <div class="bloque-ee-item" data-crn="${ee.crn}">
+                        <h4>${ee.nombre}</h4>
+                        <p><strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
+                        <p><strong>Docente:</strong> ${ee.docente}</p>
+                        <p><strong>Salón:</strong> ${ee.salon}</p>
+                        <p><strong>Horario:</strong> Sáb ${horariosStr}</p>
+                    </div>
+                `;
+            });
+        }
+
+        return `
+            <div class="bloque-card">
+                <div class="bloque-header">
+                    <h3>${titulo}</h3>
+                    <p>${descripcion}</p>
+                    <p><strong>${ees.length}</strong> EE${ees.length !== 1 ? 's' : ''} seleccionada${ees.length !== 1 ? 's' : ''}</p>
+                </div>
+                <div class="bloque-ee-list">${eesHTML}</div>
+            </div>
+        `;
+    }
+
+    // ============ CONFLICTOS ============
+    function detectConflicts() {
+        let conflicts = 0;
+        for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
+            for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
+                const ee1 = appState.horarioSeleccionado[i];
+                const ee2 = appState.horarioSeleccionado[j];
+                for (const h1 of ee1.horarios) {
+                    for (const h2 of ee2.horarios) {
+                        if (h1.dia === h2.dia) {
+                            const ini1 = timeToMinutes(h1.inicio);
+                            const fin1 = timeToMinutes(h1.fin);
+                            const ini2 = timeToMinutes(h2.inicio);
+                            const fin2 = timeToMinutes(h2.fin);
+                            if (ini1 < fin2 && ini2 < fin1) conflicts++;
+                        }
+                    }
+                }
+            }
+        }
+        return conflicts;
+    }
+
+    function markConflicts() {
+        const conflictEEs = new Set();
+        for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
+            for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
+                const ee1 = appState.horarioSeleccionado[i];
+                const ee2 = appState.horarioSeleccionado[j];
+                let hayChoque = false;
+                for (const h1 of ee1.horarios) {
+                    for (const h2 of ee2.horarios) {
+                        if (h1.dia === h2.dia) {
+                            const ini1 = timeToMinutes(h1.inicio);
+                            const fin1 = timeToMinutes(h1.fin);
+                            const ini2 = timeToMinutes(h2.inicio);
+                            const fin2 = timeToMinutes(h2.fin);
+                            if (ini1 < fin2 && ini2 < fin1) hayChoque = true;
+                        }
+                    }
+                }
+                if (hayChoque) {
+                    conflictEEs.add(ee1.crn);
+                    conflictEEs.add(ee2.crn);
+                }
+            }
+        }
+        
+        document.querySelectorAll('.grid-cell.occupied').forEach(cell => {
+            const onclick = cell.getAttribute('onclick');
+            if (onclick) {
+                const match = onclick.match(/cellClick\((\d+),\s*(\d+)\)/);
+                if (match) {
+                    const dia = parseInt(match[1]);
+                    const hora = parseInt(match[2]);
+                    const ee = appState.horarioSeleccionado.find(e => 
+                        e.horarios.some(h => {
+                            const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
+                            const finH = Math.ceil(timeToMinutes(h.fin) / 60);
+                            return h.dia === dia && hora >= iniH && hora < finH;
+                        })
+                    );
+                    if (ee && conflictEEs.has(ee.crn)) cell.classList.add('conflict');
+                }
+            }
+        });
+    }
+
+    function markConflictsBloques() {
+        const conflictEEs = new Set();
+        for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
+            for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
+                const ee1 = appState.horarioSeleccionado[i];
+                const ee2 = appState.horarioSeleccionado[j];
+                let hayChoque = false;
+                for (const h1 of ee1.horarios) {
+                    for (const h2 of ee2.horarios) {
+                        if (h1.dia === h2.dia) {
+                            const ini1 = timeToMinutes(h1.inicio);
+                            const fin1 = timeToMinutes(h1.fin);
+                            const ini2 = timeToMinutes(h2.inicio);
+                            const fin2 = timeToMinutes(h2.fin);
+                            if (ini1 < fin2 && ini2 < fin1) hayChoque = true;
+                        }
+                    }
+                }
+                if (hayChoque) {
+                    conflictEEs.add(ee1.crn);
+                    conflictEEs.add(ee2.crn);
+                }
+            }
+        }
+        
+        document.querySelectorAll('.bloque-ee-item').forEach(item => {
+            if (conflictEEs.has(item.dataset.crn)) {
+                item.classList.add('conflict');
+            }
+        });
+    }
+
+    // ============ MODAL ============
+    function populateAreaFilter() {
+        const select = document.getElementById('filter-area');
+        const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
+        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
+        areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
+    }
+
+    function openModal() {
+        const modal = document.getElementById('ee-modal');
+        const eeList = document.getElementById('ee-list');
+        document.getElementById('search-ee').value = '';
+        document.getElementById('filter-area').value = '';
+        document.getElementById('filter-bloque').value = '';
+        document.getElementById('filter-turno').value = '';
+        eeList.innerHTML = '';
+
+        const diasNombre = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+        const eesOrdenadas = [...appState.experienciasEducativas].sort((a, b) => a.nombre.localeCompare(b.nombre));
+        
+        eesOrdenadas.forEach(ee => {
+            const item = document.createElement('div');
+            item.className = 'ee-item';
+            item.dataset.search = `${ee.nombre} ${ee.docente} ${ee.crn} ${ee.area}`.toLowerCase();
+            item.dataset.area = ee.area || '';
+            item.dataset.turno = ee.bloqueInfo.turno || '';
+            
+            const horariosStr = ee.horarios.map(h => {
+                return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)}`;
+            }).join(' · ');
+            
+            const yaAgregada = appState.horarioSeleccionado.some(e => e.crn === ee.crn);
+            if (yaAgregada) item.classList.add('added');
+            
+            item.innerHTML = `
+                <h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4>
+                <p>
+                    <span class="area-badge">${ee.areaCode || 'N/A'}</span>
+                    <strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos} ${ee.maxEnrl ? '· <strong>Cupo:</strong> ' + ee.maxEnrl : ''}
+                </p>
+                <p><strong>Docente:</strong> ${ee.docente}</p>
+                <p><strong>Salón:</strong> ${ee.salon}</p>
+                <p><strong>Horario:</strong> ${horariosStr}</p>
+                <p><strong>Área:</strong> ${ee.area}</p>
+            `;
+            
+            if (!yaAgregada) {
+                item.onclick = () => addEEToHorario(ee);
+            }
+            
+            eeList.appendChild(item);
+        });
+
+        modal.classList.add('active');
+    }
+
+    function filterEEList() {
+        const search = document.getElementById('search-ee').value.toLowerCase();
+        const areaFilter = document.getElementById('filter-area').value;
+        const turnoFilter = document.getElementById('filter-turno').value;
+        
+        document.querySelectorAll('.ee-item').forEach(item => {
+            const matchSearch = item.dataset.search.includes(search);
+            const matchArea = !areaFilter || item.dataset.area === areaFilter;
+            const matchTurno = !turnoFilter || item.dataset.turno === turnoFilter;
+            item.style.display = (matchSearch && matchArea && matchTurno) ? 'block' : 'none';
+        });
+    }
+
+    function closeModal() {
+        document.getElementById('ee-modal').classList.remove('active');
+    }
+
+    function addEEToHorario(ee) {
+        if (appState.horarioSeleccionado.find(e => e.crn === ee.crn)) {
+            alert('Esta experiencia educativa ya está en tu horario');
+            return;
+        }
+        appState.horarioSeleccionado.push(ee);
+        updateStats();
+        renderVista();
+        closeModal();
+        setTimeout(() => openModal(), 100);
+    }
+
+    function clearHorario() {
+        if (confirm('¿Estás seguro de limpiar todo el horario?')) {
+            appState.horarioSeleccionado = [];
+            updateStats();
+            renderVista();
+        }
+    }
+
+    function reloadData() {
+        if (confirm('¿Recargar los datos desde Google Drive?')) {
+            appState.datosCargados = { '04-E': null, '04-A': null, '25-E': null, '25-A': null };
+            appState.datosCargadosOK = false;
+            appState.horarioSeleccionado = [];
+            document.getElementById('app-main').style.display = 'none';
+            loadFromGoogleDrive();
+        }
+    }
+
+    function printHorario() { window.print(); }
+
+    // ============ MENSAJES ============
+    function updateLoadingMessage(msg) {
+        document.getElementById('loading-message').textContent = msg;
+    }
+
+    function showError(message) {
+        document.getElementById('loading-section').style.display = 'none';
+        document.getElementById('error-section').textContent = message;
+        document.getElementById('error-section').style.display = 'block';
+    }
+
+    function showSuccess(message) {
+        document.getElementById('success-section').textContent = message;
+        document.getElementById('success-section').style.display = 'block';
+        setTimeout(() => {
+            document.getElementById('success-section').style.display = 'none';
+        }, 5000);
+    }
 </script>
+
 </body>
 </html>
