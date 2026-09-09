@@ -9,146 +9,277 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+background: #f5f5f5;
 min-height: 100vh;
-padding: 20px;
 }
 .container {
-max-width: 1400px;
+max-width: 1200px;
 margin: 0 auto;
 background: white;
-border-radius: 20px;
-box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+border-radius: 10px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 overflow: hidden;
 }
-.header {
-background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-color: white;
-padding: 30px;
-text-align: center;
-position: relative;
-}
-.header h1 { font-size: 2.5em; margin-bottom: 10px; }
-.header p { font-size: 1.2em; opacity: 0.9; }
-.back-btn {
-position: absolute;
-top: 20px;
-left: 20px;
-background: rgba(255,255,255,0.2);
-color: white;
-border: 2px solid rgba(255,255,255,0.5);
-padding: 10px 20px;
-border-radius: 10px;
-cursor: pointer;
-font-size: 0.95em;
-transition: all 0.3s;
-}
-.back-btn:hover {
-background: rgba(255,255,255,0.3);
-transform: translateX(-3px);
-}
-.content { padding: 30px; }
-    /* ====== PANTALLAS ====== */
-    .screen {
-        display: none;
-        animation: fadeIn 0.4s ease-in;
-    }
-    .screen.active { display: block; }
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .section { margin-bottom: 30px; }
-    .section-title {
-        font-size: 1.5em;
-        color: #667eea;
-        margin-bottom: 15px;
-        font-weight: bold;
-    }
-    .section-subtitle {
-        color: #666;
-        margin-bottom: 20px;
-        line-height: 1.6;
-    }
-    
-    /* ====== TARJETAS DE SELECCIÓN ====== */
-    .selector-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        margin-bottom: 20px;
-    }
-    .option-card {
-        padding: 30px;
-        border: 3px solid #e0e0e0;
-        border-radius: 20px;
-        cursor: pointer;
-        transition: all 0.3s;
-        background: #f9f9f9;
-        text-align: center;
-    }
-    .option-card:hover {
-        border-color: #667eea;
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(102, 126, 234, 0.2);
-    }
-    .option-card.selected {
-        border-color: #667eea;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* HEADER INSTITUCIONAL */
+    .header {
+        background: #1a3a6b;
         color: white;
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+        padding: 20px;
+        text-align: center;
+        border-bottom: 4px solid #28a745;
     }
-    .option-card .icon { font-size: 3em; margin-bottom: 15px; }
-    .option-card h3 { font-size: 1.5em; margin-bottom: 10px; }
-    .option-card p { font-size: 0.95em; line-height: 1.6; }
+    .header .uv-badge {
+        background: #28a745;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+    .header h1 {
+        font-size: 1.8em;
+        margin-bottom: 5px;
+    }
+    .header h1::before {
+        content: '📅 ';
+    }
+    .header .subtitle {
+        font-size: 1em;
+        opacity: 0.9;
+        margin-bottom: 10px;
+    }
+    .header .plan-badge {
+        background: rgba(255,255,255,0.2);
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 0.9em;
+        display: inline-block;
+    }
     
-    /* ====== BOTONES DE NAVEGACIÓN ====== */
-    .nav-buttons {
+    /* CONTENT */
+    .content { padding: 20px; }
+    
+    /* SECCIÓN OFERTA */
+    .oferta-header {
         display: flex;
         justify-content: space-between;
-        gap: 15px;
-        margin-top: 30px;
-        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 20px;
     }
-    .btn {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border: none;
-        padding: 15px 35px;
-        border-radius: 12px;
-        font-size: 1.1em;
-        cursor: pointer;
-        transition: all 0.3s;
+    .oferta-title {
+        font-size: 1.3em;
+        color: #1a3a6b;
         font-weight: bold;
     }
-    .btn:hover:not(:disabled) {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    .oferta-title::before {
+        content: '📂 ';
     }
-    .btn:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
+    .btn-cambiar {
+        background: white;
+        border: 2px solid #1a3a6b;
+        color: #1a3a6b;
+        padding: 8px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s;
     }
-    .btn-secondary {
-        background: #f0f0f0;
-        color: #333;
-    }
-    .btn-secondary:hover {
-        background: #e0e0e0;
+    .btn-cambiar:hover {
+        background: #1a3a6b;
+        color: white;
     }
     
-    /* ====== LOADING ====== */
+    /* STATS */
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .stat-card {
+        background: white;
+        border: 2px solid #e0e0e0;
+        border-left: 4px solid #28a745;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+    }
+    .stat-value {
+        font-size: 2.5em;
+        font-weight: bold;
+        color: #1a3a6b;
+        margin-bottom: 5px;
+    }
+    .stat-label {
+        font-size: 0.9em;
+        color: #666;
+    }
+    
+    /* BOTÓN AGREGAR */
+    .btn-agregar {
+        width: 100%;
+        background: #28a745;
+        color: white;
+        border: none;
+        padding: 18px;
+        border-radius: 10px;
+        font-size: 1.2em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-bottom: 20px;
+    }
+    .btn-agregar:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+    }
+    .btn-agregar::before {
+        content: '➕ ';
+    }
+    
+    /* INSTRUCCIÓN */
+    .instruccion {
+        text-align: center;
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 20px;
+    }
+    .instruccion::before {
+        content: '👆 ';
+    }
+    
+    /* GRID DE BLOQUES */
+    .bloques-grid {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+    }
+    .bloques-grid th {
+        background: #7c3aed;
+        color: white;
+        padding: 15px 10px;
+        text-align: center;
+        font-weight: bold;
+    }
+    .bloques-grid th:first-child {
+        background: #f8f9fa;
+        color: #333;
+    }
+    .bloques-grid th .bloque-num {
+        font-size: 1.1em;
+        display: block;
+        margin-bottom: 3px;
+    }
+    .bloques-grid th .bloque-fecha {
+        font-size: 0.85em;
+        font-weight: normal;
+        opacity: 0.9;
+    }
+    .bloques-grid td {
+        border: 1px solid #e0e0e0;
+        padding: 15px 10px;
+        text-align: center;
+        min-height: 80px;
+        vertical-align: middle;
+    }
+    .bloques-grid td:first-child {
+        background: #f8f9fa;
+        font-weight: bold;
+        color: #1a3a6b;
+    }
+    .bloques-grid .turno-cell {
+        font-size: 1.1em;
+    }
+    .bloque-cell {
+        cursor: pointer;
+        transition: all 0.3s;
+        min-height: 80px;
+    }
+    .bloque-cell:hover {
+        background: #f0f4ff;
+    }
+    .bloque-cell.empty {
+        color: #ccc;
+        font-size: 1.5em;
+    }
+    .bloque-cell.occupied {
+        background: #e8f5e9;
+        border: 2px solid #28a745;
+    }
+    .bloque-cell .ee-nombre {
+        font-weight: bold;
+        color: #1a3a6b;
+        font-size: 0.95em;
+        margin-bottom: 5px;
+    }
+    .bloque-cell .ee-info {
+        font-size: 0.8em;
+        color: #666;
+        line-height: 1.4;
+    }
+    
+    /* BOTONES INFERIORES */
+    .botones-inferiores {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .btn-inferior {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .btn-imprimir {
+        background: #6c757d;
+        color: white;
+    }
+    .btn-imprimir:hover {
+        background: #5a6268;
+    }
+    .btn-limpiar {
+        background: #dc3545;
+        color: white;
+    }
+    .btn-limpiar:hover {
+        background: #c82333;
+    }
+    
+    /* FOOTER */
+    .footer {
+        background: #f8f9fa;
+        border-top: 4px solid #28a745;
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-size: 0.85em;
+        line-height: 1.6;
+    }
+    .footer a {
+        color: #1a3a6b;
+        text-decoration: none;
+    }
+    .footer a:hover {
+        text-decoration: underline;
+    }
+    
+    /* LOADING */
     .loading {
         text-align: center;
         padding: 40px;
-        font-size: 1.2em;
-        color: #667eea;
+        color: #1a3a6b;
     }
     .loading-spinner {
         border: 4px solid #f3f3f3;
-        border-top: 4px solid #667eea;
+        border-top: 4px solid #1a3a6b;
         border-radius: 50%;
         width: 50px;
         height: 50px;
@@ -175,183 +306,7 @@ transform: translateX(-3px);
         margin: 20px 0;
     }
     
-    /* ====== INDICADOR DE PASOS ====== */
-    .steps-indicator {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 30px;
-    }
-    .step {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .step-number {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        background: #e0e0e0;
-        color: #999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        transition: all 0.3s;
-    }
-    .step.active .step-number {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-    .step.completed .step-number {
-        background: #4caf50;
-        color: white;
-    }
-    .step-label {
-        font-size: 0.9em;
-        color: #999;
-    }
-    .step.active .step-label { color: #667eea; font-weight: bold; }
-    .step.completed .step-label { color: #4caf50; }
-    .step-connector {
-        width: 30px;
-        height: 2px;
-        background: #e0e0e0;
-        align-self: center;
-    }
-    
-    /* ====== GRID HORARIO ESCOLARIZADO ====== */
-    .horario-grid {
-        display: grid;
-        grid-template-columns: 80px repeat(6, 1fr);
-        gap: 3px;
-        margin: 20px 0;
-    }
-    .grid-header {
-        background: #667eea;
-        color: white;
-        padding: 12px 5px;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 5px;
-        font-size: 0.9em;
-    }
-    .grid-time {
-        background: #f0f0f0;
-        padding: 8px 5px;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 5px;
-        font-size: 0.85em;
-    }
-    .grid-cell {
-        background: #f9f9f9;
-        border: 2px solid #e0e0e0;
-        padding: 6px;
-        min-height: 55px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.75em;
-        position: relative;
-        overflow: hidden;
-    }
-    .grid-cell:hover { background: #e8e8e8; border-color: #667eea; }
-    .grid-cell.occupied {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-color: #667eea;
-    }
-    .grid-cell.conflict {
-        background: #ff6b6b !important;
-        border-color: #ff0000 !important;
-        animation: pulse 1s infinite;
-    }
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-    
-    /* ====== GRID HORARIO ABIERTO (BLOQUES) ====== */
-    .bloques-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        margin: 20px 0;
-    }
-    .bloque-card {
-        background: white;
-        border: 2px solid #e0e0e0;
-        border-radius: 15px;
-        padding: 20px;
-        transition: all 0.3s;
-    }
-    .bloque-card:hover {
-        border-color: #667eea;
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-    }
-    .bloque-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        text-align: center;
-    }
-    .bloque-header h3 { font-size: 1.3em; margin-bottom: 5px; }
-    .bloque-header p { font-size: 0.9em; opacity: 0.9; }
-    .bloque-ee-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .bloque-ee-item {
-        background: #f9f9f9;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        padding: 12px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.9em;
-    }
-    .bloque-ee-item:hover {
-        border-color: #667eea;
-        background: #f0f4ff;
-    }
-    .bloque-ee-item.occupied {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        border-color: #667eea;
-    }
-    .bloque-ee-item.conflict {
-        background: #ff6b6b;
-        border-color: #ff0000;
-        color: white;
-    }
-    .bloque-ee-item h4 { font-size: 1em; margin-bottom: 5px; }
-    .bloque-ee-item p { font-size: 0.85em; margin: 2px 0; }
-    .bloque-empty {
-        text-align: center;
-        padding: 20px;
-        color: #999;
-        font-style: italic;
-    }
-    
-    /* ====== STATS ====== */
-    .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
-        margin: 20px 0;
-    }
-    .stat-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 20px;
-        border-radius: 15px;
-        text-align: center;
-    }
-    .stat-value { font-size: 2.5em; font-weight: bold; margin-bottom: 5px; }
-    .stat-label { font-size: 0.9em; opacity: 0.9; }
-    
-    /* ====== MODAL ====== */
+    /* MODAL */
     .modal {
         display: none;
         position: fixed;
@@ -365,8 +320,8 @@ transform: translateX(-3px);
     .modal.active { display: flex; }
     .modal-content {
         background: white;
-        border-radius: 20px;
-        padding: 30px;
+        border-radius: 15px;
+        padding: 25px;
         max-width: 900px;
         width: 90%;
         max-height: 85vh;
@@ -374,25 +329,34 @@ transform: translateX(-3px);
     }
     .modal-header {
         font-size: 1.5em;
-        color: #667eea;
+        color: #1a3a6b;
         margin-bottom: 20px;
         font-weight: bold;
     }
+    .search-box {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        font-size: 1em;
+    }
+    .search-box:focus { outline: none; border-color: #1a3a6b; }
     .filter-bar {
         display: flex;
         gap: 10px;
         margin-bottom: 15px;
         flex-wrap: wrap;
     }
-    .filter-bar select, .search-box {
+    .filter-bar select {
         padding: 10px;
         border: 2px solid #e0e0e0;
         border-radius: 10px;
         font-size: 0.95em;
         background: white;
+        flex: 1;
+        min-width: 150px;
     }
-    .search-box { flex: 1; min-width: 200px; }
-    .search-box:focus, .filter-bar select:focus { outline: none; border-color: #667eea; }
     .ee-list { max-height: 500px; overflow-y: auto; }
     .ee-item {
         padding: 15px;
@@ -402,8 +366,8 @@ transform: translateX(-3px);
         cursor: pointer;
         transition: all 0.3s;
     }
-    .ee-item:hover { border-color: #667eea; background: #f9f9f9; }
-    .ee-item h4 { color: #667eea; margin-bottom: 5px; }
+    .ee-item:hover { border-color: #1a3a6b; background: #f0f4ff; }
+    .ee-item h4 { color: #1a3a6b; margin-bottom: 5px; }
     .ee-item p { font-size: 0.9em; color: #666; margin: 3px 0; }
     .ee-item.added { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; }
     .area-badge {
@@ -415,199 +379,129 @@ transform: translateX(-3px);
         font-size: 0.8em;
         margin-right: 5px;
     }
+    .btn-cerrar-modal {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 15px;
+    }
     
+    /* CONFLICT WARNING */
     .conflict-warning {
         background: #fff3cd;
         border: 2px solid #ffc107;
         color: #856404;
         padding: 15px;
         border-radius: 10px;
-        margin: 20px 0;
+        margin-bottom: 20px;
         display: none;
     }
     .conflict-warning.show { display: block; }
     
-    .info-box {
-        background: #e3f2fd;
-        border: 2px solid #90caf9;
-        color: #1565c0;
-        padding: 15px;
-        border-radius: 10px;
-        margin: 20px 0;
-        font-size: 0.95em;
-        line-height: 1.6;
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .botones-inferiores { grid-template-columns: 1fr; }
+        .bloques-grid { font-size: 0.75em; }
+        .bloques-grid th, .bloques-grid td { padding: 8px 5px; }
     }
-    .info-box a { color: #1565c0; font-weight: bold; }
-    
-    .footer {
-        background: #f0f0f0;
-        padding: 20px;
-        text-align: center;
-        color: #666;
-        font-size: 0.9em;
-    }
-    .footer a { color: #667eea; text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
     
     @media print {
-        body { background: white; padding: 0; }
+        body { background: white; }
         .container { box-shadow: none; }
-        .btn, .modal, .conflict-warning, .back-btn, .steps-indicator, .header, .footer, .stats, .info-box, .nav-buttons { display: none !important; }
-        .screen { display: block !important; }
-        #screen-1, #screen-2 { display: none !important; }
-    }
-    @media (max-width: 768px) {
-        .horario-grid { grid-template-columns: 60px repeat(6, 1fr); font-size: 0.7em; }
-        .grid-cell { min-height: 45px; padding: 3px; }
-        .header h1 { font-size: 1.8em; }
-        .step-label { display: none; }
+        .btn-agregar, .botones-inferiores, .modal, .conflict-warning { display: none !important; }
     }
 </style>
-  </head>
+    </head>
 <body>
 <div class="container">
 <div class="header">
-<button class="back-btn" id="back-btn" style="display:none;" onclick="goBack()">← Cambiar</button>
-<h1>📅 Planeador de Horarios Facico</h1>
-<p>Universidad Veracruzana</p>
-<p>Periodo Agosto 2026 - Enero 2027</p>
+<div class="uv-badge">UNIVERSIDAD VERACRUZANA</div>
+<h1>Planeador de Horarios Facico</h1>
+<div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
+<div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
 </div>
-      <div class="content">
-        <!-- Indicador de pasos -->
-        <div class="steps-indicator" id="steps-indicator">
-            <div class="step active" data-step="1">
-                <div class="step-number">1</div>
-                <div class="step-label">Modalidad</div>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="2">
-                <div class="step-number">2</div>
-                <div class="step-label">Plan</div>
-            </div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="3">
-                <div class="step-number">3</div>
-                <div class="step-label">Mi Horario</div>
-            </div>
+        <div class="content">
+        <div id="loading-section" class="loading">
+            <div class="loading-spinner"></div>
+            <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
+            <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
         </div>
 
-        <!-- ============ PANTALLA 1: MODALIDAD ============ -->
-        <div class="screen active" id="screen-1">
-            <div class="section">
-                <div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
-                <p class="section-subtitle">
-                    La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas. 
-                    Selecciona la que corresponda a tu situación.
-                </p>
-                <div class="selector-grid">
-                    <div class="option-card" data-modalidad="E" onclick="selectModalidad('E')">
-                        <div class="icon">🏫</div>
-                        <h3>Escolarizado</h3>
-                        <p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p>
-                    </div>
-                    <div class="option-card" data-modalidad="A" onclick="selectModalidad('A')">
-                        <div class="icon">📚</div>
-                        <h3>Abierto</h3>
-                        <p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>, según el calendario oficial.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="nav-buttons">
-                <div></div>
-                <button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button>
-            </div>
-        </div>
+        <div id="error-section" class="error" style="display: none;"></div>
+        <div id="success-section" class="success" style="display: none;"></div>
 
-        <!-- ============ PANTALLA 2: PLAN ============ -->
-        <div class="screen" id="screen-2">
-            <div class="section">
-                <div class="section-title">Paso 2: ¿A qué plan de estudios perteneces?</div>
-                <p class="section-subtitle">
-                    Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.
-                </p>
-                <div class="selector-grid">
-                    <div class="option-card" data-plan="04" onclick="selectPlan('04')">
-                        <div class="icon">📜</div>
-                        <h3>Plan 2004</h3>
-                        <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
-                    </div>
-                    <div class="option-card" data-plan="25" onclick="selectPlan('25')">
-                        <div class="icon">📜</div>
-                        <h3>Plan 2025</h3>
-                        <p>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las EEs vigentes.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="goToScreen(1)">← Atrás</button>
-                <button class="btn" id="btn-next-2" disabled onclick="goToScreen(3)">Ver mi oferta académica →</button>
-            </div>
-        </div>
-
-        <!-- ============ PANTALLA 3: APP PRINCIPAL ============ -->
-        <div class="screen" id="screen-3">
-            <div id="loading-section" class="loading">
-                <div class="loading-spinner"></div>
-                <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
-                <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
+        <div id="app-main" style="display: none;">
+            <div class="oferta-header">
+                <div class="oferta-title" id="oferta-title">Oferta Académica</div>
+                <button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button>
             </div>
 
-            <div id="error-section" class="error" style="display: none;"></div>
-            <div id="success-section" class="success" style="display: none;"></div>
-
-            <div id="app-main" style="display: none;">
-                <!-- Info box para modalidad abierta -->
-                <div class="info-box" id="info-box" style="display:none;">
-                    <strong>📌 Modalidad Abierta:</strong> Cada Experiencia Educativa se imparte en un <strong>bloque</strong> (Del 1 al 5, matutino o vespertino) durante <strong>tres sábados</strong>. 
-                    Selecciona el bloque y turno para ver las EEs disponibles. Consulta las fechas exactas en el 
-                    <a href="https://www.uv.mx/escolar/calendarios/2026/comunicacion.html" target="_blank">calendario oficial</a>.
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-ee">0</div>
+                    <div class="stat-label">Experiencias Educativas</div>
                 </div>
-
-                <div class="section">
-                    <div class="section-title">📂 Oferta Académica</div>
-                    <p class="section-subtitle" id="selection-summary"></p>
-                    <div class="stats">
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-ee">0</div>
-                            <div class="stat-label">Experiencias Educativas</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-creditos">0</div>
-                            <div class="stat-label">Créditos</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-horas">0</div>
-                            <div class="stat-label">Horas/Semana</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-choques">0</div>
-                            <div class="stat-label">Choques</div>
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-creditos">0</div>
+                    <div class="stat-label">Créditos</div>
                 </div>
-
-                <div class="conflict-warning" id="conflict-warning">
-                    ⚠️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola.
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-horas">0.0</div>
+                    <div class="stat-label" id="stat-horas-label">Horas/Sábado</div>
                 </div>
-
-                <div class="section">
-                    <button class="btn" onclick="openModal()">➕ Agregar Experiencia Educativa</button>
-                    <button class="btn btn-secondary" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
-                    <button class="btn btn-secondary" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
-                    <button class="btn btn-secondary" onclick="reloadData()">🔄 Recargar datos</button>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-choques">0</div>
+                    <div class="stat-label">Choques</div>
                 </div>
+            </div>
 
-                <!-- Vista Escolarizado: Grid L-V -->
-                <div id="vista-escolarizado" style="display:none;">
-                    <p style="color:#666;font-size:0.9em;margin:10px 0;">👆 Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</p>
-                    <div class="horario-grid" id="horario-grid"></div>
-                </div>
+            <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
 
-                <!-- Vista Abierto: Bloques -->
-                <div id="vista-abierto" style="display:none;">
-                    <p style="color:#666;font-size:0.9em;margin:10px 0;">👆 Toca una Experiencia Educativa para quitarla. Usa el botón "➕ Agregar" para añadir EEs a cada bloque.</p>
-                    <div class="bloques-container" id="bloques-container"></div>
-                </div>
+            <div class="conflict-warning" id="conflict-warning">
+                ⚠️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+            </div>
+
+            <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
+
+            <table class="bloques-grid" id="bloques-grid">
+                <thead>
+                    <tr>
+                        <th>Turno</th>
+                        <th id="th-bloque-1"><span class="bloque-num">Bloque 1</span><span class="bloque-fecha" id="fecha-bloque-1">Cargando...</span></th>
+                        <th id="th-bloque-2"><span class="bloque-num">Bloque 2</span><span class="bloque-fecha" id="fecha-bloque-2">Cargando...</span></th>
+                        <th id="th-bloque-3"><span class="bloque-num">Bloque 3</span><span class="bloque-fecha" id="fecha-bloque-3">Cargando...</span></th>
+                        <th id="th-bloque-4"><span class="bloque-num">Bloque 4</span><span class="bloque-fecha" id="fecha-bloque-4">Cargando...</span></th>
+                        <th id="th-bloque-5"><span class="bloque-num">Bloque 5</span><span class="bloque-fecha" id="fecha-bloque-5">Cargando...</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="turno-cell">Matutino</td>
+                        <td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClick('M', 1)">—</td>
+                        <td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClick('M', 2)">—</td>
+                        <td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClick('M', 3)">—</td>
+                        <td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClick('M', 4)">—</td>
+                        <td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClick('M', 5)">—</td>
+                    </tr>
+                    <tr>
+                        <td class="turno-cell">Vespertino</td>
+                        <td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClick('V', 1)">—</td>
+                        <td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClick('V', 2)">—</td>
+                        <td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClick('V', 3)">—</td>
+                        <td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClick('V', 4)">—</td>
+                        <td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClick('V', 5)">—</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="botones-inferiores">
+                <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
+                <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
             </div>
         </div>
     </div>
@@ -628,7 +522,12 @@ transform: translateX(-3px);
             <select id="filter-area" onchange="filterEEList()">
                 <option value="">📁 Todas las áreas</option>
             </select>
-            <select id="filter-bloque" onchange="filterEEList()" style="display:none;">
+            <select id="filter-turno" onchange="filterEEList()">
+                <option value="">🕐 Todos los turnos</option>
+                <option value="M">Matutino</option>
+                <option value="V">Vespertino</option>
+            </select>
+            <select id="filter-bloque" onchange="filterEEList()">
                 <option value="">📅 Todos los bloques</option>
                 <option value="1">Bloque 1</option>
                 <option value="2">Bloque 2</option>
@@ -636,14 +535,9 @@ transform: translateX(-3px);
                 <option value="4">Bloque 4</option>
                 <option value="5">Bloque 5</option>
             </select>
-            <select id="filter-turno" onchange="filterEEList()" style="display:none;">
-                <option value="">🕐 Todos los turnos</option>
-                <option value="M">Matutino</option>
-                <option value="V">Vespertino</option>
-            </select>
         </div>
         <div class="ee-list" id="ee-list"></div>
-        <button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>
+        <button class="btn-cerrar-modal" onclick="closeModal()">Cerrar</button>
     </div>
 </div>
 
@@ -656,108 +550,36 @@ transform: translateX(-3px);
         '04-E': /SYRPRAC.*04.*E.*\.xlsx$/i,
         '04-A': /SYRPRAC.*04.*A.*\.xlsx$/i,
         '25-E': /SYRPRAC.*25.*E.*\.xlsx$/i,
-        '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i
+        '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i,
+        'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i
     };
-
-    // Definición de bloques para modalidad abierta
-    // Los bloques se identifican por el rango de horas del sábado
-    const BLOQUES = [
-        { num: 1, nombre: 'Bloque 1', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
-        { num: 2, nombre: 'Bloque 2', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
-        { num: 3, nombre: 'Bloque 3', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
-        { num: 4, nombre: 'Bloque 4', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } },
-        { num: 5, nombre: 'Bloque 5', matutino: { ini: 700, fin: 1359 }, vespertino: { ini: 1400, fin: 2200 } }
-    ];
 
     // ============ ESTADO ============
     let appState = {
-        currentScreen: 1,
-        modalidad: null,
+        modalidad: 'A', // Abierto por defecto para esta vista
         plan: null,
         datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
+        bloquesInfo: {}, // Fechas de bloques
         experienciasEducativas: [],
         horarioSeleccionado: [],
         datosCargadosOK: false
     };
 
-    // ============ NAVEGACIÓN ENTRE PANTALLAS ============
-    function goToScreen(num) {
-        // Validaciones
-        if (num === 2 && !appState.modalidad) return;
-        if (num === 3 && (!appState.modalidad || !appState.plan)) return;
-        
-        // Si vamos a pantalla 3 y no hemos cargado datos, cargar
-        if (num === 3 && !appState.datosCargadosOK) {
-            loadFromGoogleDrive();
-        }
-
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(`screen-${num}`).classList.add('active');
-        appState.currentScreen = num;
-        updateStepsIndicator();
-        updateBackButton();
-        window.scrollTo(0, 0);
-    }
-
-    function goBack() {
-        if (appState.currentScreen === 3) {
-            goToScreen(2);
-        } else if (appState.currentScreen === 2) {
-            goToScreen(1);
-        }
-    }
-
-    function updateStepsIndicator() {
-        document.querySelectorAll('.step').forEach(step => {
-            const stepNum = parseInt(step.dataset.step);
-            step.classList.remove('active', 'completed');
-            if (stepNum === appState.currentScreen) {
-                step.classList.add('active');
-            } else if (stepNum < appState.currentScreen) {
-                step.classList.add('completed');
-            }
-        });
-    }
-
-    function updateBackButton() {
-        const backBtn = document.getElementById('back-btn');
-        if (appState.currentScreen > 1) {
-            backBtn.style.display = 'block';
-        } else {
-            backBtn.style.display = 'none';
-        }
-    }
-
-    // ============ SELECCIÓN DE OPCIONES ============
-    function selectModalidad(mod) {
-        appState.modalidad = mod;
-        document.querySelectorAll('[data-modalidad]').forEach(card => {
-            card.classList.toggle('selected', card.dataset.modalidad === mod);
-        });
-        document.getElementById('btn-next-1').disabled = false;
-    }
-
-    function selectPlan(plan) {
-        appState.plan = plan;
-        document.querySelectorAll('[data-plan]').forEach(card => {
-            card.classList.toggle('selected', card.dataset.plan === plan);
-        });
-        document.getElementById('btn-next-2').disabled = false;
-    }
+    // ============ INICIALIZACIÓN ============
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFromGoogleDrive();
+    });
 
     // ============ GOOGLE DRIVE ============
     async function loadFromGoogleDrive() {
         try {
-            document.getElementById('loading-section').style.display = 'block';
-            document.getElementById('app-main').style.display = 'none';
-            document.getElementById('error-section').style.display = 'none';
-            document.getElementById('success-section').style.display = 'none';
+            showLoading();
             
             const files = await listFilesInFolder();
             console.log('Archivos encontrados en Drive:', files);
             
             if (!files || files.length === 0) {
-                throw new Error('No se encontraron archivos en la carpeta de Google Drive. Verifica que la carpeta sea pública.');
+                throw new Error('No se encontraron archivos en la carpeta de Google Drive.');
             }
 
             const archivosEncontrados = {};
@@ -775,8 +597,14 @@ transform: translateX(-3px);
             for (const [key, file] of Object.entries(archivosEncontrados)) {
                 try {
                     updateLoadingMessage(`Cargando ${file.name}... (${cargados + 1}/${total})`);
-                    const data = await downloadAndProcessFile(file.id);
-                    appState.datosCargados[key] = data;
+                    
+                    if (key === 'BLOQUES-A') {
+                        const data = await downloadAndProcessBloques(file.id);
+                        appState.bloquesInfo = data;
+                    } else {
+                        const data = await downloadAndProcessFile(file.id);
+                        appState.datosCargados[key] = data;
+                    }
                     cargados++;
                 } catch (err) {
                     console.error(`Error procesando ${file.name}:`, err);
@@ -788,9 +616,15 @@ transform: translateX(-3px);
             }
 
             appState.datosCargadosOK = true;
+            
+            // Actualizar fechas de bloques en el grid
+            updateBloquesFechas();
+            
             const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
             showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs en total)`);
             
+            // Por defecto mostrar Plan 2025 Abierto
+            appState.plan = '25';
             initializeApp();
 
         } catch (error) {
@@ -821,6 +655,58 @@ transform: translateX(-3px);
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
         
         return processData(jsonData);
+    }
+
+    async function downloadAndProcessBloques(fileId) {
+        const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
+        
+        const blob = await response.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+        
+        return processBloquesData(jsonData);
+    }
+
+    function processBloquesData(data) {
+        // Estructura esperada:
+        // Bloque | Turno | Fechas
+        // 1 | Matutino | 22 y 29 ago, 5 sep
+        // 1 | Vespertino | 22 y 29 ago, 5 sep
+        // ...
+        const bloques = {};
+        
+        for (let i = 1; i < data.length; i++) {
+            const row = data[i];
+            if (!row || row.length < 3) continue;
+            
+            const bloque = row[0];
+            const turno = row[1];
+            const fechas = row[2];
+            
+            if (bloque && turno && fechas) {
+                const turnoKey = String(turno).toLowerCase().includes('mat') ? 'M' : 'V';
+                bloques[`bloque${bloque}_${turnoKey}`] = fechas;
+            }
+        }
+        
+        return bloques;
+    }
+
+    function updateBloquesFechas() {
+        for (let i = 1; i <= 5; i++) {
+            const fechaM = appState.bloquesInfo[`bloque${i}_M`] || 'Fechas por definir';
+            const fechaV = appState.bloquesInfo[`bloque${i}_V`] || 'Fechas por definir';
+            
+            // Mostrar ambas fechas en el header
+            const fechaText = fechaM === fechaV ? fechaM : `${fechaM} / ${fechaV}`;
+            document.getElementById(`fecha-bloque-${i}`).textContent = fechaText;
+        }
     }
 
     function processData(data) {
@@ -925,29 +811,21 @@ transform: translateX(-3px);
         return Object.values(crnMap).map(ee => {
             ee.salon = [...ee.salones].join(', ') || 'Por asignar';
             delete ee.salones;
-            // Clasificar por bloque y turno para modalidad abierta
             ee.bloqueInfo = clasificarBloque(ee.horarios);
             return ee;
         });
     }
 
-    // Clasifica una EE en bloque (1-5) y turno (M/V) según sus horarios del sábado
     function clasificarBloque(horarios) {
-        // Para modalidad abierta, los horarios son solo sábados
         const sabado = horarios.filter(h => h.dia === 5);
         if (sabado.length === 0) {
-            // Si no hay sábado, es escolarizado
-            return { tipo: 'escolarizado', bloque: null, turno: null };
+            return { tipo: 'escolarizado', turno: null };
         }
         
-        // Determinar turno por la hora de inicio promedio
         const promedio = sabado.reduce((sum, h) => sum + h.inicio, 0) / sabado.length;
         const turno = promedio < 1400 ? 'M' : 'V';
         
-        // Para los bloques 1-5, en la realidad los bloques se diferencian por fechas,
-        // no por hora. Como no tenemos esa info en el Excel, asignamos por orden de CRN
-        // El usuario podrá ver todas las EEs de su modalidad y seleccionarlas
-        return { tipo: 'abierto', bloque: null, turno: turno };
+        return { tipo: 'abierto', turno: turno };
     }
 
     // ============ INICIALIZAR APP ============
@@ -956,7 +834,7 @@ transform: translateX(-3px);
         const datos = appState.datosCargados[key];
         
         if (!datos || datos.length === 0) {
-            showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
+            showError('️ No hay datos disponibles para esta combinación de plan y modalidad.');
             return;
         }
         
@@ -966,29 +844,22 @@ transform: translateX(-3px);
         document.getElementById('loading-section').style.display = 'none';
         document.getElementById('app-main').style.display = 'block';
         
-        // Actualizar resumen
+        // Actualizar header
         const modalidadTxt = appState.modalidad === 'E' ? 'Escolarizado' : 'Abierto';
         const planTxt = appState.plan === '04' ? 'Plan 2004' : 'Plan 2025';
-        document.getElementById('selection-summary').innerHTML = 
-            `<strong>${planTxt}</strong> · Modalidad <strong>${modalidadTxt}</strong> · ${datos.length} EEs disponibles`;
-        
-        // Mostrar vista correspondiente
-        if (appState.modalidad === 'E') {
-            document.getElementById('vista-escolarizado').style.display = 'block';
-            document.getElementById('vista-abierto').style.display = 'none';
-            document.getElementById('info-box').style.display = 'none';
-        } else {
-            document.getElementById('vista-escolarizado').style.display = 'none';
-            document.getElementById('vista-abierto').style.display = 'block';
-            document.getElementById('info-box').style.display = 'block';
-            // Mostrar filtros de bloque/turno en modal
-            document.getElementById('filter-bloque').style.display = 'block';
-            document.getElementById('filter-turno').style.display = 'block';
-        }
+        document.getElementById('header-subtitle').textContent = `Periodo Agosto 2026 - Enero 2027 · Sistema ${modalidadTxt} · Sábados por bloques`;
+        document.getElementById('header-plan-badge').textContent = `${modalidadTxt} · ${planTxt}`;
+        document.getElementById('oferta-title').textContent = `Oferta Académica · ${modalidadTxt} · ${planTxt}`;
         
         populateAreaFilter();
         updateStats();
-        renderVista();
+        renderBloquesGrid();
+    }
+
+    function cambiarPlan() {
+        // Alternar entre Plan 2004 y 2025
+        appState.plan = appState.plan === '04' ? '25' : '04';
+        initializeApp();
     }
 
     // ============ UTILIDADES DE TIEMPO ============
@@ -1027,235 +898,68 @@ transform: translateX(-3px);
         warning.classList.toggle('show', choques > 0);
     }
 
-    function renderVista() {
-        if (appState.modalidad === 'E') {
-            renderHorarioGrid();
-        } else {
-            renderBloques();
-        }
+    function renderBloquesGrid() {
+        // Limpiar todas las celdas
+        document.querySelectorAll('.bloque-cell').forEach(cell => {
+            cell.className = 'bloque-cell empty';
+            cell.innerHTML = '—';
+        });
+        
+        // Llenar con EEs seleccionadas
+        appState.horarioSeleccionado.forEach(ee => {
+            const turno = ee.bloqueInfo.turno;
+            if (!turno) return;
+            
+            // Asignar a bloques 1-5 (distribuir equitativamente o según lógica)
+            // Por ahora, asignar al primer bloque disponible del turno
+            for (let bloque = 1; bloque <= 5; bloque++) {
+                const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
+                if (cell && cell.classList.contains('empty')) {
+                    cell.className = 'bloque-cell occupied';
+                    cell.innerHTML = `
+                        <div class="ee-nombre">${ee.nombre}</div>
+                        <div class="ee-info">
+                            ${ee.docente}<br>
+                            📍 ${ee.salon}<br>
+                            🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
+                        </div>
+                    `;
+                    break;
+                }
+            }
+        });
     }
 
-    // ============ VISTA ESCOLARIZADO ============
-    function renderHorarioGrid() {
-        const grid = document.getElementById('horario-grid');
-        grid.innerHTML = '';
-
-        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-        const numDias = 6;
-
-        grid.innerHTML += '<div class="grid-header">Hora</div>';
-        dias.forEach(dia => grid.innerHTML += `<div class="grid-header">${dia}</div>`);
-
-        for (let hora = 7; hora <= 22; hora++) {
-            grid.innerHTML += `<div class="grid-time">${hora}:00</div>`;
-            
-            for (let diaIndex = 0; diaIndex < numDias; diaIndex++) {
+    function cellClick(turno, bloque) {
+        const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
+        if (cell.classList.contains('occupied')) {
+            const eeNombre = cell.querySelector('.ee-nombre').textContent;
+            if (confirm(`¿Quitar "${eeNombre}" de tu horario?`)) {
+                // Encontrar y remover la EE
                 const ee = appState.horarioSeleccionado.find(e => 
-                    e.horarios.some(h => {
-                        const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
-                        const finH = Math.ceil(timeToMinutes(h.fin) / 60);
-                        return h.dia === diaIndex && hora >= iniH && hora < finH;
-                    })
+                    e.bloqueInfo.turno === turno && e.nombre === eeNombre
                 );
-                
-                let cellClass = 'grid-cell';
-                let cellContent = '';
-                
                 if (ee) {
-                    const horario = ee.horarios.find(h => h.dia === diaIndex);
-                    const inicioHora = Math.floor(timeToMinutes(horario.inicio) / 60);
-                    
-                    if (hora === inicioHora) {
-                        cellClass += ' occupied';
-                        const nombreCorto = ee.nombre.length > 35 ? ee.nombre.substring(0, 35) + '...' : ee.nombre;
-                        const docenteCorto = ee.docente.length > 30 ? ee.docente.substring(0, 30) + '...' : ee.docente;
-                        const salonCorto = ee.salon.length > 25 ? ee.salon.substring(0, 25) + '...' : ee.salon;
-                        cellContent = `<strong>${nombreCorto}</strong><br><small>${docenteCorto}</small><br><small>📍 ${salonCorto}</small><br><small>🕐 ${formatTime(horario.inicio)}-${formatTime(horario.fin)}</small>`;
-                    }
+                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
+                    updateStats();
+                    renderBloquesGrid();
                 }
-                
-                grid.innerHTML += `<div class="${cellClass}" onclick="cellClick(${diaIndex}, ${hora})">${cellContent}</div>`;
             }
         }
-        
-        markConflicts();
     }
 
-    function cellClick(dia, hora) {
-        const ee = appState.horarioSeleccionado.find(e => 
-            e.horarios.some(h => {
-                const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
-                const finH = Math.ceil(timeToMinutes(h.fin) / 60);
-                return h.dia === dia && hora >= iniH && hora < finH;
-            })
-        );
-        
-        if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
-            appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
-            updateStats();
-            renderVista();
-        }
-    }
-
-    // ============ VISTA ABIERTO (BLOQUES) ============
-    function renderBloques() {
-        const container = document.getElementById('bloques-container');
-        container.innerHTML = '';
-
-        // Agrupar EEs seleccionadas por turno (M/V)
-        const matutinas = appState.horarioSeleccionado.filter(ee => ee.bloqueInfo.turno === 'M');
-        const vespertinas = appState.horarioSeleccionado.filter(ee => ee.bloqueInfo.turno === 'V');
-
-        // Tarjeta Matutino
-        container.innerHTML += renderBloqueCard('matutino', '🌅 Bloques Matutinos', 'Sábados de 7:00 a 14:00 aprox.', matutinas);
-        // Tarjeta Vespertino
-        container.innerHTML += renderBloqueCard('vespertino', '🌇 Bloques Vespertinos', 'Sábados de 16:00 a 21:00 aprox.', vespertinas);
-
-        // Agregar eventos
-        document.querySelectorAll('.bloque-ee-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const crn = item.dataset.crn;
-                const ee = appState.horarioSeleccionado.find(e => e.crn === crn);
-                if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
-                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== crn);
-                    updateStats();
-                    renderBloques();
-                }
-            });
-        });
-
-        markConflictsBloques();
-    }
-
-    function renderBloqueCard(tipo, titulo, descripcion, ees) {
-        let eesHTML = '';
-        if (ees.length === 0) {
-            eesHTML = '<div class="bloque-empty">Sin EEs agregadas. Usa el botón "➕ Agregar" para añadir.</div>';
-        } else {
-            ees.forEach(ee => {
-                const horariosStr = ee.horarios.map(h => `${formatTime(h.inicio)}-${formatTime(h.fin)}`).join(', ');
-                eesHTML += `
-                    <div class="bloque-ee-item" data-crn="${ee.crn}">
-                        <h4>${ee.nombre}</h4>
-                        <p><strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
-                        <p><strong>Docente:</strong> ${ee.docente}</p>
-                        <p><strong>Salón:</strong> ${ee.salon}</p>
-                        <p><strong>Horario:</strong> Sáb ${horariosStr}</p>
-                    </div>
-                `;
-            });
-        }
-
-        return `
-            <div class="bloque-card">
-                <div class="bloque-header">
-                    <h3>${titulo}</h3>
-                    <p>${descripcion}</p>
-                    <p><strong>${ees.length}</strong> EE${ees.length !== 1 ? 's' : ''} seleccionada${ees.length !== 1 ? 's' : ''}</p>
-                </div>
-                <div class="bloque-ee-list">${eesHTML}</div>
-            </div>
-        `;
-    }
-
-    // ============ CONFLICTOS ============
     function detectConflicts() {
         let conflicts = 0;
         for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
             for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
                 const ee1 = appState.horarioSeleccionado[i];
                 const ee2 = appState.horarioSeleccionado[j];
-                for (const h1 of ee1.horarios) {
-                    for (const h2 of ee2.horarios) {
-                        if (h1.dia === h2.dia) {
-                            const ini1 = timeToMinutes(h1.inicio);
-                            const fin1 = timeToMinutes(h1.fin);
-                            const ini2 = timeToMinutes(h2.inicio);
-                            const fin2 = timeToMinutes(h2.fin);
-                            if (ini1 < fin2 && ini2 < fin1) conflicts++;
-                        }
-                    }
+                if (ee1.bloqueInfo.turno === ee2.bloqueInfo.turno) {
+                    conflicts++;
                 }
             }
         }
         return conflicts;
-    }
-
-    function markConflicts() {
-        const conflictEEs = new Set();
-        for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
-            for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
-                const ee1 = appState.horarioSeleccionado[i];
-                const ee2 = appState.horarioSeleccionado[j];
-                let hayChoque = false;
-                for (const h1 of ee1.horarios) {
-                    for (const h2 of ee2.horarios) {
-                        if (h1.dia === h2.dia) {
-                            const ini1 = timeToMinutes(h1.inicio);
-                            const fin1 = timeToMinutes(h1.fin);
-                            const ini2 = timeToMinutes(h2.inicio);
-                            const fin2 = timeToMinutes(h2.fin);
-                            if (ini1 < fin2 && ini2 < fin1) hayChoque = true;
-                        }
-                    }
-                }
-                if (hayChoque) {
-                    conflictEEs.add(ee1.crn);
-                    conflictEEs.add(ee2.crn);
-                }
-            }
-        }
-        
-        document.querySelectorAll('.grid-cell.occupied').forEach(cell => {
-            const onclick = cell.getAttribute('onclick');
-            if (onclick) {
-                const match = onclick.match(/cellClick\((\d+),\s*(\d+)\)/);
-                if (match) {
-                    const dia = parseInt(match[1]);
-                    const hora = parseInt(match[2]);
-                    const ee = appState.horarioSeleccionado.find(e => 
-                        e.horarios.some(h => {
-                            const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
-                            const finH = Math.ceil(timeToMinutes(h.fin) / 60);
-                            return h.dia === dia && hora >= iniH && hora < finH;
-                        })
-                    );
-                    if (ee && conflictEEs.has(ee.crn)) cell.classList.add('conflict');
-                }
-            }
-        });
-    }
-
-    function markConflictsBloques() {
-        const conflictEEs = new Set();
-        for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
-            for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
-                const ee1 = appState.horarioSeleccionado[i];
-                const ee2 = appState.horarioSeleccionado[j];
-                let hayChoque = false;
-                for (const h1 of ee1.horarios) {
-                    for (const h2 of ee2.horarios) {
-                        if (h1.dia === h2.dia) {
-                            const ini1 = timeToMinutes(h1.inicio);
-                            const fin1 = timeToMinutes(h1.fin);
-                            const ini2 = timeToMinutes(h2.inicio);
-                            const fin2 = timeToMinutes(h2.fin);
-                            if (ini1 < fin2 && ini2 < fin1) hayChoque = true;
-                        }
-                    }
-                }
-                if (hayChoque) {
-                    conflictEEs.add(ee1.crn);
-                    conflictEEs.add(ee2.crn);
-                }
-            }
-        }
-        
-        document.querySelectorAll('.bloque-ee-item').forEach(item => {
-            if (conflictEEs.has(item.dataset.crn)) {
-                item.classList.add('conflict');
-            }
-        });
     }
 
     // ============ MODAL ============
@@ -1271,8 +975,8 @@ transform: translateX(-3px);
         const eeList = document.getElementById('ee-list');
         document.getElementById('search-ee').value = '';
         document.getElementById('filter-area').value = '';
-        document.getElementById('filter-bloque').value = '';
         document.getElementById('filter-turno').value = '';
+        document.getElementById('filter-bloque').value = '';
         eeList.innerHTML = '';
 
         const diasNombre = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -1301,7 +1005,7 @@ transform: translateX(-3px);
                 <p><strong>Docente:</strong> ${ee.docente}</p>
                 <p><strong>Salón:</strong> ${ee.salon}</p>
                 <p><strong>Horario:</strong> ${horariosStr}</p>
-                <p><strong>Área:</strong> ${ee.area}</p>
+                <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : 'Vespertino'}</p>
             `;
             
             if (!yaAgregada) {
@@ -1338,7 +1042,7 @@ transform: translateX(-3px);
         }
         appState.horarioSeleccionado.push(ee);
         updateStats();
-        renderVista();
+        renderBloquesGrid();
         closeModal();
         setTimeout(() => openModal(), 100);
     }
@@ -1347,23 +1051,20 @@ transform: translateX(-3px);
         if (confirm('¿Estás seguro de limpiar todo el horario?')) {
             appState.horarioSeleccionado = [];
             updateStats();
-            renderVista();
-        }
-    }
-
-    function reloadData() {
-        if (confirm('¿Recargar los datos desde Google Drive?')) {
-            appState.datosCargados = { '04-E': null, '04-A': null, '25-E': null, '25-A': null };
-            appState.datosCargadosOK = false;
-            appState.horarioSeleccionado = [];
-            document.getElementById('app-main').style.display = 'none';
-            loadFromGoogleDrive();
+            renderBloquesGrid();
         }
     }
 
     function printHorario() { window.print(); }
 
     // ============ MENSAJES ============
+    function showLoading() {
+        document.getElementById('loading-section').style.display = 'block';
+        document.getElementById('app-main').style.display = 'none';
+        document.getElementById('error-section').style.display = 'none';
+        document.getElementById('success-section').style.display = 'none';
+    }
+
     function updateLoadingMessage(msg) {
         document.getElementById('loading-message').textContent = msg;
     }
@@ -1382,6 +1083,5 @@ transform: translateX(-3px);
         }, 5000);
     }
 </script>
-
-</body>
+    </body>
 </html>
