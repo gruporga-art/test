@@ -248,40 +248,52 @@ border: 2px solid #28a745;
 }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
 .bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
-    /* GRID ESCOLARIZADO CON TABLA */
+        /* GRID ESCOLARIZADO - TABLA CON LAYOUT FIJO */
+    .horario-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 20px;
+    }
     .horario-table {
         width: 100%;
         border-collapse: collapse;
-        margin-bottom: 20px;
-        font-size: 0.85em;
+        table-layout: fixed;
     }
     .horario-table th {
         background: #1a3a6b;
         color: white;
-        padding: 15px 8px;
+        padding: 12px 4px;
         text-align: center;
         font-weight: bold;
         font-size: 0.95em;
+        border: 1px solid #0f2444;
     }
     .horario-table th:first-child {
-        background: #1a3a6b;
-        width: 80px;
+        width: 70px;
+        min-width: 70px;
+        max-width: 70px;
+    }
+    .horario-table th:not(:first-child) {
+        width: calc((100% - 70px) / 5);
     }
     .horario-table td {
-        border: 1px solid #e0e0e0;
-        padding: 8px;
+        border: 1px solid #d0d0d0;
+        padding: 2px;
         vertical-align: top;
-        min-height: 60px;
+        height: 55px;
+        overflow: hidden;
     }
     .horario-table td:first-child {
         background: #f0f0f0;
         font-weight: bold;
         text-align: center;
         font-size: 0.9em;
+        padding: 8px 4px;
+        vertical-align: middle;
     }
     .horario-table .ee-card {
         color: white;
-        padding: 8px;
+        padding: 6px 8px;
         border-radius: 5px;
         cursor: pointer;
         transition: all 0.3s;
@@ -290,34 +302,50 @@ border: 2px solid #28a745;
         flex-direction: column;
         justify-content: center;
         box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        overflow: hidden;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
     }
     .horario-table .ee-card:hover {
         transform: scale(1.02);
         box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+        z-index: 10;
+        position: relative;
     }
     .horario-table .ee-card .ee-nombre {
         font-weight: bold;
-        font-size: 0.95em;
-        margin-bottom: 4px;
+        font-size: 0.85em;
+        margin-bottom: 3px;
+        line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     .horario-table .ee-card .ee-nrc {
-        font-size: 0.8em;
-        opacity: 0.9;
-        margin-bottom: 3px;
+        font-size: 0.75em;
+        opacity: 0.95;
+        margin-bottom: 2px;
     }
     .horario-table .ee-card .ee-docente {
-        font-size: 0.8em;
+        font-size: 0.75em;
         opacity: 0.9;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     .horario-table .ee-card .ee-horario {
-        font-size: 0.8em;
+        font-size: 0.75em;
         opacity: 0.9;
-        margin-bottom: 3px;
+        margin-bottom: 2px;
     }
     .horario-table .ee-card .ee-salon {
-        font-size: 0.8em;
+        font-size: 0.75em;
         opacity: 0.9;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
     
     /* CHOQUE - efecto visual */
@@ -458,7 +486,8 @@ border: 2px solid #28a745;
         .stats { grid-template-columns: repeat(2, 1fr); }
         .botones-inferiores { grid-template-columns: 1fr; }
         .bloques-grid { font-size: 0.75em; }
-        .horario-table { font-size: 0.7em; }
+        .horario-table th, .horario-table td { font-size: 0.7em; padding: 2px; }
+        .horario-table th:first-child { width: 50px; }
         .header h1 { font-size: 1.4em; }
         .step-label { display: none; }
         .selector-grid { grid-template-columns: 1fr; }
@@ -468,11 +497,12 @@ border: 2px solid #28a745;
     @media print {
         @page {
             size: landscape;
-            margin: 10mm;
+            margin: 8mm;
         }
         body {
             background: white !important;
             padding: 0 !important;
+            margin: 0 !important;
         }
         * {
             -webkit-print-color-adjust: exact !important;
@@ -483,8 +513,8 @@ border: 2px solid #28a745;
             box-shadow: none !important;
             border-radius: 0 !important;
             max-width: 100% !important;
+            margin: 0 !important;
         }
-        /* Ocultar todo excepto el grid de horario */
         .header, .steps-indicator, .screen:not(#screen-3),
         .oferta-header, .stats, .btn-agregar, .instruccion,
         .botones-inferiores, .footer, .back-btn,
@@ -492,39 +522,64 @@ border: 2px solid #28a745;
         #vista-abierto, .modal {
             display: none !important;
         }
-        #screen-3 {
+        #screen-3, #app-main, #vista-escolarizado {
             display: block !important;
         }
-        #app-main {
-            display: block !important;
-        }
-        #vista-escolarizado {
-            display: block !important;
+        .horario-table-wrapper {
+            overflow: visible !important;
         }
         .horario-table {
             width: 100% !important;
-            font-size: 9pt !important;
+            table-layout: fixed !important;
             border-collapse: collapse !important;
+            font-size: 8pt !important;
         }
         .horario-table th {
             background: #1a3a6b !important;
             color: white !important;
-            padding: 6px 4px !important;
+            padding: 4px 2px !important;
             font-size: 9pt !important;
+            border: 1px solid #000 !important;
+        }
+        .horario-table th:first-child {
+            width: 50px !important;
         }
         .horario-table td {
-            padding: 4px !important;
+            padding: 2px !important;
             border: 1px solid #999 !important;
+            height: auto !important;
+            overflow: hidden !important;
+        }
+        .horario-table td:first-child {
+            background: #f0f0f0 !important;
+            font-size: 8pt !important;
+            padding: 4px 2px !important;
         }
         .horario-table .ee-card {
-            color: white !important;
-            padding: 4px !important;
-            font-size: 8pt !important;
+            padding: 3px 4px !important;
+            font-size: 7pt !important;
             box-shadow: none !important;
+            border-radius: 2px !important;
+            overflow: hidden !important;
+        }
+        .horario-table .ee-card .ee-nombre {
+            font-size: 7.5pt !important;
+            white-space: normal !important;
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+        .horario-table .ee-card .ee-nrc,
+        .horario-table .ee-card .ee-docente,
+        .horario-table .ee-card .ee-horario,
+        .horario-table .ee-card .ee-salon {
+            font-size: 6.5pt !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
         }
     }
 </style>
-</head>
+    </head>
 <body>
 <div class="container">
 <div class="header">
@@ -534,7 +589,7 @@ border: 2px solid #28a745;
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
 <div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
 </div>
-    <div class="content">
+        <div class="content">
         <div class="steps-indicator" id="steps-indicator">
             <div class="step active" data-step="1">
                 <div class="step-number">1</div>
@@ -578,7 +633,7 @@ border: 2px solid #28a745;
             <p class="section-subtitle">Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.</p>
             <div class="selector-grid">
                 <div class="option-card" data-plan="04" onclick="selectPlan('04')">
-                    <div class="icon">📜</div>
+                    <div class="icon"></div>
                     <h3>Plan 2004</h3>
                     <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
                 </div>
@@ -671,7 +726,9 @@ border: 2px solid #28a745;
                 </div>
 
                 <div id="vista-escolarizado" style="display:none;">
-                    <table class="horario-table" id="horario-table"></table>
+                    <div class="horario-table-wrapper">
+                        <table class="horario-table" id="horario-table"></table>
+                    </div>
                 </div>
 
                 <div class="botones-inferiores">
@@ -720,7 +777,6 @@ border: 2px solid #28a745;
         'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i
     };
 
-    // Paleta de colores para las EEs
     const PALETA_COLORES = [
         { bg: '#28a745', text: '#ffffff' },
         { bg: '#007bff', text: '#ffffff' },
@@ -832,11 +888,9 @@ border: 2px solid #28a745;
                     if (key === 'BLOQUES-A') {
                         const data = await downloadAndProcessBloques(file.id);
                         appState.bloquesFechas = data;
-                        console.log('Fechas de bloques:', data);
                     } else {
                         const data = await downloadAndProcessFile(file.id);
                         appState.datosCargados[key] = data;
-                        console.log(`✓ ${key}: ${data.length} EEs`);
                     }
                     cargados++;
                 } catch (err) {
@@ -857,7 +911,7 @@ border: 2px solid #28a745;
             initializeApp();
 
         } catch (error) {
-            showError('❌ Error: ' + error.message);
+            showError(' Error: ' + error.message);
             console.error(error);
         }
     }
@@ -1004,13 +1058,13 @@ border: 2px solid #28a745;
             }
             
             const dias = [
-                { ini: idx.IL, fin: idx.FL, dia: 0, nombre: 'Lunes' },
-                { ini: idx.IM, fin: idx.FM, dia: 1, nombre: 'Martes' },
-                { ini: idx.II, fin: idx.FI, dia: 2, nombre: 'Miércoles' },
-                { ini: idx.IJ, fin: idx.FJ, dia: 3, nombre: 'Jueves' },
-                { ini: idx.IV, fin: idx.FV, dia: 4, nombre: 'Viernes' },
-                { ini: idx.ISS, fin: idx.FSS, dia: 5, nombre: 'Sábado' },
-                { ini: idx.ID, fin: idx.FD, dia: 6, nombre: 'Domingo' }
+                { ini: idx.IL, fin: idx.FL, dia: 0 },
+                { ini: idx.IM, fin: idx.FM, dia: 1 },
+                { ini: idx.II, fin: idx.FI, dia: 2 },
+                { ini: idx.IJ, fin: idx.FJ, dia: 3 },
+                { ini: idx.IV, fin: idx.FV, dia: 4 },
+                { ini: idx.ISS, fin: idx.FSS, dia: 5 },
+                { ini: idx.ID, fin: idx.FD, dia: 6 }
             ];
             
             dias.forEach(d => {
@@ -1058,7 +1112,7 @@ border: 2px solid #28a745;
         const datos = appState.datosCargados[key];
         
         if (!datos || datos.length === 0) {
-            showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
+            showError('️ No hay datos disponibles para esta combinación de plan y modalidad.');
             return;
         }
         
@@ -1076,7 +1130,6 @@ border: 2px solid #28a745;
         
         document.getElementById('stat-horas-label').textContent = appState.modalidad === 'A' ? 'Horas/Sábado' : 'Horas/Semana';
         
-        // Ocultar/mostrar filtro de turnos según modalidad
         const filterTurno = document.getElementById('filter-turno');
         if (appState.modalidad === 'E') {
             filterTurno.style.display = 'none';
@@ -1195,7 +1248,9 @@ border: 2px solid #28a745;
         const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         const horasInicio = 7;
         const horasFin = 21;
+        const numDias = 5;
         
+        // Detectar conflictos
         const conflictEEs = new Set();
         for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
             for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
@@ -1216,51 +1271,68 @@ border: 2px solid #28a745;
             }
         }
         
+        // Header
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
         table.appendChild(headerRow);
         
+        // Matriz de ocupación: ocupacion[hora][dia] = {ee, horario, esInicio, rowspan}
         const ocupacion = {};
         for (let h = horasInicio; h <= horasFin; h++) {
             ocupacion[h] = {};
-            for (let d = 0; d < 5; d++) {
+            for (let d = 0; d < numDias; d++) {
                 ocupacion[h][d] = null;
             }
         }
         
+        // Llenar matriz
         appState.horarioSeleccionado.forEach(ee => {
             ee.horarios.forEach(h => {
-                if (h.dia >= 0 && h.dia < 5) {
+                if (h.dia >= 0 && h.dia < numDias) {
                     const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
                     const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
-                    for (let hora = iniHora; hora < finHora && hora <= horasFin; hora++) {
+                    const rowspan = finHora - iniHora;
+                    
+                    // Marcar solo la celda de inicio con rowspan
+                    if (ocupacion[iniHora] && ocupacion[iniHora][h.dia] === null) {
+                        ocupacion[iniHora][h.dia] = { 
+                            ee, 
+                            horario: h, 
+                            esInicio: true,
+                            rowspan: Math.min(rowspan, horasFin - iniHora + 1)
+                        };
+                    }
+                    // Marcar celdas cubiertas (para omitirlas al generar filas)
+                    for (let hora = iniHora + 1; hora < finHora && hora <= horasFin; hora++) {
                         if (ocupacion[hora] && ocupacion[hora][h.dia] === null) {
-                            ocupacion[hora][h.dia] = { ee, horario: h, esInicio: hora === iniHora };
+                            ocupacion[hora][h.dia] = { cubierto: true };
                         }
                     }
                 }
             });
         });
         
+        // Generar filas
         for (let hora = horasInicio; hora <= horasFin; hora++) {
             const row = document.createElement('tr');
             
+            // Celda de hora
             const horaCell = document.createElement('td');
             horaCell.textContent = `${hora}:00`;
             row.appendChild(horaCell);
             
-            for (let dia = 0; dia < 5; dia++) {
-                const cell = document.createElement('td');
+            // Celdas de días
+            for (let dia = 0; dia < numDias; dia++) {
                 const ocup = ocupacion[hora][dia];
                 
+                // Si está cubierta por rowspan, NO generar celda
+                if (ocup && ocup.cubierto) {
+                    continue;
+                }
+                
+                const cell = document.createElement('td');
+                
                 if (ocup && ocup.esInicio) {
-                    const finHora = Math.ceil(timeToMinutes(ocup.horario.fin) / 60);
-                    const rowspan = Math.min(finHora - hora, horasFin - hora + 1);
-                    
-                    if (rowspan > 1) {
-                        cell.rowSpan = rowspan;
-                    }
-                    
                     const salonDelDia = ocup.ee.salonesPorDia[dia] || Object.values(ocup.ee.salonesPorDia)[0] || 'Por asignar';
                     const aulaCorta = extraerAula(salonDelDia);
                     const duracion = Math.ceil((timeToMinutes(ocup.horario.fin) - timeToMinutes(ocup.horario.inicio)) / 60);
@@ -1269,6 +1341,10 @@ border: 2px solid #28a745;
                     const color = PALETA_COLORES[idx % PALETA_COLORES.length];
                     
                     const esConflicto = conflictEEs.has(ocup.ee.crn);
+                    
+                    if (ocup.rowspan > 1) {
+                        cell.rowSpan = ocup.rowspan;
+                    }
                     
                     cell.innerHTML = `
                         <div class="ee-card ${esConflicto ? 'conflicto' : ''}" data-crn="${ocup.ee.crn}" style="background:${color.bg}; color:${color.text};">
@@ -1287,6 +1363,7 @@ border: 2px solid #28a745;
             table.appendChild(row);
         }
         
+        // Event listeners
         document.querySelectorAll('.ee-card').forEach(card => {
             card.addEventListener('click', function() {
                 const crn = this.dataset.crn;
@@ -1323,7 +1400,7 @@ border: 2px solid #28a745;
     function populateAreaFilter() {
         const select = document.getElementById('filter-area');
         const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
-        select.innerHTML = '<option value=""> Todas las áreas</option>';
+        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
         areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
     }
 
@@ -1378,7 +1455,6 @@ border: 2px solid #28a745;
         document.querySelectorAll('.ee-item').forEach(item => {
             const matchSearch = item.dataset.search.includes(search);
             const matchArea = !areaFilter || item.dataset.area === areaFilter;
-            // Si el filtro de turno está oculto (Escolarizado), no aplicar filtro de turno
             const filterTurnoVisible = document.getElementById('filter-turno').style.display !== 'none';
             const matchTurno = !filterTurnoVisible || !turnoFilter || item.dataset.turno === turnoFilter;
             item.style.display = (matchSearch && matchArea && matchTurno) ? 'block' : 'none';
