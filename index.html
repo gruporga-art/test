@@ -206,7 +206,7 @@ margin-bottom: 20px;
 .btn-agregar:hover { background: #218838; }
 .btn-agregar::before { content: '➕ '; }
 .instruccion { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
-.instruccion::before { content: '👆 '; }
+.instruccion::before { content: ' '; }
 .bloques-grid {
 width: 100%;
 border-collapse: collapse;
@@ -247,82 +247,77 @@ background: #e8f5e9;
 border: 2px solid #28a745;
 }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
-.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
-/* GRID ESCOLARIZADO MEJORADO */
-    .horario-grid {
-        display: grid;
-        grid-template-columns: 80px repeat(5, 1fr);
-        gap: 2px;
+.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }  
+/* GRID ESCOLARIZADO CON TABLA */
+    .horario-table {
+        width: 100%;
+        border-collapse: collapse;
         margin-bottom: 20px;
-        border: 2px solid #1a3a6b;
-        border-radius: 8px;
-        overflow: hidden;
+        font-size: 0.85em;
     }
-    .grid-header {
+    .horario-table th {
         background: #1a3a6b;
         color: white;
-        padding: 15px 5px;
+        padding: 15px 8px;
         text-align: center;
         font-weight: bold;
         font-size: 0.95em;
     }
-    .grid-time {
+    .horario-table th:first-child {
+        background: #1a3a6b;
+        width: 80px;
+    }
+    .horario-table td {
+        border: 1px solid #e0e0e0;
+        padding: 8px;
+        vertical-align: top;
+        min-height: 60px;
+    }
+    .horario-table td:first-child {
         background: #f0f0f0;
-        padding: 10px 5px;
-        text-align: center;
         font-weight: bold;
+        text-align: center;
         font-size: 0.9em;
     }
-    .grid-cell {
-        background: white;
-        border: 1px solid #e0e0e0;
-        padding: 5px;
-        min-height: 70px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.75em;
-        position: relative;
-        overflow: hidden;
-    }
-    .grid-cell:hover { background: #f0f4ff; border-color: #1a3a6b; }
-    .grid-cell.occupied {
+    .horario-table .ee-card {
         background: #28a745;
         color: white;
-        border: 2px solid #218838;
-    }
-    .grid-cell.continuation {
-        background: #28a745;
-        border-top: none;
-        border: 2px solid #218838;
-        border-top: 1px solid #218838;
-    }
-    .grid-cell .ee-card {
+        padding: 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        gap: 2px;
-        height: 100%;
+        justify-content: center;
     }
-    .grid-cell .ee-nombre {
+    .horario-table .ee-card:hover {
+        background: #dc3545;
+        transform: scale(1.02);
+    }
+    .horario-table .ee-card .ee-nombre {
         font-weight: bold;
-        font-size: 0.9em;
+        font-size: 0.95em;
+        margin-bottom: 4px;
+    }
+    .horario-table .ee-card .ee-nrc {
+        font-size: 0.8em;
+        opacity: 0.9;
         margin-bottom: 3px;
     }
-    .grid-cell .ee-nrc {
-        font-size: 0.85em;
+    .horario-table .ee-card .ee-docente {
+        font-size: 0.8em;
         opacity: 0.9;
+        margin-bottom: 3px;
     }
-    .grid-cell .ee-docente {
+    .horario-table .ee-card .ee-horario {
         font-size: 0.8em;
-        opacity: 0.85;
+        opacity: 0.9;
+        margin-bottom: 3px;
     }
-    .grid-cell .ee-horario {
+    .horario-table .ee-card .ee-salon {
         font-size: 0.8em;
-        opacity: 0.85;
-    }
-    .grid-cell .ee-salon {
-        font-size: 0.8em;
-        opacity: 0.85;
-        margin-top: auto;
+        opacity: 0.9;
     }
     
     .botones-inferiores {
@@ -439,7 +434,6 @@ border: 2px solid #28a745;
         cursor: pointer;
         margin-top: 15px;
     }
-    .btn-cerrar-modal:hover { background: #5a6268; }
     .conflict-warning {
         background: #fff3cd;
         border: 2px solid #ffc107;
@@ -450,255 +444,469 @@ border: 2px solid #28a745;
         display: none;
     }
     .conflict-warning.show { display: block; }
-    .conflict-warning::before { content: '⚠️ '; }
+    @media (max-width: 768px) {
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .botones-inferiores { grid-template-columns: 1fr; }
+        .bloques-grid { font-size: 0.75em; }
+        .horario-table { font-size: 0.7em; }
+        .header h1 { font-size: 1.4em; }
+        .step-label { display: none; }
+        .selector-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+        body { background: white; }
+        .container { box-shadow: none; }
+        .btn-agregar, .botones-inferiores, .modal, .conflict-warning, .back-btn, .steps-indicator, .nav-buttons { display: none !important; }
+    }
 </style>
 </head>
 <body>
 <div class="container">
 <div class="header">
+<button class="back-btn" id="back-btn" style="display:none;" onclick="goBack()">← Cambiar</button>
 <div class="uv-badge">UNIVERSIDAD VERACRUZANA</div>
-<h1>📅 Planeador de Horarios Facico</h1>
+<h1>Planeador de Horarios Facico</h1>
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
-<div class="plan-badge" id="header-plan-badge">Escolarizado · Plan 2004</div>
-</div>
+<div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
+</div>   
 <div class="content">
-        <!-- Pantalla de carga -->
-        <div id="loading-section" class="loading">
-            <div class="loading-spinner"></div>
-            <div id="loading-message">Cargando datos...</div>
+        <div class="steps-indicator" id="steps-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Modalidad</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Plan</div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Mi Horario</div>
+            </div>
         </div>
-        
-        <!-- Pantalla de error -->
-        <div id="error-section" class="error" style="display: none;"></div>
-        
-        <!-- Pantalla de éxito -->
-        <div id="success-section" class="success" style="display: none;"></div>
-        
-        <!-- Aplicación principal -->
-        <div id="app-main" style="display: none;">
-            <div class="oferta-header">
-                <div class="oferta-title" id="oferta-title">📂 Oferta Académica</div>
-                <button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button>
-            </div>
-            
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-ee">0</div>
-                    <div class="stat-label">Experiencias Educativas</div>
+
+        <div class="screen active" id="screen-1">
+            <div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
+            <p class="section-subtitle">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas. Selecciona la que corresponda a tu situación.</p>
+            <div class="selector-grid">
+                <div class="option-card" data-modalidad="E" onclick="selectModalidad('E')">
+                    <div class="icon">🏫</div>
+                    <h3>Escolarizado</h3>
+                    <p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-creditos">0</div>
-                    <div class="stat-label">Créditos</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-horas">0</div>
-                    <div class="stat-label" id="stat-horas-label">Horas/Semana</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="stat-choques">0</div>
-                    <div class="stat-label">Choques</div>
+                <div class="option-card" data-modalidad="A" onclick="selectModalidad('A')">
+                    <div class="icon">📚</div>
+                    <h3>Abierto</h3>
+                    <p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>, según el calendario oficial.</p>
                 </div>
             </div>
-            
-            <div class="conflict-warning" id="conflict-warning">
-                ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+            <div class="nav-buttons">
+                <div></div>
+                <button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button>
             </div>
-            
-            <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
-            
-            <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
-            
-            <!-- Vista Abierto (Bloques) -->
-            <div id="vista-abierto" style="display: none;">
-                <table class="bloques-grid">
-                    <thead>
-                        <tr>
-                            <th>Turno</th>
-                            <th>
-                                <span class="bloque-num">Bloque 1</span>
-                                <span class="bloque-fecha" id="fecha-bloque-1">22 y 29 ago, 5 sep</span>
-                            </th>
-                            <th>
-                                <span class="bloque-num">Bloque 2</span>
-                                <span class="bloque-fecha" id="fecha-bloque-2">12, 19 y 26 sep</span>
-                            </th>
-                            <th>
-                                <span class="bloque-num">Bloque 3</span>
-                                <span class="bloque-fecha" id="fecha-bloque-3">3, 10 y 17 oct</span>
-                            </th>
-                            <th>
-                                <span class="bloque-num">Bloque 4</span>
-                                <span class="bloque-fecha" id="fecha-bloque-4">24 y 31 oct, 7 nov</span>
-                            </th>
-                            <th>
-                                <span class="bloque-num">Bloque 5</span>
-                                <span class="bloque-fecha" id="fecha-bloque-5">14, 21 y 28 nov</span>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Matutino (M)</td>
-                            <td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClickBloque('M', 1)">—</td>
-                            <td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClickBloque('M', 2)">—</td>
-                            <td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClickBloque('M', 3)">—</td>
-                            <td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClickBloque('M', 4)">—</td>
-                            <td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClickBloque('M', 5)">—</td>
-                        </tr>
-                        <tr>
-                            <td>Vespertino (V)</td>
-                            <td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClickBloque('V', 1)">—</td>
-                            <td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClickBloque('V', 2)">—</td>
-                            <td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClickBloque('V', 3)">—</td>
-                            <td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClickBloque('V', 4)">—</td>
-                            <td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClickBloque('V', 5)">—</td>
-                        </tr>
-                    </tbody>
-                </table>
+        </div>
+
+        <div class="screen" id="screen-2">
+            <div class="section-title">Paso 2: ¿A qué plan de estudios perteneces?</div>
+            <p class="section-subtitle">Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.</p>
+            <div class="selector-grid">
+                <div class="option-card" data-plan="04" onclick="selectPlan('04')">
+                    <div class="icon">📜</div>
+                    <h3>Plan 2004</h3>
+                    <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
+                </div>
+                <div class="option-card" data-plan="25" onclick="selectPlan('25')">
+                    <div class="icon">📜</div>
+                    <h3>Plan 2025</h3>
+                    <p>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las EEs vigentes.</p>
+                </div>
             </div>
-            
-            <!-- Vista Escolarizado (Grid) -->
-            <div id="vista-escolarizado" style="display: none;">
-                <div class="horario-grid" id="horario-grid"></div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="goToScreen(1)">← Atrás</button>
+                <button class="btn" id="btn-next-2" disabled onclick="goToScreen(3)">Ver mi oferta académica →</button>
             </div>
-            
-            <div class="botones-inferiores">
-                <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
-                <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
+        </div>
+
+        <div class="screen" id="screen-3">
+            <div id="loading-section" class="loading">
+                <div class="loading-spinner"></div>
+                <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
+                <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
+            </div>
+
+            <div id="error-section" class="error" style="display: none;"></div>
+            <div id="success-section" class="success" style="display: none;"></div>
+
+            <div id="app-main" style="display: none;">
+                <div class="oferta-header">
+                    <div class="oferta-title" id="oferta-title">Oferta Académica</div>
+                    <button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-ee">0</div>
+                        <div class="stat-label">Experiencias Educativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-creditos">0</div>
+                        <div class="stat-label">Créditos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-horas">0.0</div>
+                        <div class="stat-label" id="stat-horas-label">Horas/Sábado</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="stat-choques">0</div>
+                        <div class="stat-label">Choques</div>
+                    </div>
+                </div>
+
+                <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
+
+                <div class="conflict-warning" id="conflict-warning">
+                    ⚠️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+                </div>
+
+                <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
+
+                <div id="vista-abierto" style="display:none;">
+                    <table class="bloques-grid" id="bloques-grid">
+                        <thead>
+                            <tr>
+                                <th>Turno</th>
+                                <th><span class="bloque-num">Bloque 1</span><span class="bloque-fecha" id="fecha-bloque-1">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 2</span><span class="bloque-fecha" id="fecha-bloque-2">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 3</span><span class="bloque-fecha" id="fecha-bloque-3">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 4</span><span class="bloque-fecha" id="fecha-bloque-4">Cargando...</span></th>
+                                <th><span class="bloque-num">Bloque 5</span><span class="bloque-fecha" id="fecha-bloque-5">Cargando...</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Matutino</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClickBloque('M', 1)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClickBloque('M', 2)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClickBloque('M', 3)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClickBloque('M', 4)">—</td>
+                                <td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClickBloque('M', 5)">—</td>
+                            </tr>
+                            <tr>
+                                <td>Vespertino</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClickBloque('V', 1)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClickBloque('V', 2)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClickBloque('V', 3)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClickBloque('V', 4)">—</td>
+                                <td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClickBloque('V', 5)">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="vista-escolarizado" style="display:none;">
+                    <table class="horario-table" id="horario-table"></table>
+                </div>
+
+                <div class="botones-inferiores">
+                    <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
+                    <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
+                </div>
             </div>
         </div>
     </div>
-    
-    <!-- Modal para agregar EE -->
-    <div class="modal" id="ee-modal">
-        <div class="modal-content">
-            <div class="modal-header">➕ Agregar Experiencia Educativa</div>
-            <input type="text" class="search-box" id="search-ee" placeholder="Buscar por nombre, docente o CRN..." oninput="filterEEList()">
-            <div class="filter-bar">
-                <select id="filter-area" onchange="filterEEList()">
-                    <option value="">Todas las áreas</option>
-                </select>
-                <select id="filter-turno" onchange="filterEEList()">
-                    <option value="">Todos los turnos</option>
-                    <option value="M">Matutino</option>
-                    <option value="V">Vespertino</option>
-                </select>
-            </div>
-            <div class="ee-list" id="ee-list"></div>
-            <button class="btn-cerrar-modal" onclick="closeModal()"> Cerrar</button>
-        </div>
-    </div>
-    
+
     <div class="footer">
-        <p>Facultad de Ciencias y Técnicas de la Comunicación · Universidad Veracruzana · 2026</p>
+        <p><strong>Facultad de Ciencias y Técnicas de la Comunicación</strong> · Universidad Veracruzana · 2026</p>
         <p>Verifica siempre la oferta oficial en la plataforma de la UV (<a href="https://www.uv.mx/veracruz/fcc/programacion-academica" target="_blank">www.uv.mx/veracruz/fcc/programacion-academica</a>).</p>
-        <p>Herramienta de apoyo diseñada por el docente <a href="mailto:alfreyes@tuv.mx">Dr. Alfredo Reyes Gutiérrez</a> para sus Tutorados.</p>
+        <p>Herramienta de apoyo diseñada por el docente <a href="mailto:alfreyes@uv.mx">Dr. Alfredo Reyes Gutiérrez</a> para sus Tutorados.</p>
+    </div>
+</div>
+
+<div class="modal" id="ee-modal">
+    <div class="modal-content">
+        <div class="modal-header">➕ Agregar Experiencia Educativa</div>
+        <input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o CRN..." oninput="filterEEList()">
+        <div class="filter-bar">
+            <select id="filter-area" onchange="filterEEList()">
+                <option value="">📁 Todas las áreas</option>
+            </select>
+            <select id="filter-turno" onchange="filterEEList()">
+                <option value="">🕐 Todos los turnos</option>
+                <option value="M">Matutino</option>
+                <option value="V">Vespertino</option>
+            </select>
+        </div>
+        <div class="ee-list" id="ee-list"></div>
+        <button class="btn-cerrar-modal" onclick="closeModal()">Cerrar</button>
     </div>
 </div>
 
 <script>
-    // URLs de Google Drive (reemplaza con tus URLs reales)
-    const DRIVE_URLS = {
-        '04-E': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYRPRAC-CSCO-04-E-CR-202701/pub?output=xlsx',
-        '04-A': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYRPRAC-CSCO-04-A-CR-202701/pub?output=xlsx',
-        '25-E': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYRPRAC-CSCO-25-E-CR-202701/pub?output=xlsx',
-        '25-A': 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSYRPRAC-CSCO-25-A-CR-202701/pub?output=xlsx'
+    const API_KEY = 'AIzaSyBI4tHjYhVazAn6y8CW1k2kC0zcxLX07xI';
+    const FOLDER_ID = '1j6zXhkThBBJs5Ur_gnaS8Fql4iRfDNkY';
+    
+    const FILE_PATTERNS = {
+        '04-E': /SYRPRAC.*04.*E.*\.xlsx$/i,
+        '04-A': /SYRPRAC.*04.*A.*\.xlsx$/i,
+        '25-E': /SYRPRAC.*25.*E.*\.xlsx$/i,
+        '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i,
+        'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i
     };
 
-    const appState = {
-        plan: '04',
-        modalidad: 'E',
+    let appState = {
+        currentScreen: 1,
+        modalidad: null,
+        plan: null,
+        datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
+        bloquesFechas: {},
         experienciasEducativas: [],
         horarioSeleccionado: [],
-        datosCargados: {}
+        datosCargadosOK: false
     };
 
-    const BLOQUES_FECHAS = {
-        1: '22 y 29 ago, 5 sep',
-        2: '12, 19 y 26 sep',
-        3: '3, 10 y 17 oct',
-        4: '24 y 31 oct, 7 nov',
-        5: '14, 21 y 28 nov'
-    };
+    document.addEventListener('DOMContentLoaded', () => {});
 
-    async function cargarDatos() {
-        const key = `${appState.plan}-${appState.modalidad}`;
-        const url = DRIVE_URLS[key];
+    function goToScreen(num) {
+        if (num === 2 && !appState.modalidad) return;
+        if (num === 3 && (!appState.modalidad || !appState.plan)) return;
         
-        if (!url) {
-            showError('URL no configurada para esta combinación.');
-            return;
+        if (num === 3 && !appState.datosCargadosOK) {
+            loadFromGoogleDrive();
         }
-        
-        updateLoadingMessage(`Cargando datos de ${appState.modalidad === 'E' ? 'Escolarizado' : 'Abierto'} - Plan ${appState.plan === '04' ? '2004' : '2025'}...`);
-        
+
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(`screen-${num}`).classList.add('active');
+        appState.currentScreen = num;
+        updateStepsIndicator();
+        updateBackButton();
+        window.scrollTo(0, 0);
+    }
+
+    function goBack() {
+        if (appState.currentScreen === 3) goToScreen(2);
+        else if (appState.currentScreen === 2) goToScreen(1);
+    }
+
+    function updateStepsIndicator() {
+        document.querySelectorAll('.step').forEach(step => {
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.remove('active', 'completed');
+            if (stepNum === appState.currentScreen) step.classList.add('active');
+            else if (stepNum < appState.currentScreen) step.classList.add('completed');
+        });
+    }
+
+    function updateBackButton() {
+        document.getElementById('back-btn').style.display = appState.currentScreen > 1 ? 'block' : 'none';
+    }
+
+    function selectModalidad(mod) {
+        appState.modalidad = mod;
+        document.querySelectorAll('[data-modalidad]').forEach(card => {
+            card.classList.toggle('selected', card.dataset.modalidad === mod);
+        });
+        document.getElementById('btn-next-1').disabled = false;
+    }
+
+    function selectPlan(plan) {
+        appState.plan = plan;
+        document.querySelectorAll('[data-plan]').forEach(card => {
+            card.classList.toggle('selected', card.dataset.plan === plan);
+        });
+        document.getElementById('btn-next-2').disabled = false;
+    }
+
+    async function loadFromGoogleDrive() {
         try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            document.getElementById('loading-section').style.display = 'block';
+            document.getElementById('app-main').style.display = 'none';
+            document.getElementById('error-section').style.display = 'none';
+            document.getElementById('success-section').style.display = 'none';
             
-            const arrayBuffer = await response.arrayBuffer();
-            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-            const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+            const files = await listFilesInFolder();
+            console.log('Archivos encontrados:', files);
             
-            if (jsonData.length < 2) {
-                throw new Error('El archivo está vacío o no tiene el formato esperado.');
+            if (!files || files.length === 0) {
+                throw new Error('No se encontraron archivos en la carpeta de Google Drive.');
             }
+
+            const archivosEncontrados = {};
+            for (const [key, pattern] of Object.entries(FILE_PATTERNS)) {
+                const file = files.find(f => pattern.test(f.name));
+                if (file) {
+                    archivosEncontrados[key] = file;
+                    console.log(`✓ ${key}: ${file.name}`);
+                }
+            }
+
+            let cargados = 0;
+            const total = Object.keys(archivosEncontrados).length;
             
-            const datos = procesarDatosExcel(jsonData);
-            appState.datosCargados[key] = datos;
+            for (const [key, file] of Object.entries(archivosEncontrados)) {
+                try {
+                    updateLoadingMessage(`Cargando ${file.name}... (${cargados + 1}/${total})`);
+                    
+                    if (key === 'BLOQUES-A') {
+                        const data = await downloadAndProcessBloques(file.id);
+                        appState.bloquesFechas = data;
+                        console.log('Fechas de bloques:', data);
+                    } else {
+                        const data = await downloadAndProcessFile(file.id);
+                        appState.datosCargados[key] = data;
+                        console.log(`✓ ${key}: ${data.length} EEs`);
+                    }
+                    cargados++;
+                } catch (err) {
+                    console.error(`Error procesando ${file.name}:`, err);
+                }
+            }
+
+            if (cargados === 0) {
+                throw new Error('No se pudo procesar ningún archivo.');
+            }
+
+            appState.datosCargadosOK = true;
+            updateBloquesFechas();
+            
+            const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
+            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs)`);
             
             initializeApp();
+
         } catch (error) {
-            console.error('Error cargando datos:', error);
-            showError(`Error al cargar los datos: ${error.message}\n\nVerifica que la URL de Google Drive sea correcta y que el archivo sea público.`);
+            showError('❌ Error: ' + error.message);
+            console.error(error);
         }
     }
 
-    function procesarDatosExcel(jsonData) {
-        const headers = jsonData[0];
-        const idx = {};
-        headers.forEach((h, i) => {
-            if (typeof h === 'string') {
-                const hUpper = h.toUpperCase().trim();
-                if (hUpper.includes('TITULO')) idx.titulo = i;
-                else if (hUpper.includes('CRN')) idx.crn = i;
-                else if (hUpper.includes('CREDIT')) idx.creditos = i;
-                else if (hUpper.includes('NOMBRED')) idx.docente = i;
-                else if (hUpper.includes('AREA_DESC')) idx.area = i;
-                else if (hUpper.includes('XLST_GROUP')) idx.areaCode = i;
-                else if (hUpper.includes('MAX_ENRL')) idx.maxEnrl = i;
-                else if (hUpper === 'IL') idx.IL = i;
-                else if (hUpper === 'FL') idx.FL = i;
-                else if (hUpper === 'IM') idx.IM = i;
-                else if (hUpper === 'FM') idx.FM = i;
-                else if (hUpper === 'II') idx.II = i;
-                else if (hUpper === 'FI') idx.FI = i;
-                else if (hUpper === 'IJ') idx.IJ = i;
-                else if (hUpper === 'FJ') idx.FJ = i;
-                else if (hUpper === 'IV') idx.IV = i;
-                else if (hUpper === 'FV') idx.FV = i;
-                else if (hUpper === 'ISS') idx.ISS = i;
-                else if (hUpper === 'FSS') idx.FSS = i;
-                else if (hUpper === 'ID') idx.ID = i;
-                else if (hUpper === 'FD') idx.FD = i;
-                else if (hUpper.includes('ROOM_CODE')) idx.salon = i;
+    async function listFilesInFolder() {
+        const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+trashed=false&key=${API_KEY}&fields=files(id,name,mimeType)`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
+        return data.files || [];
+    }
+
+    async function downloadAndProcessFile(fileId) {
+        const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
+        const blob = await response.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+        return processData(jsonData);
+    }
+
+    async function downloadAndProcessBloques(fileId) {
+        const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
+        const blob = await response.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+        return processBloquesData(jsonData);
+    }
+
+    function processBloquesData(data) {
+        const bloques = {};
+        let headerRow = null;
+        let fechasRow = null;
+        
+        for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+            if (!row) continue;
+            const firstCell = String(row[0] || '').trim().toLowerCase();
+            if (firstCell === 'bloques' || firstCell.includes('bloque')) {
+                headerRow = i;
             }
-        });
+            if (firstCell === 'fechas') {
+                fechasRow = i;
+            }
+        }
+        
+        if (headerRow !== null && fechasRow !== null) {
+            const headerCells = data[headerRow];
+            const fechasCells = data[fechasRow];
+            
+            for (let i = 1; i <= 5; i++) {
+                const bloqueNombre = String(headerCells[i] || '').trim();
+                const fechas = String(fechasCells[i] || '').trim();
+                if (bloqueNombre && fechas) {
+                    bloques[i] = fechas;
+                }
+            }
+        }
+        
+        return bloques;
+    }
+
+    function updateBloquesFechas() {
+        for (let i = 1; i <= 5; i++) {
+            const fechas = appState.bloquesFechas[i] || 'Fechas por definir';
+            const el = document.getElementById(`fecha-bloque-${i}`);
+            if (el) el.textContent = fechas;
+        }
+    }
+
+    function processData(data) {
+        if (!data || data.length < 2) return [];
+        
+        let headerRowIndex = 0;
+        let headers = [];
+        for (let i = 0; i < Math.min(5, data.length); i++) {
+            const row = data[i];
+            if (row && row.includes('TITULO') && row.includes('SSBSECT_CRN')) {
+                headerRowIndex = i;
+                headers = row.map(h => String(h).trim());
+                break;
+            }
+        }
+        if (headers.length === 0) {
+            headers = data[0].map(h => String(h).trim());
+        }
+        
+        const idx = {
+            titulo: headers.indexOf('TITULO'),
+            creditos: headers.indexOf('SCBCRSE_CREDIT_HR_LOW'),
+            crn: headers.indexOf('SSBSECT_CRN'),
+            docente: headers.indexOf('NOMBRED'),
+            salon: headers.indexOf('SSRMEET_ROOM_CODE'),
+            edificio: headers.indexOf('SSRMEET_BLDG_CODE'),
+            area: headers.indexOf('SMRALIB_AREA_DESC'),
+            areaCode: headers.indexOf('SMRPAAP_AREA'),
+            maxEnrl: headers.indexOf('SSBSECT_MAX_ENRL'),
+            IL: headers.indexOf('IL'), FL: headers.indexOf('FL'),
+            IM: headers.indexOf('IM'), FM: headers.indexOf('FM'),
+            II: headers.indexOf('II'), FI: headers.indexOf('FI'),
+            IJ: headers.indexOf('IJ'), FJ: headers.indexOf('FJ'),
+            IV: headers.indexOf('IV'), FV: headers.indexOf('FV'),
+            ISS: headers.indexOf('ISS'), FSS: headers.indexOf('FSS'),
+            ID: headers.indexOf('ID'), FD: headers.indexOf('FD')
+        };
 
         const crnMap = {};
         
-        for (let i = 1; i < jsonData.length; i++) {
-            const row = jsonData[i];
+        for (let i = headerRowIndex + 1; i < data.length; i++) {
+            const row = data[i];
             if (!row || row.length === 0) continue;
             
+            const titulo = row[idx.titulo];
             const crn = row[idx.crn];
-            if (!crn) continue;
+            if (!titulo || !crn) continue;
+            const tituloStr = String(titulo).trim();
+            if (tituloStr.includes('CF_DESC_LEVL') || tituloStr === 'LICENCIATURA' || tituloStr === '') continue;
             
-            const tituloStr = String(row[idx.titulo] || '').trim();
-            if (!tituloStr) continue;
-            
-            const salonCompleto = String(row[idx.salon] || '').trim();
+            const salon = String(row[idx.salon] || '').trim();
+            const edificio = String(row[idx.edificio] || '').trim();
+            const salonCompleto = salon + (edificio ? ' (' + edificio + ')' : '');
             
             if (!crnMap[crn]) {
                 crnMap[crn] = {
@@ -763,7 +971,7 @@ border: 2px solid #28a745;
         const datos = appState.datosCargados[key];
         
         if (!datos || datos.length === 0) {
-            showError('️ No hay datos disponibles para esta combinación de plan y modalidad.');
+            showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
             return;
         }
         
@@ -801,13 +1009,6 @@ border: 2px solid #28a745;
         initializeApp();
     }
 
-    function updateBloquesFechas() {
-        for (let i = 1; i <= 5; i++) {
-            const el = document.getElementById(`fecha-bloque-${i}`);
-            if (el) el.textContent = BLOQUES_FECHAS[i];
-        }
-    }
-
     function timeToMinutes(time) {
         const hours = Math.floor(time / 100);
         const minutes = time % 100;
@@ -843,7 +1044,7 @@ border: 2px solid #28a745;
 
     function renderVista() {
         if (appState.modalidad === 'A') renderBloquesGrid();
-        else renderHorarioGrid();
+        else renderHorarioTable();
     }
 
     function renderBloquesGrid() {
@@ -866,7 +1067,7 @@ border: 2px solid #28a745;
                         <div class="ee-info">
                             ${ee.docente.substring(0, 25)}<br>
                             📍 ${ee.salon.substring(0, 20)}<br>
-                             ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
+                            🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
                         </div>
                     `;
                     break;
@@ -892,89 +1093,100 @@ border: 2px solid #28a745;
         }
     }
 
-    function renderHorarioGrid() {
-        const grid = document.getElementById('horario-grid');
-        grid.innerHTML = '';
-        const diasNombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+    function renderHorarioTable() {
+        const table = document.getElementById('horario-table');
+        table.innerHTML = '';
         
-        // Headers
-        grid.innerHTML += '<div class="grid-header">Hora</div>';
-        diasNombres.forEach(d => {
-            grid.innerHTML += `<div class="grid-header">${d}</div>`;
-        });
+        const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const horasInicio = 7;
+        const horasFin = 21;
         
-        // Time slots from 7:00 to 21:00
-        for (let hora = 7; hora <= 21; hora++) {
-            grid.innerHTML += `<div class="grid-time">${hora}:00</div>`;
-            
-            for (let dia = 0; dia < 5; dia++) {
-                const cellId = `cell-${dia}-${hora}`;
-                let cellContent = '';
-                let cellClass = 'grid-cell';
-                
-                // Find EE that starts at this hour
-                const eeInicio = appState.horarioSeleccionado.find(ee => {
-                    return ee.horarios.some(h => {
-                        if (h.dia !== dia) return false;
-                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
-                        return hora === iniHora;
-                    });
-                });
-                
-                // Find EE that continues at this hour (started earlier)
-                const eeContinuacion = appState.horarioSeleccionado.find(ee => {
-                    return ee.horarios.some(h => {
-                        if (h.dia !== dia) return false;
-                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
-                        const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
-                        return hora > iniHora && hora < finHora;
-                    });
-                });
-                
-                if (eeInicio) {
-                    const horarioDelDia = eeInicio.horarios.find(h => h.dia === dia);
-                    if (horarioDelDia) {
-                        const salonDelDia = eeInicio.salonesPorDia[dia] || Object.values(eeInicio.salonesPorDia)[0] || 'Por asignar';
-                        const duracion = Math.ceil((timeToMinutes(horarioDelDia.fin) - timeToMinutes(horarioDelDia.inicio)) / 60);
-                        
-                        cellClass += ' occupied';
-                        cellContent = `
-                            <div class="ee-card">
-                                <div class="ee-nombre">${eeInicio.nombre}</div>
-                                <div class="ee-nrc">NRC ${eeInicio.crn}</div>
-                                <div class="ee-docente">${eeInicio.docente}</div>
-                                <div class="ee-horario">${formatTime(horarioDelDia.inicio)}-${formatTime(horarioDelDia.fin)} (${duracion}h)</div>
-                                <div class="ee-salon"> ${salonDelDia}</div>
-                            </div>
-                        `;
-                    }
-                } else if (eeContinuacion) {
-                    cellClass += ' continuation';
-                    cellContent = '';
-                }
-                
-                grid.innerHTML += `<div class="${cellClass}" id="${cellId}" data-dia="${dia}" data-hora="${hora}">${cellContent}</div>`;
+        // Crear estructura de la tabla
+        // Header row
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
+        table.appendChild(headerRow);
+        
+        // Crear matriz de ocupación [hora][dia] = null o {ee, horario}
+        const ocupacion = {};
+        for (let h = horasInicio; h <= horasFin; h++) {
+            ocupacion[h] = {};
+            for (let d = 0; d < 5; d++) {
+                ocupacion[h][d] = null;
             }
         }
         
-        // Add click handlers for occupied cells
-        document.querySelectorAll('.grid-cell.occupied').forEach(cell => {
-            cell.addEventListener('click', function() {
-                const dia = parseInt(this.dataset.dia);
-                const hora = parseInt(this.dataset.hora);
+        // Llenar matriz con EEs seleccionadas
+        appState.horarioSeleccionado.forEach(ee => {
+            ee.horarios.forEach(h => {
+                if (h.dia >= 0 && h.dia < 5) {
+                    const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
+                    const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
+                    for (let hora = iniHora; hora < finHora && hora <= horasFin; hora++) {
+                        if (ocupacion[hora] && ocupacion[hora][h.dia] === null) {
+                            ocupacion[hora][h.dia] = { ee, horario: h, esInicio: hora === iniHora };
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Generar filas de la tabla
+        for (let hora = horasInicio; hora <= horasFin; hora++) {
+            const row = document.createElement('tr');
+            
+            // Celda de hora
+            const horaCell = document.createElement('td');
+            horaCell.textContent = `${hora}:00`;
+            row.appendChild(horaCell);
+            
+            // Celdas de días
+            for (let dia = 0; dia < 5; dia++) {
+                const cell = document.createElement('td');
+                const ocup = ocupacion[hora][dia];
                 
-                const ee = appState.horarioSeleccionado.find(e => {
-                    return e.horarios.some(h => {
-                        if (h.dia !== dia) return false;
-                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
-                        return hora === iniHora;
-                    });
-                });
+                if (ocup && ocup.esInicio) {
+                    // Calcular rowspan
+                    const finHora = Math.ceil(timeToMinutes(ocup.horario.fin) / 60);
+                    const rowspan = Math.min(finHora - hora, horasFin - hora + 1);
+                    
+                    if (rowspan > 1) {
+                        cell.rowSpan = rowspan;
+                    }
+                    
+                    const salonDelDia = ocup.ee.salonesPorDia[dia] || Object.values(ocup.ee.salonesPorDia)[0] || 'Por asignar';
+                    const duracion = Math.ceil((timeToMinutes(ocup.horario.fin) - timeToMinutes(ocup.horario.inicio)) / 60);
+                    
+                    cell.innerHTML = `
+                        <div class="ee-card" data-crn="${ocup.ee.crn}">
+                            <div class="ee-nombre">${ocup.ee.nombre}</div>
+                            <div class="ee-nrc">NRC ${ocup.ee.crn}</div>
+                            <div class="ee-docente">${ocup.ee.docente}</div>
+                            <div class="ee-horario">${formatTime(ocup.horario.inicio)}-${formatTime(ocup.horario.fin)} (${duracion}h)</div>
+                            <div class="ee-salon">📍 ${salonDelDia}</div>
+                        </div>
+                    `;
+                } else if (!ocup) {
+                    // Celda vacía (no ocupada por ninguna EE)
+                    cell.innerHTML = '';
+                }
+                // Si ocup existe pero no es inicio, no crear celda (ya está cubierta por rowspan)
                 
+                row.appendChild(cell);
+            }
+            
+            table.appendChild(row);
+        }
+        
+        // Agregar event listeners para eliminar
+        document.querySelectorAll('.ee-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const crn = this.dataset.crn;
+                const ee = appState.horarioSeleccionado.find(e => e.crn === crn);
                 if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
-                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
+                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== crn);
                     updateStats();
-                    renderHorarioGrid();
+                    renderHorarioTable();
                 }
             });
         });
@@ -1003,7 +1215,7 @@ border: 2px solid #28a745;
     function populateAreaFilter() {
         const select = document.getElementById('filter-area');
         const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
-        select.innerHTML = '<option value=""> Todas las áreas</option>';
+        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
         areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
     }
 
@@ -1097,10 +1309,9 @@ border: 2px solid #28a745;
         document.getElementById('success-section').style.display = 'block';
         setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000);
     }
-
-    // Inicializar
-    window.addEventListener('DOMContentLoaded', cargarDatos);
 </script>
+
 </body>
 </html>
+
 
