@@ -13,7 +13,7 @@ background: #f5f5f5;
 min-height: 100vh;
 }
 .container {
-max-width: 1200px;
+max-width: 1400px;
 margin: 0 auto;
 background: white;
 border-radius: 10px;
@@ -40,7 +40,7 @@ display: inline-block;
 margin-bottom: 10px;
 }
 .header h1 { font-size: 1.8em; margin-bottom: 5px; }
-.header h1::before { content: '📅 '; }
+.header h1::before { content: ' '; }
 .header .subtitle { font-size: 1em; opacity: 0.9; margin-bottom: 10px; }
 .header .plan-badge {
 background: rgba(255,255,255,0.2);
@@ -248,193 +248,217 @@ border: 2px solid #28a745;
 }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
 .bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
-.horario-grid {
-display: grid;
-grid-template-columns: 80px repeat(5, 1fr);
-gap: 3px;
-margin-bottom: 20px;
-}
-.grid-header {
-background: #1a3a6b;
-color: white;
-padding: 12px 5px;
-text-align: center;
-font-weight: bold;
-border-radius: 5px;
-font-size: 0.9em;
-}
-.grid-time {
-background: #f0f0f0;
-padding: 8px 5px;
-text-align: center;
-font-weight: bold;
-border-radius: 5px;
-font-size: 0.85em;
-}
-.grid-cell {
-background: #f9f9f9;
-border: 2px solid #e0e0e0;
-padding: 6px;
-min-height: 55px;
-border-radius: 5px;
-cursor: pointer;
-transition: all 0.3s;
-font-size: 0.75em;
-}
-.grid-cell:hover { background: #e8e8e8; border-color: #1a3a6b; }
-.grid-cell.occupied {
-background: #e8f5e9;
-border: 2px solid #28a745;
-}
-.grid-cell .ee-info {
-font-size: 0.85em;
-line-height: 1.4;
-}
-.grid-cell .ee-info strong {
-display: block;
-margin-bottom: 3px;
-color: #1a3a6b;
-}
-.botones-inferiores {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 15px;
-margin-bottom: 20px;
-}
-.btn-inferior {
-padding: 15px;
-border: none;
-border-radius: 10px;
-font-size: 1.1em;
-font-weight: bold;
-cursor: pointer;
-transition: all 0.3s;
-}
-.btn-imprimir { background: #6c757d; color: white; }
-.btn-imprimir:hover { background: #5a6268; }
-.btn-limpiar { background: #dc3545; color: white; }
-.btn-limpiar:hover { background: #c82333; }
-.footer {
-background: #f8f9fa;
-border-top: 4px solid #28a745;
-padding: 20px;
-text-align: center;
-color: #666;
-font-size: 0.85em;
-line-height: 1.6;
-}
-.footer a { color: #1a3a6b; text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-.loading { text-align: center; padding: 40px; color: #1a3a6b; }
-.loading-spinner {
-border: 4px solid #f3f3f3;
-border-top: 4px solid #1a3a6b;
-border-radius: 50%;
-width: 50px; height: 50px;
-animation: spin 1s linear infinite;
-margin: 20px auto;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-.error { background: #fee; border: 2px solid #fcc; color: #c33; padding: 20px; border-radius: 10px; margin: 20px 0; white-space: pre-wrap; }
-.success { background: #efe; border: 2px solid #cfc; color: #3c3; padding: 20px; border-radius: 10px; margin: 20px 0; }
-.modal {
-display: none;
-position: fixed;
-top: 0; left: 0;
-width: 100%; height: 100%;
-background: rgba(0,0,0,0.7);
-z-index: 1000;
-align-items: center;
-justify-content: center;
-}
-.modal.active { display: flex; }
-.modal-content {
-background: white;
-border-radius: 15px;
-padding: 25px;
-max-width: 900px;
-width: 90%;
-max-height: 85vh;
-overflow-y: auto;
-}
-.modal-header { font-size: 1.5em; color: #1a3a6b; margin-bottom: 20px; font-weight: bold; }
-.search-box {
-width: 100%;
-padding: 12px;
-border: 2px solid #e0e0e0;
-border-radius: 10px;
-margin-bottom: 15px;
-font-size: 1em;
-}
-.search-box:focus { outline: none; border-color: #1a3a6b; }
-.filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-.filter-bar select {
-padding: 10px;
-border: 2px solid #e0e0e0;
-border-radius: 10px;
-font-size: 0.95em;
-background: white;
-flex: 1;
-min-width: 150px;
-}
-.ee-list { max-height: 500px; overflow-y: auto; }
-.ee-item {
-padding: 15px;
-border: 2px solid #e0e0e0;
-border-radius: 10px;
-margin-bottom: 10px;
-cursor: pointer;
-transition: all 0.3s;
-}
-.ee-item:hover { border-color: #1a3a6b; background: #f0f4ff; }
-.ee-item h4 { color: #1a3a6b; margin-bottom: 5px; }
-.ee-item p { font-size: 0.9em; color: #666; margin: 3px 0; }
-.ee-item.added { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; }
-.area-badge {
-display: inline-block;
-background: #e0e0e0;
-color: #333;
-padding: 3px 8px;
-border-radius: 5px;
-font-size: 0.8em;
-margin-right: 5px;
-}
-.btn-cerrar-modal {
-background: #6c757d;
-color: white;
-border: none;
-padding: 12px 30px;
-border-radius: 10px;
-font-size: 1em;
-cursor: pointer;
-margin-top: 15px;
-}
-.conflict-warning {
-background: #fff3cd;
-border: 2px solid #ffc107;
-color: #856404;
-padding: 15px;
-border-radius: 10px;
-margin-bottom: 20px;
-display: none;
-}
-.conflict-warning.show { display: block; }
-@media (max-width: 768px) {
-.stats { grid-template-columns: repeat(2, 1fr); }
-.botones-inferiores { grid-template-columns: 1fr; }
-.bloques-grid { font-size: 0.75em; }
-.horario-grid { grid-template-columns: 60px repeat(5, 1fr); font-size: 0.7em; }
-.header h1 { font-size: 1.4em; }
-.step-label { display: none; }
-.selector-grid { grid-template-columns: 1fr; }
-}
-@media print {
-body { background: white; }
-.container { box-shadow: none; }
-.btn-agregar, .botones-inferiores, .modal, .conflict-warning, .back-btn, .steps-indicator, .nav-buttons { display: none !important; }
-}
+      /* GRID ESCOLARIZADO MEJORADO */
+    .horario-grid {
+        display: grid;
+        grid-template-columns: 80px repeat(5, 1fr);
+        gap: 2px;
+        margin-bottom: 20px;
+        border: 2px solid #1a3a6b;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .grid-header {
+        background: #1a3a6b;
+        color: white;
+        padding: 15px 5px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.95em;
+    }
+    .grid-time {
+        background: #f0f0f0;
+        padding: 10px 5px;
+        text-align: center;
+        font-weight: bold;
+        font-size: 0.9em;
+    }
+    .grid-cell {
+        background: white;
+        border: 1px solid #e0e0e0;
+        padding: 5px;
+        min-height: 70px;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.75em;
+        position: relative;
+        overflow: hidden;
+    }
+    .grid-cell:hover { background: #f0f4ff; border-color: #1a3a6b; }
+    .grid-cell.occupied {
+        background: #28a745;
+        color: white;
+        border: 2px solid #218838;
+    }
+    .grid-cell .ee-card {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        height: 100%;
+    }
+    .grid-cell .ee-nombre {
+        font-weight: bold;
+        font-size: 0.9em;
+        margin-bottom: 3px;
+    }
+    .grid-cell .ee-nrc {
+        font-size: 0.85em;
+        opacity: 0.9;
+    }
+    .grid-cell .ee-docente {
+        font-size: 0.8em;
+        opacity: 0.85;
+    }
+    .grid-cell .ee-horario {
+        font-size: 0.8em;
+        opacity: 0.85;
+    }
+    .grid-cell .ee-salon {
+        font-size: 0.8em;
+        opacity: 0.85;
+        margin-top: auto;
+    }
+    
+    .botones-inferiores {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+    .btn-inferior {
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .btn-imprimir { background: #6c757d; color: white; }
+    .btn-imprimir:hover { background: #5a6268; }
+    .btn-limpiar { background: #dc3545; color: white; }
+    .btn-limpiar:hover { background: #c82333; }
+    .footer {
+        background: #f8f9fa;
+        border-top: 4px solid #28a745;
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        font-size: 0.85em;
+        line-height: 1.6;
+    }
+    .footer a { color: #1a3a6b; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .loading { text-align: center; padding: 40px; color: #1a3a6b; }
+    .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #1a3a6b;
+        border-radius: 50%;
+        width: 50px; height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .error { background: #fee; border: 2px solid #fcc; color: #c33; padding: 20px; border-radius: 10px; margin: 20px 0; white-space: pre-wrap; }
+    .success { background: #efe; border: 2px solid #cfc; color: #3c3; padding: 20px; border-radius: 10px; margin: 20px 0; }
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+        background: white;
+        border-radius: 15px;
+        padding: 25px;
+        max-width: 900px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+    }
+    .modal-header { font-size: 1.5em; color: #1a3a6b; margin-bottom: 20px; font-weight: bold; }
+    .search-box {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        font-size: 1em;
+    }
+    .search-box:focus { outline: none; border-color: #1a3a6b; }
+    .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+    .filter-bar select {
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 0.95em;
+        background: white;
+        flex: 1;
+        min-width: 150px;
+    }
+    .ee-list { max-height: 500px; overflow-y: auto; }
+    .ee-item {
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    .ee-item:hover { border-color: #1a3a6b; background: #f0f4ff; }
+    .ee-item h4 { color: #1a3a6b; margin-bottom: 5px; }
+    .ee-item p { font-size: 0.9em; color: #666; margin: 3px 0; }
+    .ee-item.added { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; }
+    .area-badge {
+        display: inline-block;
+        background: #e0e0e0;
+        color: #333;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-size: 0.8em;
+        margin-right: 5px;
+    }
+    .btn-cerrar-modal {
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-size: 1em;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    .conflict-warning {
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        color: #856404;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: none;
+    }
+    .conflict-warning.show { display: block; }
+    @media (max-width: 768px) {
+        .stats { grid-template-columns: repeat(2, 1fr); }
+        .botones-inferiores { grid-template-columns: 1fr; }
+        .bloques-grid { font-size: 0.75em; }
+        .horario-grid { grid-template-columns: 60px repeat(5, 1fr); font-size: 0.7em; }
+        .header h1 { font-size: 1.4em; }
+        .step-label { display: none; }
+        .selector-grid { grid-template-columns: 1fr; }
+    }
+    @media print {
+        body { background: white; }
+        .container { box-shadow: none; }
+        .btn-agregar, .botones-inferiores, .modal, .conflict-warning, .back-btn, .steps-indicator, .nav-buttons { display: none !important; }
+    }
 </style>
-</head>
+  </head>
 <body>
 <div class="container">
 <div class="header">
@@ -467,12 +491,12 @@ body { background: white; }
             <p class="section-subtitle">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas. Selecciona la que corresponda a tu situación.</p>
             <div class="selector-grid">
                 <div class="option-card" data-modalidad="E" onclick="selectModalidad('E')">
-                    <div class="icon"></div>
+                    <div class="icon">🏫</div>
                     <h3>Escolarizado</h3>
                     <p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p>
                 </div>
                 <div class="option-card" data-modalidad="A" onclick="selectModalidad('A')">
-                    <div class="icon"></div>
+                    <div class="icon">📚</div>
                     <h3>Abierto</h3>
                     <p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>, según el calendario oficial.</p>
                 </div>
@@ -641,9 +665,7 @@ body { background: white; }
         datosCargadosOK: false
     };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        // No cargar automáticamente, esperar a que el usuario seleccione
-    });
+    document.addEventListener('DOMContentLoaded', () => {});
 
     function goToScreen(num) {
         if (num === 2 && !appState.modalidad) return;
@@ -662,11 +684,8 @@ body { background: white; }
     }
 
     function goBack() {
-        if (appState.currentScreen === 3) {
-            goToScreen(2);
-        } else if (appState.currentScreen === 2) {
-            goToScreen(1);
-        }
+        if (appState.currentScreen === 3) goToScreen(2);
+        else if (appState.currentScreen === 2) goToScreen(1);
     }
 
     function updateStepsIndicator() {
@@ -884,31 +903,11 @@ body { background: white; }
             const tituloStr = String(titulo).trim();
             if (tituloStr.includes('CF_DESC_LEVL') || tituloStr === 'LICENCIATURA' || tituloStr === '') continue;
             
-            const horariosFila = [];
-            const dias = [
-                { ini: idx.IL, fin: idx.FL, dia: 0 },
-                { ini: idx.IM, fin: idx.FM, dia: 1 },
-                { ini: idx.II, fin: idx.FI, dia: 2 },
-                { ini: idx.IJ, fin: idx.FJ, dia: 3 },
-                { ini: idx.IV, fin: idx.FV, dia: 4 },
-                { ini: idx.ISS, fin: idx.FSS, dia: 5 },
-                { ini: idx.ID, fin: idx.FD, dia: 6 }
-            ];
-            
-            dias.forEach(d => {
-                if (d.ini < 0 || d.fin < 0) return;
-                const ini = parseInt(row[d.ini]);
-                const fin = parseInt(row[d.fin]);
-                if (!isNaN(ini) && !isNaN(fin) && ini > 0 && fin > 0 && fin > ini) {
-                    horariosFila.push({ dia: d.dia, inicio: ini, fin: fin });
-                }
-            });
-            
-            if (horariosFila.length === 0) continue;
-            
             const salon = String(row[idx.salon] || '').trim();
             const edificio = String(row[idx.edificio] || '').trim();
+            const salonCompleto = salon + (edificio ? ' (' + edificio + ')' : '');
             
+            // Crear entrada si no existe
             if (!crnMap[crn]) {
                 crnMap[crn] = {
                     nombre: tituloStr,
@@ -919,23 +918,42 @@ body { background: white; }
                     areaCode: String(row[idx.areaCode] || '').trim(),
                     maxEnrl: parseInt(row[idx.maxEnrl]) || 0,
                     horarios: [],
-                    salones: new Set()
+                    salonesPorDia: {}
                 };
             }
             
-            if (salon) crnMap[crn].salones.add(salon + (edificio ? ' (' + edificio + ')' : ''));
+            // Procesar horarios por día
+            const dias = [
+                { ini: idx.IL, fin: idx.FL, dia: 0, nombre: 'Lunes' },
+                { ini: idx.IM, fin: idx.FM, dia: 1, nombre: 'Martes' },
+                { ini: idx.II, fin: idx.FI, dia: 2, nombre: 'Miércoles' },
+                { ini: idx.IJ, fin: idx.FJ, dia: 3, nombre: 'Jueves' },
+                { ini: idx.IV, fin: idx.FV, dia: 4, nombre: 'Viernes' },
+                { ini: idx.ISS, fin: idx.FSS, dia: 5, nombre: 'Sábado' },
+                { ini: idx.ID, fin: idx.FD, dia: 6, nombre: 'Domingo' }
+            ];
             
-            horariosFila.forEach(h => {
-                const existe = crnMap[crn].horarios.some(
-                    eh => eh.dia === h.dia && eh.inicio === h.inicio && eh.fin === h.fin
-                );
-                if (!existe) crnMap[crn].horarios.push(h);
+            dias.forEach(d => {
+                if (d.ini < 0 || d.fin < 0) return;
+                const ini = parseInt(row[d.ini]);
+                const fin = parseInt(row[d.fin]);
+                if (!isNaN(ini) && !isNaN(fin) && ini > 0 && fin > 0 && fin > ini) {
+                    // Agregar horario
+                    const existe = crnMap[crn].horarios.some(
+                        eh => eh.dia === d.dia && eh.inicio === ini && eh.fin === fin
+                    );
+                    if (!existe) {
+                        crnMap[crn].horarios.push({ dia: d.dia, inicio: ini, fin: fin });
+                    }
+                    // Guardar salón para este día
+                    if (salonCompleto) {
+                        crnMap[crn].salonesPorDia[d.dia] = salonCompleto;
+                    }
+                }
             });
         }
         
         return Object.values(crnMap).map(ee => {
-            ee.salon = [...ee.salones].join(', ') || 'Por asignar';
-            delete ee.salones;
             ee.bloqueInfo = clasificarBloque(ee.horarios);
             return ee;
         });
@@ -960,7 +978,6 @@ body { background: white; }
             return;
         }
         
-        // LIMPIAR horario seleccionado al cambiar de plan/modalidad
         appState.experienciasEducativas = datos;
         appState.horarioSeleccionado = [];
         
@@ -991,7 +1008,6 @@ body { background: white; }
 
     function cambiarPlan() {
         appState.plan = appState.plan === '04' ? '25' : '04';
-        // LIMPIAR horario al cambiar de plan
         appState.horarioSeleccionado = [];
         initializeApp();
     }
@@ -1084,54 +1100,77 @@ body { background: white; }
         const grid = document.getElementById('horario-grid');
         grid.innerHTML = '';
         const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const diasNombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
         
+        // Headers
         grid.innerHTML += '<div class="grid-header">Hora</div>';
-        dias.forEach(d => grid.innerHTML += `<div class="grid-header">${d}</div>`);
+        diasNombres.forEach(d => {
+            grid.innerHTML += `<div class="grid-header">${d}</div>`;
+        });
         
+        // Time slots from 7:00 to 21:00
         for (let hora = 7; hora <= 21; hora++) {
             grid.innerHTML += `<div class="grid-time">${hora}:00</div>`;
-            dias.forEach((d, di) => {
-                const eeEnEstaHora = appState.horarioSeleccionado.filter(e => 
-                    e.horarios.some(h => {
-                        const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
-                        const finH = Math.ceil(timeToMinutes(h.fin) / 60);
-                        return h.dia === di && hora >= iniH && hora < finH;
-                    })
-                );
-                
+            
+            for (let dia = 0; dia < 5; dia++) {
+                const cellId = `cell-${dia}-${hora}`;
+                let cellContent = '';
                 let cellClass = 'grid-cell';
-                let content = '';
                 
-                if (eeEnEstaHora.length > 0) {
-                    cellClass += ' occupied';
-                    const ee = eeEnEstaHora[0];
-                    const h = ee.horarios.find(hor => hor.dia === di);
-                    const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
-                    
-                    if (hora === iniH) {
-                        // Mostrar todas las horas que ocupa esta EE en este día
-                        const finH = Math.ceil(timeToMinutes(h.fin) / 60);
-                        const duracion = finH - iniH;
+                // Find EE that occupies this cell
+                const eeOcupada = appState.horarioSeleccionado.find(ee => {
+                    return ee.horarios.some(h => {
+                        if (h.dia !== dia) return false;
+                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
+                        const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
+                        return hora >= iniHora && hora < finHora;
+                    });
+                });
+                
+                if (eeOcupada) {
+                    // Find the specific schedule for this day
+                    const horarioDelDia = eeOcupada.horarios.find(h => h.dia === dia);
+                    if (horarioDelDia) {
+                        const iniHora = Math.floor(timeToMinutes(horarioDelDia.inicio) / 60);
                         
-                        content = `<div class="ee-info"><strong>${ee.nombre.substring(0, 25)}</strong>${ee.docente.substring(0, 20)}<br>📍 ${ee.salon.substring(0, 15)}<br>🕐 ${formatTime(h.inicio)}-${formatTime(h.fin)} (${duracion}h)</div>`;
+                        // Only show in the first hour slot
+                        if (hora === iniHora) {
+                            cellClass += ' occupied';
+                            const salonDelDia = eeOcupada.salonesPorDia[dia] || eeOcupada.salonesPorDia[0] || 'Por asignar';
+                            const duracion = Math.ceil((timeToMinutes(horarioDelDia.fin) - timeToMinutes(horarioDelDia.inicio)) / 60);
+                            
+                            cellContent = `
+                                <div class="ee-card">
+                                    <div class="ee-nombre">${eeOcupada.nombre}</div>
+                                    <div class="ee-nrc">NRC ${eeOcupada.crn}</div>
+                                    <div class="ee-docente">${eeOcupada.docente}</div>
+                                    <div class="ee-horario">${formatTime(horarioDelDia.inicio)}-${formatTime(horarioDelDia.fin)} (${duracion}h)</div>
+                                    <div class="ee-salon">📍 ${salonDelDia}</div>
+                                </div>
+                            `;
+                        }
                     }
                 }
-                grid.innerHTML += `<div class="${cellClass}" data-dia="${di}" data-hora="${hora}">${content}</div>`;
-            });
+                
+                grid.innerHTML += `<div class="${cellClass}" id="${cellId}" data-dia="${dia}" data-hora="${hora}">${cellContent}</div>`;
+            }
         }
         
-        // Agregar event listeners para eliminar
+        // Add click handlers
         document.querySelectorAll('.grid-cell.occupied').forEach(cell => {
             cell.addEventListener('click', function() {
                 const dia = parseInt(this.dataset.dia);
                 const hora = parseInt(this.dataset.hora);
-                const ee = appState.horarioSeleccionado.find(e => 
-                    e.horarios.some(h => {
-                        const iniH = Math.floor(timeToMinutes(h.inicio) / 60);
-                        const finH = Math.ceil(timeToMinutes(h.fin) / 60);
-                        return h.dia === dia && hora >= iniH && hora < finH;
-                    })
-                );
+                
+                const ee = appState.horarioSeleccionado.find(e => {
+                    return e.horarios.some(h => {
+                        if (h.dia !== dia) return false;
+                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
+                        const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
+                        return hora >= iniHora && hora < finHora;
+                    });
+                });
+                
                 if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
                     appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
                     updateStats();
@@ -1185,7 +1224,12 @@ body { background: white; }
             item.dataset.area = ee.area || '';
             item.dataset.turno = ee.bloqueInfo.turno || '';
             
-            const horariosStr = ee.horarios.map(h => `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)}`).join(' · ');
+            // Build horarios string with salon info per day
+            const horariosDetallados = ee.horarios.map(h => {
+                const salonDelDia = ee.salonesPorDia[h.dia] || Object.values(ee.salonesPorDia)[0] || 'Por asignar';
+                return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)} (${salonDelDia})`;
+            }).join(' · ');
+            
             const yaAgregada = appState.horarioSeleccionado.some(e => e.crn === ee.crn);
             if (yaAgregada) item.classList.add('added');
             
@@ -1193,8 +1237,8 @@ body { background: white; }
                 <h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4>
                 <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
                 <p><strong>Docente:</strong> ${ee.docente}</p>
-                <p><strong>Salón:</strong> ${ee.salon}</p>
-                <p><strong>Horario:</strong> ${horariosStr}</p>
+                <p><strong>Salón:</strong> ${Object.values(ee.salonesPorDia).join(', ') || 'Por asignar'}</p>
+                <p><strong>Horario:</strong> ${horariosDetallados}</p>
                 <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : ee.bloqueInfo.turno === 'V' ? 'Vespertino' : 'Escolarizado'}</p>
             `;
             
@@ -1255,5 +1299,6 @@ body { background: white; }
         setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000);
     }
 </script>
-  </body>
+
+</body>
 </html>
