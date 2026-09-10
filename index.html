@@ -206,7 +206,7 @@ margin-bottom: 20px;
 .btn-agregar:hover { background: #218838; }
 .btn-agregar::before { content: '➕ '; }
 .instruccion { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
-.instruccion::before { content: '👆 '; }
+.instruccion::before { content: ' '; }
 .bloques-grid {
 width: 100%;
 border-collapse: collapse;
@@ -247,76 +247,77 @@ background: #e8f5e9;
 border: 2px solid #28a745;
 }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
-.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
-      /* GRID ESCOLARIZADO MEJORADO */
-    .horario-grid {
-        display: grid;
-        grid-template-columns: 80px repeat(5, 1fr);
-        gap: 2px;
+.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }  
+/* GRID ESCOLARIZADO CON TABLA */
+    .horario-table {
+        width: 100%;
+        border-collapse: collapse;
         margin-bottom: 20px;
-        border: 2px solid #1a3a6b;
-        border-radius: 8px;
-        overflow: hidden;
+        font-size: 0.85em;
     }
-    .grid-header {
+    .horario-table th {
         background: #1a3a6b;
         color: white;
-        padding: 15px 5px;
+        padding: 15px 8px;
         text-align: center;
         font-weight: bold;
         font-size: 0.95em;
     }
-    .grid-time {
+    .horario-table th:first-child {
+        background: #1a3a6b;
+        width: 80px;
+    }
+    .horario-table td {
+        border: 1px solid #e0e0e0;
+        padding: 8px;
+        vertical-align: top;
+        min-height: 60px;
+    }
+    .horario-table td:first-child {
         background: #f0f0f0;
-        padding: 10px 5px;
-        text-align: center;
         font-weight: bold;
+        text-align: center;
         font-size: 0.9em;
     }
-    .grid-cell {
-        background: white;
-        border: 1px solid #e0e0e0;
-        padding: 5px;
-        min-height: 70px;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-size: 0.75em;
-        position: relative;
-        overflow: hidden;
-    }
-    .grid-cell:hover { background: #f0f4ff; border-color: #1a3a6b; }
-    .grid-cell.occupied {
+    .horario-table .ee-card {
         background: #28a745;
         color: white;
-        border: 2px solid #218838;
-    }
-    .grid-cell .ee-card {
+        padding: 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        height: 100%;
         display: flex;
         flex-direction: column;
-        gap: 2px;
-        height: 100%;
+        justify-content: center;
     }
-    .grid-cell .ee-nombre {
+    .horario-table .ee-card:hover {
+        background: #dc3545;
+        transform: scale(1.02);
+    }
+    .horario-table .ee-card .ee-nombre {
         font-weight: bold;
-        font-size: 0.9em;
+        font-size: 0.95em;
+        margin-bottom: 4px;
+    }
+    .horario-table .ee-card .ee-nrc {
+        font-size: 0.8em;
+        opacity: 0.9;
         margin-bottom: 3px;
     }
-    .grid-cell .ee-nrc {
-        font-size: 0.85em;
+    .horario-table .ee-card .ee-docente {
+        font-size: 0.8em;
         opacity: 0.9;
+        margin-bottom: 3px;
     }
-    .grid-cell .ee-docente {
+    .horario-table .ee-card .ee-horario {
         font-size: 0.8em;
-        opacity: 0.85;
+        opacity: 0.9;
+        margin-bottom: 3px;
     }
-    .grid-cell .ee-horario {
+    .horario-table .ee-card .ee-salon {
         font-size: 0.8em;
-        opacity: 0.85;
-    }
-    .grid-cell .ee-salon {
-        font-size: 0.8em;
-        opacity: 0.85;
-        margin-top: auto;
+        opacity: 0.9;
     }
     
     .botones-inferiores {
@@ -447,7 +448,7 @@ border: 2px solid #28a745;
         .stats { grid-template-columns: repeat(2, 1fr); }
         .botones-inferiores { grid-template-columns: 1fr; }
         .bloques-grid { font-size: 0.75em; }
-        .horario-grid { grid-template-columns: 60px repeat(5, 1fr); font-size: 0.7em; }
+        .horario-table { font-size: 0.7em; }
         .header h1 { font-size: 1.4em; }
         .step-label { display: none; }
         .selector-grid { grid-template-columns: 1fr; }
@@ -458,7 +459,7 @@ border: 2px solid #28a745;
         .btn-agregar, .botones-inferiores, .modal, .conflict-warning, .back-btn, .steps-indicator, .nav-buttons { display: none !important; }
     }
 </style>
-  </head>
+</head>
 <body>
 <div class="container">
 <div class="header">
@@ -467,8 +468,8 @@ border: 2px solid #28a745;
 <h1>Planeador de Horarios Facico</h1>
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
 <div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
-</div>
-    <div class="content">
+</div>   
+<div class="content">
         <div class="steps-indicator" id="steps-indicator">
             <div class="step active" data-step="1">
                 <div class="step-number">1</div>
@@ -517,7 +518,7 @@ border: 2px solid #28a745;
                     <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
                 </div>
                 <div class="option-card" data-plan="25" onclick="selectPlan('25')">
-                    <div class="icon"></div>
+                    <div class="icon">📜</div>
                     <h3>Plan 2025</h3>
                     <p>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las EEs vigentes.</p>
                 </div>
@@ -605,12 +606,12 @@ border: 2px solid #28a745;
                 </div>
 
                 <div id="vista-escolarizado" style="display:none;">
-                    <div class="horario-grid" id="horario-grid"></div>
+                    <table class="horario-table" id="horario-table"></table>
                 </div>
 
                 <div class="botones-inferiores">
                     <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
-                    <button class="btn-inferior btn-limpiar" onclick="clearHorario()">️ Limpiar Mi Horario</button>
+                    <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
                 </div>
             </div>
         </div>
@@ -907,7 +908,6 @@ border: 2px solid #28a745;
             const edificio = String(row[idx.edificio] || '').trim();
             const salonCompleto = salon + (edificio ? ' (' + edificio + ')' : '');
             
-            // Crear entrada si no existe
             if (!crnMap[crn]) {
                 crnMap[crn] = {
                     nombre: tituloStr,
@@ -922,7 +922,6 @@ border: 2px solid #28a745;
                 };
             }
             
-            // Procesar horarios por día
             const dias = [
                 { ini: idx.IL, fin: idx.FL, dia: 0, nombre: 'Lunes' },
                 { ini: idx.IM, fin: idx.FM, dia: 1, nombre: 'Martes' },
@@ -938,14 +937,12 @@ border: 2px solid #28a745;
                 const ini = parseInt(row[d.ini]);
                 const fin = parseInt(row[d.fin]);
                 if (!isNaN(ini) && !isNaN(fin) && ini > 0 && fin > 0 && fin > ini) {
-                    // Agregar horario
                     const existe = crnMap[crn].horarios.some(
                         eh => eh.dia === d.dia && eh.inicio === ini && eh.fin === fin
                     );
                     if (!existe) {
                         crnMap[crn].horarios.push({ dia: d.dia, inicio: ini, fin: fin });
                     }
-                    // Guardar salón para este día
                     if (salonCompleto) {
                         crnMap[crn].salonesPorDia[d.dia] = salonCompleto;
                     }
@@ -1047,7 +1044,7 @@ border: 2px solid #28a745;
 
     function renderVista() {
         if (appState.modalidad === 'A') renderBloquesGrid();
-        else renderHorarioGrid();
+        else renderHorarioTable();
     }
 
     function renderBloquesGrid() {
@@ -1096,85 +1093,100 @@ border: 2px solid #28a745;
         }
     }
 
-    function renderHorarioGrid() {
-        const grid = document.getElementById('horario-grid');
-        grid.innerHTML = '';
+    function renderHorarioTable() {
+        const table = document.getElementById('horario-table');
+        table.innerHTML = '';
+        
         const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        const diasNombres = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const horasInicio = 7;
+        const horasFin = 21;
         
-        // Headers
-        grid.innerHTML += '<div class="grid-header">Hora</div>';
-        diasNombres.forEach(d => {
-            grid.innerHTML += `<div class="grid-header">${d}</div>`;
-        });
+        // Crear estructura de la tabla
+        // Header row
+        const headerRow = document.createElement('tr');
+        headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
+        table.appendChild(headerRow);
         
-        // Time slots from 7:00 to 21:00
-        for (let hora = 7; hora <= 21; hora++) {
-            grid.innerHTML += `<div class="grid-time">${hora}:00</div>`;
-            
-            for (let dia = 0; dia < 5; dia++) {
-                const cellId = `cell-${dia}-${hora}`;
-                let cellContent = '';
-                let cellClass = 'grid-cell';
-                
-                // Find EE that occupies this cell
-                const eeOcupada = appState.horarioSeleccionado.find(ee => {
-                    return ee.horarios.some(h => {
-                        if (h.dia !== dia) return false;
-                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
-                        const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
-                        return hora >= iniHora && hora < finHora;
-                    });
-                });
-                
-                if (eeOcupada) {
-                    // Find the specific schedule for this day
-                    const horarioDelDia = eeOcupada.horarios.find(h => h.dia === dia);
-                    if (horarioDelDia) {
-                        const iniHora = Math.floor(timeToMinutes(horarioDelDia.inicio) / 60);
-                        
-                        // Only show in the first hour slot
-                        if (hora === iniHora) {
-                            cellClass += ' occupied';
-                            const salonDelDia = eeOcupada.salonesPorDia[dia] || eeOcupada.salonesPorDia[0] || 'Por asignar';
-                            const duracion = Math.ceil((timeToMinutes(horarioDelDia.fin) - timeToMinutes(horarioDelDia.inicio)) / 60);
-                            
-                            cellContent = `
-                                <div class="ee-card">
-                                    <div class="ee-nombre">${eeOcupada.nombre}</div>
-                                    <div class="ee-nrc">NRC ${eeOcupada.crn}</div>
-                                    <div class="ee-docente">${eeOcupada.docente}</div>
-                                    <div class="ee-horario">${formatTime(horarioDelDia.inicio)}-${formatTime(horarioDelDia.fin)} (${duracion}h)</div>
-                                    <div class="ee-salon">📍 ${salonDelDia}</div>
-                                </div>
-                            `;
-                        }
-                    }
-                }
-                
-                grid.innerHTML += `<div class="${cellClass}" id="${cellId}" data-dia="${dia}" data-hora="${hora}">${cellContent}</div>`;
+        // Crear matriz de ocupación [hora][dia] = null o {ee, horario}
+        const ocupacion = {};
+        for (let h = horasInicio; h <= horasFin; h++) {
+            ocupacion[h] = {};
+            for (let d = 0; d < 5; d++) {
+                ocupacion[h][d] = null;
             }
         }
         
-        // Add click handlers
-        document.querySelectorAll('.grid-cell.occupied').forEach(cell => {
-            cell.addEventListener('click', function() {
-                const dia = parseInt(this.dataset.dia);
-                const hora = parseInt(this.dataset.hora);
+        // Llenar matriz con EEs seleccionadas
+        appState.horarioSeleccionado.forEach(ee => {
+            ee.horarios.forEach(h => {
+                if (h.dia >= 0 && h.dia < 5) {
+                    const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
+                    const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
+                    for (let hora = iniHora; hora < finHora && hora <= horasFin; hora++) {
+                        if (ocupacion[hora] && ocupacion[hora][h.dia] === null) {
+                            ocupacion[hora][h.dia] = { ee, horario: h, esInicio: hora === iniHora };
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Generar filas de la tabla
+        for (let hora = horasInicio; hora <= horasFin; hora++) {
+            const row = document.createElement('tr');
+            
+            // Celda de hora
+            const horaCell = document.createElement('td');
+            horaCell.textContent = `${hora}:00`;
+            row.appendChild(horaCell);
+            
+            // Celdas de días
+            for (let dia = 0; dia < 5; dia++) {
+                const cell = document.createElement('td');
+                const ocup = ocupacion[hora][dia];
                 
-                const ee = appState.horarioSeleccionado.find(e => {
-                    return e.horarios.some(h => {
-                        if (h.dia !== dia) return false;
-                        const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
-                        const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
-                        return hora >= iniHora && hora < finHora;
-                    });
-                });
+                if (ocup && ocup.esInicio) {
+                    // Calcular rowspan
+                    const finHora = Math.ceil(timeToMinutes(ocup.horario.fin) / 60);
+                    const rowspan = Math.min(finHora - hora, horasFin - hora + 1);
+                    
+                    if (rowspan > 1) {
+                        cell.rowSpan = rowspan;
+                    }
+                    
+                    const salonDelDia = ocup.ee.salonesPorDia[dia] || Object.values(ocup.ee.salonesPorDia)[0] || 'Por asignar';
+                    const duracion = Math.ceil((timeToMinutes(ocup.horario.fin) - timeToMinutes(ocup.horario.inicio)) / 60);
+                    
+                    cell.innerHTML = `
+                        <div class="ee-card" data-crn="${ocup.ee.crn}">
+                            <div class="ee-nombre">${ocup.ee.nombre}</div>
+                            <div class="ee-nrc">NRC ${ocup.ee.crn}</div>
+                            <div class="ee-docente">${ocup.ee.docente}</div>
+                            <div class="ee-horario">${formatTime(ocup.horario.inicio)}-${formatTime(ocup.horario.fin)} (${duracion}h)</div>
+                            <div class="ee-salon">📍 ${salonDelDia}</div>
+                        </div>
+                    `;
+                } else if (!ocup) {
+                    // Celda vacía (no ocupada por ninguna EE)
+                    cell.innerHTML = '';
+                }
+                // Si ocup existe pero no es inicio, no crear celda (ya está cubierta por rowspan)
                 
+                row.appendChild(cell);
+            }
+            
+            table.appendChild(row);
+        }
+        
+        // Agregar event listeners para eliminar
+        document.querySelectorAll('.ee-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const crn = this.dataset.crn;
+                const ee = appState.horarioSeleccionado.find(e => e.crn === crn);
                 if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
-                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
+                    appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== crn);
                     updateStats();
-                    renderHorarioGrid();
+                    renderHorarioTable();
                 }
             });
         });
@@ -1203,7 +1215,7 @@ border: 2px solid #28a745;
     function populateAreaFilter() {
         const select = document.getElementById('filter-area');
         const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
-        select.innerHTML = '<option value=""> Todas las áreas</option>';
+        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
         areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
     }
 
@@ -1224,7 +1236,6 @@ border: 2px solid #28a745;
             item.dataset.area = ee.area || '';
             item.dataset.turno = ee.bloqueInfo.turno || '';
             
-            // Build horarios string with salon info per day
             const horariosDetallados = ee.horarios.map(h => {
                 const salonDelDia = ee.salonesPorDia[h.dia] || Object.values(ee.salonesPorDia)[0] || 'Por asignar';
                 return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)} (${salonDelDia})`;
@@ -1302,3 +1313,4 @@ border: 2px solid #28a745;
 
 </body>
 </html>
+
