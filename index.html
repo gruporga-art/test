@@ -247,8 +247,8 @@ background: #e8f5e9;
 border: 2px solid #28a745;
 }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
-.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }  
-/* GRID ESCOLARIZADO CON TABLA */
+.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
+        /* GRID ESCOLARIZADO CON TABLA */
     .horario-table {
         width: 100%;
         border-collapse: collapse;
@@ -280,7 +280,6 @@ border: 2px solid #28a745;
         font-size: 0.9em;
     }
     .horario-table .ee-card {
-        background: #28a745;
         color: white;
         padding: 8px;
         border-radius: 5px;
@@ -290,10 +289,11 @@ border: 2px solid #28a745;
         display: flex;
         flex-direction: column;
         justify-content: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
     }
     .horario-table .ee-card:hover {
-        background: #dc3545;
         transform: scale(1.02);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.25);
     }
     .horario-table .ee-card .ee-nombre {
         font-weight: bold;
@@ -318,6 +318,16 @@ border: 2px solid #28a745;
     .horario-table .ee-card .ee-salon {
         font-size: 0.8em;
         opacity: 0.9;
+    }
+    
+    /* CHOQUE - efecto visual */
+    .horario-table .ee-card.conflicto {
+        animation: pulseConflicto 1.5s infinite;
+        box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4);
+    }
+    @keyframes pulseConflicto {
+        0%, 100% { box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4); }
+        50% { box-shadow: 0 0 0 5px #ff0000, 0 4px 12px rgba(255,0,0,0.6); }
     }
     
     .botones-inferiores {
@@ -444,6 +454,26 @@ border: 2px solid #28a745;
         display: none;
     }
     .conflict-warning.show { display: block; }
+    .leyenda-colores {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        font-size: 0.85em;
+    }
+    .leyenda-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .leyenda-color {
+        width: 16px;
+        height: 16px;
+        border-radius: 3px;
+    }
     @media (max-width: 768px) {
         .stats { grid-template-columns: repeat(2, 1fr); }
         .botones-inferiores { grid-template-columns: 1fr; }
@@ -468,8 +498,8 @@ border: 2px solid #28a745;
 <h1>Planeador de Horarios Facico</h1>
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
 <div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
-</div>   
-<div class="content">
+</div>
+    <div class="content">
         <div class="steps-indicator" id="steps-indicator">
             <div class="step active" data-step="1">
                 <div class="step-number">1</div>
@@ -567,10 +597,13 @@ border: 2px solid #28a745;
                 <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
 
                 <div class="conflict-warning" id="conflict-warning">
-                    ⚠️ ¡Choque de horario detectado! Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+                    ️ ¡Choque de horario detectado! Las experiencias en conflicto están marcadas con un borde rojo pulsante. Toca una para quitarla.
                 </div>
 
                 <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
+
+                <!-- Leyenda de colores -->
+                <div class="leyenda-colores" id="leyenda-colores" style="display:none;"></div>
 
                 <div id="vista-abierto" style="display:none;">
                     <table class="bloques-grid" id="bloques-grid">
@@ -627,7 +660,7 @@ border: 2px solid #28a745;
 <div class="modal" id="ee-modal">
     <div class="modal-content">
         <div class="modal-header">➕ Agregar Experiencia Educativa</div>
-        <input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o CRN..." oninput="filterEEList()">
+        <input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o NRC..." oninput="filterEEList()">
         <div class="filter-bar">
             <select id="filter-area" onchange="filterEEList()">
                 <option value="">📁 Todas las áreas</option>
@@ -654,6 +687,22 @@ border: 2px solid #28a745;
         '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i,
         'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i
     };
+
+    // Paleta de colores para las EEs
+    const PALETA_COLORES = [
+        { bg: '#28a745', text: '#ffffff' },  // Verde
+        { bg: '#007bff', text: '#ffffff' },  // Azul
+        { bg: '#fd7e14', text: '#ffffff' },  // Naranja
+        { bg: '#6f42c1', text: '#ffffff' },  // Morado
+        { bg: '#20c997', text: '#ffffff' },  // Turquesa
+        { bg: '#e83e8c', text: '#ffffff' },  // Rosa
+        { bg: '#17a2b8', text: '#ffffff' },  // Cyan
+        { bg: '#ffc107', text: '#212529' },  // Amarillo
+        { bg: '#dc3545', text: '#ffffff' },  // Rojo
+        { bg: '#6610f2', text: '#ffffff' },  // Indigo
+        { bg: '#343a40', text: '#ffffff' },  // Gris oscuro
+        { bg: '#28a745', text: '#ffffff' }   // Verde (repetido)
+    ];
 
     let appState = {
         currentScreen: 1,
@@ -966,6 +1015,15 @@ border: 2px solid #28a745;
         return { tipo: 'abierto', turno: turno };
     }
 
+    // Extraer solo el código de aula (sin edificio)
+    function extraerAula(salonCompleto) {
+        if (!salonCompleto) return 'Por asignar';
+        // "AULA 10-A (A-CCEB)" -> "AULA 10-A"
+        // "B24" -> "B24"
+        const match = salonCompleto.match(/^([A-Z0-9\-]+(?:\s+[A-Z0-9\-]+)*)/);
+        return match ? match[1].trim() : salonCompleto;
+    }
+
     function initializeApp() {
         const key = `${appState.plan}-${appState.modalidad}`;
         const datos = appState.datosCargados[key];
@@ -992,6 +1050,7 @@ border: 2px solid #28a745;
         if (appState.modalidad === 'A') {
             document.getElementById('vista-abierto').style.display = 'block';
             document.getElementById('vista-escolarizado').style.display = 'none';
+            document.getElementById('leyenda-colores').style.display = 'none';
             updateBloquesFechas();
         } else {
             document.getElementById('vista-abierto').style.display = 'none';
@@ -1040,6 +1099,28 @@ border: 2px solid #28a745;
         document.getElementById('stat-choques').textContent = choques;
         
         document.getElementById('conflict-warning').classList.toggle('show', choques > 0);
+        
+        // Actualizar leyenda de colores
+        updateLeyendaColores();
+    }
+
+    function updateLeyendaColores() {
+        const leyenda = document.getElementById('leyenda-colores');
+        if (appState.modalidad !== 'E' || appState.horarioSeleccionado.length === 0) {
+            leyenda.style.display = 'none';
+            return;
+        }
+        
+        leyenda.style.display = 'flex';
+        leyenda.innerHTML = '<strong style="margin-right:5px;">Mis materias:</strong>';
+        
+        appState.horarioSeleccionado.forEach((ee, idx) => {
+            const color = PALETA_COLORES[idx % PALETA_COLORES.length];
+            const item = document.createElement('div');
+            item.className = 'leyenda-item';
+            item.innerHTML = `<div class="leyenda-color" style="background:${color.bg};"></div><span>${ee.nombre.substring(0, 20)}${ee.nombre.length > 20 ? '...' : ''}</span>`;
+            leyenda.appendChild(item);
+        });
     }
 
     function renderVista() {
@@ -1101,13 +1182,31 @@ border: 2px solid #28a745;
         const horasInicio = 7;
         const horasFin = 21;
         
-        // Crear estructura de la tabla
-        // Header row
+        // Detectar conflictos
+        const conflictEEs = new Set();
+        for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
+            for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
+                const ee1 = appState.horarioSeleccionado[i];
+                const ee2 = appState.horarioSeleccionado[j];
+                for (const h1 of ee1.horarios) {
+                    for (const h2 of ee2.horarios) {
+                        if (h1.dia === h2.dia) {
+                            const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
+                            const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
+                            if (ini1 < fin2 && ini2 < fin1) {
+                                conflictEEs.add(ee1.crn);
+                                conflictEEs.add(ee2.crn);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
         table.appendChild(headerRow);
         
-        // Crear matriz de ocupación [hora][dia] = null o {ee, horario}
         const ocupacion = {};
         for (let h = horasInicio; h <= horasFin; h++) {
             ocupacion[h] = {};
@@ -1116,7 +1215,6 @@ border: 2px solid #28a745;
             }
         }
         
-        // Llenar matriz con EEs seleccionadas
         appState.horarioSeleccionado.forEach(ee => {
             ee.horarios.forEach(h => {
                 if (h.dia >= 0 && h.dia < 5) {
@@ -1131,22 +1229,18 @@ border: 2px solid #28a745;
             });
         });
         
-        // Generar filas de la tabla
         for (let hora = horasInicio; hora <= horasFin; hora++) {
             const row = document.createElement('tr');
             
-            // Celda de hora
             const horaCell = document.createElement('td');
             horaCell.textContent = `${hora}:00`;
             row.appendChild(horaCell);
             
-            // Celdas de días
             for (let dia = 0; dia < 5; dia++) {
                 const cell = document.createElement('td');
                 const ocup = ocupacion[hora][dia];
                 
                 if (ocup && ocup.esInicio) {
-                    // Calcular rowspan
                     const finHora = Math.ceil(timeToMinutes(ocup.horario.fin) / 60);
                     const rowspan = Math.min(finHora - hora, horasFin - hora + 1);
                     
@@ -1155,22 +1249,25 @@ border: 2px solid #28a745;
                     }
                     
                     const salonDelDia = ocup.ee.salonesPorDia[dia] || Object.values(ocup.ee.salonesPorDia)[0] || 'Por asignar';
+                    const aulaCorta = extraerAula(salonDelDia);
                     const duracion = Math.ceil((timeToMinutes(ocup.horario.fin) - timeToMinutes(ocup.horario.inicio)) / 60);
                     
+                    // Asignar color según orden
+                    const idx = appState.horarioSeleccionado.findIndex(e => e.crn === ocup.ee.crn);
+                    const color = PALETA_COLORES[idx % PALETA_COLORES.length];
+                    
+                    const esConflicto = conflictEEs.has(ocup.ee.crn);
+                    
                     cell.innerHTML = `
-                        <div class="ee-card" data-crn="${ocup.ee.crn}">
+                        <div class="ee-card ${esConflicto ? 'conflicto' : ''}" data-crn="${ocup.ee.crn}" style="background:${color.bg}; color:${color.text};">
                             <div class="ee-nombre">${ocup.ee.nombre}</div>
                             <div class="ee-nrc">NRC ${ocup.ee.crn}</div>
                             <div class="ee-docente">${ocup.ee.docente}</div>
                             <div class="ee-horario">${formatTime(ocup.horario.inicio)}-${formatTime(ocup.horario.fin)} (${duracion}h)</div>
-                            <div class="ee-salon">📍 ${salonDelDia}</div>
+                            <div class="ee-salon">📍 ${aulaCorta}</div>
                         </div>
                     `;
-                } else if (!ocup) {
-                    // Celda vacía (no ocupada por ninguna EE)
-                    cell.innerHTML = '';
                 }
-                // Si ocup existe pero no es inicio, no crear celda (ya está cubierta por rowspan)
                 
                 row.appendChild(cell);
             }
@@ -1178,7 +1275,7 @@ border: 2px solid #28a745;
             table.appendChild(row);
         }
         
-        // Agregar event listeners para eliminar
+        // Event listeners
         document.querySelectorAll('.ee-card').forEach(card => {
             card.addEventListener('click', function() {
                 const crn = this.dataset.crn;
@@ -1215,7 +1312,7 @@ border: 2px solid #28a745;
     function populateAreaFilter() {
         const select = document.getElementById('filter-area');
         const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
-        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
+        select.innerHTML = '<option value=""> Todas las áreas</option>';
         areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
     }
 
@@ -1236,9 +1333,11 @@ border: 2px solid #28a745;
             item.dataset.area = ee.area || '';
             item.dataset.turno = ee.bloqueInfo.turno || '';
             
+            // Horario compacto: solo día, hora y aula (sin edificio)
             const horariosDetallados = ee.horarios.map(h => {
-                const salonDelDia = ee.salonesPorDia[h.dia] || Object.values(ee.salonesPorDia)[0] || 'Por asignar';
-                return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)} (${salonDelDia})`;
+                const salonDelDia = ee.salonesPorDia[h.dia] || Object.values(ee.salonesPorDia)[0] || '';
+                const aula = extraerAula(salonDelDia);
+                return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)} (${aula})`;
             }).join(' · ');
             
             const yaAgregada = appState.horarioSeleccionado.some(e => e.crn === ee.crn);
@@ -1246,9 +1345,8 @@ border: 2px solid #28a745;
             
             item.innerHTML = `
                 <h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4>
-                <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>CRN:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
+                <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>NRC:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
                 <p><strong>Docente:</strong> ${ee.docente}</p>
-                <p><strong>Salón:</strong> ${Object.values(ee.salonesPorDia).join(', ') || 'Por asignar'}</p>
                 <p><strong>Horario:</strong> ${horariosDetallados}</p>
                 <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : ee.bloqueInfo.turno === 'V' ? 'Vespertino' : 'Escolarizado'}</p>
             `;
@@ -1310,8 +1408,5 @@ border: 2px solid #28a745;
         setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000);
     }
 </script>
-
 </body>
 </html>
-
-
