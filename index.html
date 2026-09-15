@@ -55,22 +55,22 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 .stat-label { font-size: 0.9em; color: #666; }
 .btn-agregar { width: 100%; background: #28a745; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
 .btn-agregar:hover { background: #218838; }
-.btn-agregar::before { content: ' '; }
+.btn-agregar::before { content: '➕ '; }
 .instruccion { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
 .instruccion::before { content: '👆 '; }
-.bloques-grid { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9em; }
-.bloques-grid th { background: #7c3aed; color: white; padding: 12px 8px; text-align: center; font-weight: bold; }
-.bloques-grid th:first-child { background: #1a3a6b; }
+.bloques-grid { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9em; table-layout: fixed; }
+.bloques-grid th { background: #7c3aed; color: white; padding: 12px 8px; text-align: center; font-weight: bold; border: 1px solid #6d28d9; }
+.bloques-grid th:first-child { background: #1a3a6b; width: 100px; }
 .bloques-grid th .bloque-num { font-size: 1.1em; display: block; margin-bottom: 3px; }
 .bloques-grid th .bloque-fecha { font-size: 0.8em; font-weight: normal; opacity: 0.95; display: block; }
 .bloques-grid td { border: 1px solid #e0e0e0; padding: 12px 8px; text-align: center; vertical-align: middle; }
 .bloques-grid td:first-child { background: #f8f9fa; font-weight: bold; color: #1a3a6b; font-size: 1.05em; }
-.bloque-cell { cursor: pointer; transition: all 0.3s; min-height: 80px; }
+.bloque-cell { cursor: pointer; transition: all 0.3s; min-height: 80px; overflow: hidden; }
 .bloque-cell:hover { background: #f0f4ff; }
 .bloque-cell.empty { color: #ccc; font-size: 1.5em; }
 .bloque-cell.occupied { background: #e8f5e9; border: 2px solid #28a745; }
-.bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
-.bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
+.bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.9em; margin-bottom: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bloque-cell .ee-info { font-size: 0.78em; color: #666; line-height: 1.3; }
 .horario-table-wrapper { width: 100%; overflow-x: auto; margin-bottom: 20px; }
 .horario-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .horario-table th { background: #1a3a6b; color: white; padding: 12px 4px; text-align: center; font-weight: bold; font-size: 0.95em; border: 1px solid #0f2444; }
@@ -140,8 +140,8 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 <div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
 <p class="section-subtitle">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas.</p>
 <div class="selector-grid">
-<div class="option-card" data-modalidad="E" onclick="selectModalidad('E')"><div class="icon"></div><h3>Escolarizado</h3><p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p></div>
-<div class="option-card" data-modalidad="A" onclick="selectModalidad('A')"><div class="icon"></div><h3>Abierto</h3><p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>.</p></div>
+<div class="option-card" data-modalidad="E" onclick="selectModalidad('E')"><div class="icon">🏫</div><h3>Escolarizado</h3><p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p></div>
+<div class="option-card" data-modalidad="A" onclick="selectModalidad('A')"><div class="icon">📚</div><h3>Abierto</h3><p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>.</p></div>
 </div>
 <div class="nav-buttons"><div></div><button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button></div>
 </div>
@@ -179,7 +179,7 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 </table>
 </div>
 <div id="vista-escolarizado" style="display:none;"><div class="horario-table-wrapper"><table class="horario-table" id="horario-table"></table></div></div>
-<div class="botones-inferiores"><button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button><button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button></div>
+<div class="botones-inferiores"><button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button><button class="btn-inferior btn-limpiar" onclick="clearHorario()">️ Limpiar Mi Horario</button></div>
 </div>
 </div>
 </div>
@@ -188,10 +188,10 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:
 <div class="modal" id="ee-modal">
 <div class="modal-content">
 <div class="modal-header">➕ Agregar Experiencia Educativa</div>
-<input type="text" class="search-box" id="search-ee" placeholder=" Buscar por nombre, docente o NRC..." oninput="filterEEList()">
+<input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o NRC..." oninput="filterEEList()">
 <div class="filter-bar">
 <select id="filter-area" onchange="filterEEList()"><option value="">📁 Todas las áreas</option></select>
-<select id="filter-turno" onchange="filterEEList()"><option value="">🕐 Todos los turnos</option><option value="M">Matutino</option><option value="V">Vespertino</option></select>
+<select id="filter-turno" onchange="filterEEList()"><option value=""> Todos los turnos</option><option value="M">Matutino</option><option value="V">Vespertino</option></select>
 <select id="filter-bloque" onchange="filterEEList()" style="display:none;"><option value="">📅 Todos los bloques</option><option value="1">Bloque 1</option><option value="2">Bloque 2</option><option value="3">Bloque 3</option><option value="4">Bloque 4</option><option value="5">Bloque 5</option></select>
 </div>
 <div class="ee-list" id="ee-list"></div>
@@ -301,7 +301,7 @@ updateBloquesFechas();
 showSuccess(`✅ Datos cargados (${totalEE} EEs, ${Object.keys(appState.nrcBloque).length} NRCs con bloque)`);
 initializeApp();
 } catch (error) {
-showError(' Error: ' + error.message);
+showError('❌ Error: ' + error.message);
 console.error(error);
 }
 }
@@ -489,7 +489,7 @@ function initializeApp() {
 const key = `${appState.plan}-${appState.modalidad}`;
 const datos = appState.datosCargados[key];
 if (!datos || datos.length === 0) {
-showError('️ No hay datos disponibles para esta combinación de plan y modalidad.');
+showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
 return;
 }
 appState.experienciasEducativas = datos;
@@ -586,21 +586,7 @@ const table = document.getElementById('horario-table');
 table.innerHTML = '';
 const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
 const horasInicio = 7, horasFin = 21, numDias = 5;
-const conflictEEs = new Set();
-for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
-for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
-const ee1 = appState.horarioSeleccionado[i], ee2 = appState.horarioSeleccionado[j];
-for (const h1 of ee1.horarios) {
-for (const h2 of ee2.horarios) {
-if (h1.dia === h2.dia) {
-const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
-const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
-if (ini1 < fin2 && ini2 < fin1) { conflictEEs.add(ee1.crn); conflictEEs.add(ee2.crn); }
-}
-}
-}
-}
-}
+const conflictEEs = detectConflictEEs();
 const headerRow = document.createElement('tr');
 headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
 table.appendChild(headerRow);
@@ -654,23 +640,74 @@ updateStats(); renderHorarioTable();
 });
 });
 }
+// CORREGIDO: Detección de conflictos según modalidad
 function detectConflicts() {
 let conflicts = 0;
+const conflictPairs = detectConflictEEs();
+// Contar pares únicos de conflicto
+const counted = new Set();
 for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
 for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
-const ee1 = appState.horarioSeleccionado[i], ee2 = appState.horarioSeleccionado[j];
-for (const h1 of ee1.horarios) {
-for (const h2 of ee2.horarios) {
-if (h1.dia === h2.dia) {
-const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
-const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
-if (ini1 < fin2 && ini2 < fin1) conflicts++;
+const ee1 = appState.horarioSeleccionado[i];
+const ee2 = appState.horarioSeleccionado[j];
+if (conflictPairs.has(ee1.crn) && conflictPairs.has(ee2.crn)) {
+// Verificar si realmente chocan entre sí
+if (tieneChoqueReal(ee1, ee2)) {
+const key = `${ee1.crn}-${ee2.crn}`;
+if (!counted.has(key)) {
+counted.add(key);
+conflicts++;
 }
 }
 }
 }
 }
 return conflicts;
+}
+// CORREGIDO: Solo marca como conflicto las EEs que realmente chocan entre sí
+function detectConflictEEs() {
+const conflictEEs = new Set();
+for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
+for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
+const ee1 = appState.horarioSeleccionado[i];
+const ee2 = appState.horarioSeleccionado[j];
+if (tieneChoqueReal(ee1, ee2)) {
+conflictEEs.add(ee1.crn);
+conflictEEs.add(ee2.crn);
+}
+}
+}
+return conflictEEs;
+}
+// CORREGIDO: Lógica de choque según modalidad
+function tieneChoqueReal(ee1, ee2) {
+// En modalidad Abierto: solo hay choque si están en el MISMO bloque y MISMO turno
+if (appState.modalidad === 'A') {
+if (ee1.bloqueAsignado !== ee2.bloqueAsignado) return false; // Diferentes bloques = no chocan
+if (ee1.bloqueInfo.turno !== ee2.bloqueInfo.turno) return false; // Diferentes turnos = no chocan
+// Mismo bloque y mismo turno = posible choque de horario
+for (const h1 of ee1.horarios) {
+for (const h2 of ee2.horarios) {
+if (h1.dia === h2.dia) {
+const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
+const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
+if (ini1 < fin2 && ini2 < fin1) return true;
+}
+}
+}
+return false;
+}
+// En modalidad Escolarizado: choque si mismo día y horario traslapado
+for (const h1 of ee1.horarios) {
+for (const h2 of ee2.horarios) {
+if (h1.dia === h2.dia) {
+const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
+const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
+if (ini1 < fin2 && ini2 < fin1) return true;
+}
+}
+}
+return false;
 }
 function populateAreaFilter() {
 const select = document.getElementById('filter-area');
