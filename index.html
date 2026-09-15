@@ -248,7 +248,7 @@ border: 2px solid #28a745;
 }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
 .bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
-        /* GRID ESCOLARIZADO - TABLA CON LAYOUT FIJO */
+            /* GRID ESCOLARIZADO */
     .horario-table-wrapper {
         width: 100%;
         overflow-x: auto;
@@ -348,7 +348,6 @@ border: 2px solid #28a745;
         white-space: nowrap;
     }
     
-    /* CHOQUE - efecto visual */
     .horario-table .ee-card.conflicto {
         animation: pulseConflicto 1.5s infinite;
         box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4);
@@ -492,94 +491,27 @@ border: 2px solid #28a745;
         .step-label { display: none; }
         .selector-grid { grid-template-columns: 1fr; }
     }
-    
-    /* ESTILOS DE IMPRESIÓN - Solo el grid de horario */
     @media print {
-        @page {
-            size: landscape;
-            margin: 8mm;
-        }
-        body {
-            background: white !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
-        * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-            color-adjust: exact !important;
-        }
-        .container {
-            box-shadow: none !important;
-            border-radius: 0 !important;
-            max-width: 100% !important;
-            margin: 0 !important;
-        }
-        .header, .steps-indicator, .screen:not(#screen-3),
-        .oferta-header, .stats, .btn-agregar, .instruccion,
-        .botones-inferiores, .footer, .back-btn,
-        .conflict-warning, #loading-section, #error-section, #success-section,
-        #vista-abierto, .modal {
-            display: none !important;
-        }
-        #screen-3, #app-main, #vista-escolarizado {
-            display: block !important;
-        }
-        .horario-table-wrapper {
-            overflow: visible !important;
-        }
-        .horario-table {
-            width: 100% !important;
-            table-layout: fixed !important;
-            border-collapse: collapse !important;
-            font-size: 8pt !important;
-        }
-        .horario-table th {
-            background: #1a3a6b !important;
-            color: white !important;
-            padding: 4px 2px !important;
-            font-size: 9pt !important;
-            border: 1px solid #000 !important;
-        }
-        .horario-table th:first-child {
-            width: 50px !important;
-        }
-        .horario-table td {
-            padding: 2px !important;
-            border: 1px solid #999 !important;
-            height: auto !important;
-            overflow: hidden !important;
-        }
-        .horario-table td:first-child {
-            background: #f0f0f0 !important;
-            font-size: 8pt !important;
-            padding: 4px 2px !important;
-        }
-        .horario-table .ee-card {
-            padding: 3px 4px !important;
-            font-size: 7pt !important;
-            box-shadow: none !important;
-            border-radius: 2px !important;
-            overflow: hidden !important;
-        }
-        .horario-table .ee-card .ee-nombre {
-            font-size: 7.5pt !important;
-            white-space: normal !important;
-            overflow: visible !important;
-            text-overflow: clip !important;
-        }
-        .horario-table .ee-card .ee-nrc,
-        .horario-table .ee-card .ee-docente,
-        .horario-table .ee-card .ee-horario,
-        .horario-table .ee-card .ee-salon {
-            font-size: 6.5pt !important;
-            white-space: nowrap !important;
-            overflow: hidden !important;
-            text-overflow: ellipsis !important;
-        }
+        @page { size: landscape; margin: 8mm; }
+        body { background: white !important; padding: 0 !important; margin: 0 !important; }
+        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+        .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; }
+        .header, .steps-indicator, .screen:not(#screen-3), .oferta-header, .stats, .btn-agregar, .instruccion,
+        .botones-inferiores, .footer, .back-btn, .conflict-warning, #loading-section, #error-section, #success-section,
+        #vista-abierto, .modal { display: none !important; }
+        #screen-3, #app-main, #vista-escolarizado { display: block !important; }
+        .horario-table-wrapper { overflow: visible !important; }
+        .horario-table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; font-size: 8pt !important; }
+        .horario-table th { background: #1a3a6b !important; color: white !important; padding: 4px 2px !important; font-size: 9pt !important; border: 1px solid #000 !important; }
+        .horario-table th:first-child { width: 50px !important; }
+        .horario-table td { padding: 2px !important; border: 1px solid #999 !important; height: auto !important; overflow: hidden !important; }
+        .horario-table td:first-child { background: #f0f0f0 !important; font-size: 8pt !important; padding: 4px 2px !important; }
+        .horario-table .ee-card { padding: 3px 4px !important; font-size: 7pt !important; box-shadow: none !important; border-radius: 2px !important; overflow: hidden !important; }
+        .horario-table .ee-card .ee-nombre { font-size: 7.5pt !important; white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
+        .horario-table .ee-card .ee-nrc, .horario-table .ee-card .ee-docente, .horario-table .ee-card .ee-horario, .horario-table .ee-card .ee-salon { font-size: 6.5pt !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
     }
 </style>
-    </head>
+        </head>
 <body>
 <div class="container">
 <div class="header">
@@ -589,22 +521,13 @@ border: 2px solid #28a745;
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
 <div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
 </div>
-        <div class="content">
+    <div class="content">
         <div class="steps-indicator" id="steps-indicator">
-            <div class="step active" data-step="1">
-                <div class="step-number">1</div>
-                <div class="step-label">Modalidad</div>
-            </div>
+            <div class="step active" data-step="1"><div class="step-number">1</div><div class="step-label">Modalidad</div></div>
             <div class="step-connector"></div>
-            <div class="step" data-step="2">
-                <div class="step-number">2</div>
-                <div class="step-label">Plan</div>
-            </div>
+            <div class="step" data-step="2"><div class="step-number">2</div><div class="step-label">Plan</div></div>
             <div class="step-connector"></div>
-            <div class="step" data-step="3">
-                <div class="step-number">3</div>
-                <div class="step-label">Mi Horario</div>
-            </div>
+            <div class="step" data-step="3"><div class="step-number">3</div><div class="step-label">Mi Horario</div></div>
         </div>
 
         <div class="screen active" id="screen-1">
@@ -633,7 +556,7 @@ border: 2px solid #28a745;
             <p class="section-subtitle">Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.</p>
             <div class="selector-grid">
                 <div class="option-card" data-plan="04" onclick="selectPlan('04')">
-                    <div class="icon"></div>
+                    <div class="icon">📜</div>
                     <h3>Plan 2004</h3>
                     <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
                 </div>
@@ -666,29 +589,15 @@ border: 2px solid #28a745;
                 </div>
 
                 <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-ee">0</div>
-                        <div class="stat-label">Experiencias Educativas</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-creditos">0</div>
-                        <div class="stat-label">Créditos</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-horas">0.0</div>
-                        <div class="stat-label" id="stat-horas-label">Horas/Sábado</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="stat-choques">0</div>
-                        <div class="stat-label">Choques</div>
-                    </div>
+                    <div class="stat-card"><div class="stat-value" id="stat-ee">0</div><div class="stat-label">Experiencias Educativas</div></div>
+                    <div class="stat-card"><div class="stat-value" id="stat-creditos">0</div><div class="stat-label">Créditos</div></div>
+                    <div class="stat-card"><div class="stat-value" id="stat-horas">0.0</div><div class="stat-label" id="stat-horas-label">Horas/Sábado</div></div>
+                    <div class="stat-card"><div class="stat-value" id="stat-choques">0</div><div class="stat-label">Choques</div></div>
                 </div>
 
                 <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
 
-                <div class="conflict-warning" id="conflict-warning">
-                    ⚠️ ¡Choque de horario detectado! Las experiencias en conflicto están marcadas con un borde rojo pulsante. Toca una para quitarla.
-                </div>
+                <div class="conflict-warning" id="conflict-warning">⚠️ ¡Choque de horario detectado! Las experiencias en conflicto están marcadas con un borde rojo pulsante. Toca una para quitarla.</div>
 
                 <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
 
@@ -751,13 +660,19 @@ border: 2px solid #28a745;
         <div class="modal-header">➕ Agregar Experiencia Educativa</div>
         <input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o NRC..." oninput="filterEEList()">
         <div class="filter-bar">
-            <select id="filter-area" onchange="filterEEList()">
-                <option value="">📁 Todas las áreas</option>
-            </select>
+            <select id="filter-area" onchange="filterEEList()"><option value="">📁 Todas las áreas</option></select>
             <select id="filter-turno" onchange="filterEEList()">
                 <option value="">🕐 Todos los turnos</option>
                 <option value="M">Matutino</option>
                 <option value="V">Vespertino</option>
+            </select>
+            <select id="filter-bloque" onchange="filterEEList()" style="display:none;">
+                <option value="">📅 Todos los bloques</option>
+                <option value="1">Bloque 1</option>
+                <option value="2">Bloque 2</option>
+                <option value="3">Bloque 3</option>
+                <option value="4">Bloque 4</option>
+                <option value="5">Bloque 5</option>
             </select>
         </div>
         <div class="ee-list" id="ee-list"></div>
@@ -774,7 +689,18 @@ border: 2px solid #28a745;
         '04-A': /SYRPRAC.*04.*A.*\.xlsx$/i,
         '25-E': /SYRPRAC.*25.*E.*\.xlsx$/i,
         '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i,
-        'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i
+        'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i,
+        'SEIL-04-A': /SYRSEIL.*04.*A.*\.xlsx$/i,
+        'SEIL-25-A': /SYRSEIL.*25.*A.*\.xlsx$/i
+    };
+
+    // Mapeo de PTRM_CODE a Bloque
+    const PTRM_TO_BLOQUE = {
+        '10': 1,
+        '11': 2,
+        '12': 3,
+        '13': 4,
+        '14': 5
     };
 
     const PALETA_COLORES = [
@@ -798,6 +724,7 @@ border: 2px solid #28a745;
         plan: null,
         datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
         bloquesFechas: {},
+        nrcBloque: {}, // { crn: bloqueNumero }
         experienciasEducativas: [],
         horarioSeleccionado: [],
         datosCargadosOK: false
@@ -808,11 +735,7 @@ border: 2px solid #28a745;
     function goToScreen(num) {
         if (num === 2 && !appState.modalidad) return;
         if (num === 3 && (!appState.modalidad || !appState.plan)) return;
-        
-        if (num === 3 && !appState.datosCargadosOK) {
-            loadFromGoogleDrive();
-        }
-
+        if (num === 3 && !appState.datosCargadosOK) loadFromGoogleDrive();
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(`screen-${num}`).classList.add('active');
         appState.currentScreen = num;
@@ -841,17 +764,13 @@ border: 2px solid #28a745;
 
     function selectModalidad(mod) {
         appState.modalidad = mod;
-        document.querySelectorAll('[data-modalidad]').forEach(card => {
-            card.classList.toggle('selected', card.dataset.modalidad === mod);
-        });
+        document.querySelectorAll('[data-modalidad]').forEach(card => card.classList.toggle('selected', card.dataset.modalidad === mod));
         document.getElementById('btn-next-1').disabled = false;
     }
 
     function selectPlan(plan) {
         appState.plan = plan;
-        document.querySelectorAll('[data-plan]').forEach(card => {
-            card.classList.toggle('selected', card.dataset.plan === plan);
-        });
+        document.querySelectorAll('[data-plan]').forEach(card => card.classList.toggle('selected', card.dataset.plan === plan));
         document.getElementById('btn-next-2').disabled = false;
     }
 
@@ -865,9 +784,7 @@ border: 2px solid #28a745;
             const files = await listFilesInFolder();
             console.log('Archivos encontrados:', files);
             
-            if (!files || files.length === 0) {
-                throw new Error('No se encontraron archivos en la carpeta de Google Drive.');
-            }
+            if (!files || files.length === 0) throw new Error('No se encontraron archivos en la carpeta de Google Drive.');
 
             const archivosEncontrados = {};
             for (const [key, pattern] of Object.entries(FILE_PATTERNS)) {
@@ -886,11 +803,15 @@ border: 2px solid #28a745;
                     updateLoadingMessage(`Cargando ${file.name}... (${cargados + 1}/${total})`);
                     
                     if (key === 'BLOQUES-A') {
-                        const data = await downloadAndProcessBloques(file.id);
-                        appState.bloquesFechas = data;
+                        appState.bloquesFechas = await downloadAndProcessBloques(file.id);
+                    } else if (key.startsWith('SEIL-')) {
+                        // Procesar archivo SYRSEIL para obtener NRC -> Bloque
+                        const nrcMap = await downloadAndProcessSEIL(file.id);
+                        // Fusionar con el mapa existente
+                        Object.assign(appState.nrcBloque, nrcMap);
+                        console.log(`✓ ${key}: ${Object.keys(nrcMap).length} NRCs con bloque asignado`);
                     } else {
-                        const data = await downloadAndProcessFile(file.id);
-                        appState.datosCargados[key] = data;
+                        appState.datosCargados[key] = await downloadAndProcessFile(file.id);
                     }
                     cargados++;
                 } catch (err) {
@@ -898,20 +819,18 @@ border: 2px solid #28a745;
                 }
             }
 
-            if (cargados === 0) {
-                throw new Error('No se pudo procesar ningún archivo.');
-            }
+            if (cargados === 0) throw new Error('No se pudo procesar ningún archivo.');
 
             appState.datosCargadosOK = true;
             updateBloquesFechas();
             
             const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
-            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs)`);
+            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs, ${Object.keys(appState.nrcBloque).length} NRCs con bloque)`);
             
             initializeApp();
 
         } catch (error) {
-            showError(' Error: ' + error.message);
+            showError('❌ Error: ' + error.message);
             console.error(error);
         }
     }
@@ -950,6 +869,19 @@ border: 2px solid #28a745;
         return processBloquesData(jsonData);
     }
 
+    async function downloadAndProcessSEIL(fileId) {
+        const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Error al descargar: ${response.status}`);
+        const blob = await response.blob();
+        const arrayBuffer = await blob.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
+        return processSEILData(jsonData);
+    }
+
     function processBloquesData(data) {
         const bloques = {};
         let headerRow = null;
@@ -959,28 +891,69 @@ border: 2px solid #28a745;
             const row = data[i];
             if (!row) continue;
             const firstCell = String(row[0] || '').trim().toLowerCase();
-            if (firstCell === 'bloques' || firstCell.includes('bloque')) {
-                headerRow = i;
-            }
-            if (firstCell === 'fechas') {
-                fechasRow = i;
-            }
+            if (firstCell === 'bloques' || firstCell.includes('bloque')) headerRow = i;
+            if (firstCell === 'fechas') fechasRow = i;
         }
         
         if (headerRow !== null && fechasRow !== null) {
             const headerCells = data[headerRow];
             const fechasCells = data[fechasRow];
-            
             for (let i = 1; i <= 5; i++) {
                 const bloqueNombre = String(headerCells[i] || '').trim();
                 const fechas = String(fechasCells[i] || '').trim();
-                if (bloqueNombre && fechas) {
-                    bloques[i] = fechas;
-                }
+                if (bloqueNombre && fechas) bloques[i] = fechas;
+            }
+        }
+        return bloques;
+    }
+
+    function processSEILData(data) {
+        // Buscar columnas SSBSECT_CRN y SWBSEIL_PTRM_CODE
+        const nrcMap = {};
+        
+        if (!data || data.length < 2) return nrcMap;
+        
+        let headerRowIndex = 0;
+        let headers = [];
+        for (let i = 0; i < Math.min(10, data.length); i++) {
+            const row = data[i];
+            if (row && row.includes('SSBSECT_CRN') && row.includes('SWBSEIL_PTRM_CODE')) {
+                headerRowIndex = i;
+                headers = row.map(h => String(h).trim());
+                break;
             }
         }
         
-        return bloques;
+        if (headers.length === 0) {
+            headers = data[0].map(h => String(h).trim());
+        }
+        
+        const idxCRN = headers.indexOf('SSBSECT_CRN');
+        const idxPTRM = headers.indexOf('SWBSEIL_PTRM_CODE');
+        
+        if (idxCRN < 0 || idxPTRM < 0) {
+            console.warn('No se encontraron columnas SSBSECT_CRN o SWBSEIL_PTRM_CODE en el archivo SYRSEIL');
+            return nrcMap;
+        }
+        
+        for (let i = headerRowIndex + 1; i < data.length; i++) {
+            const row = data[i];
+            if (!row || row.length === 0) continue;
+            
+            const crn = row[idxCRN];
+            const ptrm = row[idxPTRM];
+            
+            if (!crn || !ptrm) continue;
+            
+            const crnStr = String(crn).trim();
+            const ptrmStr = String(ptrm).trim();
+            
+            if (PTRM_TO_BLOQUE[ptrmStr]) {
+                nrcMap[crnStr] = PTRM_TO_BLOQUE[ptrmStr];
+            }
+        }
+        
+        return nrcMap;
     }
 
     function updateBloquesFechas() {
@@ -1004,9 +977,7 @@ border: 2px solid #28a745;
                 break;
             }
         }
-        if (headers.length === 0) {
-            headers = data[0].map(h => String(h).trim());
-        }
+        if (headers.length === 0) headers = data[0].map(h => String(h).trim());
         
         const idx = {
             titulo: headers.indexOf('TITULO'),
@@ -1072,30 +1043,26 @@ border: 2px solid #28a745;
                 const ini = parseInt(row[d.ini]);
                 const fin = parseInt(row[d.fin]);
                 if (!isNaN(ini) && !isNaN(fin) && ini > 0 && fin > 0 && fin > ini) {
-                    const existe = crnMap[crn].horarios.some(
-                        eh => eh.dia === d.dia && eh.inicio === ini && eh.fin === fin
-                    );
-                    if (!existe) {
-                        crnMap[crn].horarios.push({ dia: d.dia, inicio: ini, fin: fin });
-                    }
-                    if (salonCompleto) {
-                        crnMap[crn].salonesPorDia[d.dia] = salonCompleto;
-                    }
+                    const existe = crnMap[crn].horarios.some(eh => eh.dia === d.dia && eh.inicio === ini && eh.fin === fin);
+                    if (!existe) crnMap[crn].horarios.push({ dia: d.dia, inicio: ini, fin: fin });
+                    if (salonCompleto) crnMap[crn].salonesPorDia[d.dia] = salonCompleto;
                 }
             });
         }
         
         return Object.values(crnMap).map(ee => {
             ee.bloqueInfo = clasificarBloque(ee.horarios);
+            // Asignar bloque desde SYRSEIL si está disponible
+            if (appState.nrcBloque[ee.crn]) {
+                ee.bloqueAsignado = appState.nrcBloque[ee.crn];
+            }
             return ee;
         });
     }
 
     function clasificarBloque(horarios) {
         const sabado = horarios.filter(h => h.dia === 5);
-        if (sabado.length === 0) {
-            return { tipo: 'escolarizado', turno: null };
-        }
+        if (sabado.length === 0) return { tipo: 'escolarizado', turno: null };
         const promedio = sabado.reduce((sum, h) => sum + h.inicio, 0) / sabado.length;
         const turno = promedio < 1400 ? 'M' : 'V';
         return { tipo: 'abierto', turno: turno };
@@ -1112,7 +1079,7 @@ border: 2px solid #28a745;
         const datos = appState.datosCargados[key];
         
         if (!datos || datos.length === 0) {
-            showError('️ No hay datos disponibles para esta combinación de plan y modalidad.');
+            showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
             return;
         }
         
@@ -1127,14 +1094,17 @@ border: 2px solid #28a745;
         document.getElementById('header-subtitle').textContent = `Periodo Agosto 2026 - Enero 2027 · ${modalidadTxt} · Sábados por bloques`;
         document.getElementById('header-plan-badge').textContent = `${modalidadTxt} · ${planTxt}`;
         document.getElementById('oferta-title').textContent = `Oferta Académica · ${modalidadTxt} · ${planTxt}`;
-        
         document.getElementById('stat-horas-label').textContent = appState.modalidad === 'A' ? 'Horas/Sábado' : 'Horas/Semana';
         
+        // Mostrar/ocultar filtros según modalidad
         const filterTurno = document.getElementById('filter-turno');
+        const filterBloque = document.getElementById('filter-bloque');
         if (appState.modalidad === 'E') {
             filterTurno.style.display = 'none';
+            filterBloque.style.display = 'none';
         } else {
             filterTurno.style.display = 'block';
+            filterBloque.style.display = 'block';
         }
         
         if (appState.modalidad === 'A') {
@@ -1172,12 +1142,9 @@ border: 2px solid #28a745;
     function updateStats() {
         const totalEE = appState.horarioSeleccionado.length;
         const totalCreditos = appState.horarioSeleccionado.reduce((sum, ee) => sum + (ee.creditos || 0), 0);
-        
         let totalMinutos = 0;
         appState.horarioSeleccionado.forEach(ee => {
-            ee.horarios.forEach(h => {
-                totalMinutos += timeToMinutes(h.fin) - timeToMinutes(h.inicio);
-            });
+            ee.horarios.forEach(h => { totalMinutos += timeToMinutes(h.fin) - timeToMinutes(h.inicio); });
         });
         const totalHoras = (totalMinutos / 60).toFixed(1);
         const choques = detectConflicts();
@@ -1186,7 +1153,6 @@ border: 2px solid #28a745;
         document.getElementById('stat-creditos').textContent = totalCreditos;
         document.getElementById('stat-horas').textContent = totalHoras;
         document.getElementById('stat-choques').textContent = choques;
-        
         document.getElementById('conflict-warning').classList.toggle('show', choques > 0);
     }
 
@@ -1196,30 +1162,32 @@ border: 2px solid #28a745;
     }
 
     function renderBloquesGrid() {
+        // Limpiar todas las celdas
         document.querySelectorAll('.bloque-cell').forEach(cell => {
             cell.className = 'bloque-cell empty';
             cell.innerHTML = '—';
         });
         
+        // Colocar cada EE en su bloque asignado (desde SYRSEIL)
         appState.horarioSeleccionado.forEach(ee => {
             const turno = ee.bloqueInfo.turno;
-            if (!turno) return;
+            const bloque = ee.bloqueAsignado; // Bloque asignado desde SYRSEIL
             
-            for (let bloque = 1; bloque <= 5; bloque++) {
-                const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
-                if (cell && cell.classList.contains('empty')) {
-                    cell.className = 'bloque-cell occupied';
-                    const nombreCorto = ee.nombre.length > 30 ? ee.nombre.substring(0, 30) + '...' : ee.nombre;
-                    cell.innerHTML = `
-                        <div class="ee-nombre">${nombreCorto}</div>
-                        <div class="ee-info">
-                            ${ee.docente.substring(0, 25)}<br>
-                             ${ee.salon.substring(0, 20)}<br>
-                            🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
-                        </div>
-                    `;
-                    break;
-                }
+            if (!turno || !bloque) return;
+            
+            const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
+            if (cell && cell.classList.contains('empty')) {
+                cell.className = 'bloque-cell occupied';
+                const nombreCorto = ee.nombre.length > 30 ? ee.nombre.substring(0, 30) + '...' : ee.nombre;
+                cell.innerHTML = `
+                    <div class="ee-nombre">${nombreCorto}</div>
+                    <div class="ee-info">
+                        NRC ${ee.crn}<br>
+                        ${ee.docente.substring(0, 25)}<br>
+                        📍 ${Object.values(ee.salonesPorDia)[0] || 'Por asignar'}<br>
+                        🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
+                    </div>
+                `;
             }
         });
     }
@@ -1250,7 +1218,6 @@ border: 2px solid #28a745;
         const horasFin = 21;
         const numDias = 5;
         
-        // Detectar conflictos
         const conflictEEs = new Set();
         for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
             for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
@@ -1271,21 +1238,16 @@ border: 2px solid #28a745;
             }
         }
         
-        // Header
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
         table.appendChild(headerRow);
         
-        // Matriz de ocupación: ocupacion[hora][dia] = {ee, horario, esInicio, rowspan}
         const ocupacion = {};
         for (let h = horasInicio; h <= horasFin; h++) {
             ocupacion[h] = {};
-            for (let d = 0; d < numDias; d++) {
-                ocupacion[h][d] = null;
-            }
+            for (let d = 0; d < numDias; d++) ocupacion[h][d] = null;
         }
         
-        // Llenar matriz
         appState.horarioSeleccionado.forEach(ee => {
             ee.horarios.forEach(h => {
                 if (h.dia >= 0 && h.dia < numDias) {
@@ -1293,16 +1255,9 @@ border: 2px solid #28a745;
                     const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
                     const rowspan = finHora - iniHora;
                     
-                    // Marcar solo la celda de inicio con rowspan
                     if (ocupacion[iniHora] && ocupacion[iniHora][h.dia] === null) {
-                        ocupacion[iniHora][h.dia] = { 
-                            ee, 
-                            horario: h, 
-                            esInicio: true,
-                            rowspan: Math.min(rowspan, horasFin - iniHora + 1)
-                        };
+                        ocupacion[iniHora][h.dia] = { ee, horario: h, esInicio: true, rowspan: Math.min(rowspan, horasFin - iniHora + 1) };
                     }
-                    // Marcar celdas cubiertas (para omitirlas al generar filas)
                     for (let hora = iniHora + 1; hora < finHora && hora <= horasFin; hora++) {
                         if (ocupacion[hora] && ocupacion[hora][h.dia] === null) {
                             ocupacion[hora][h.dia] = { cubierto: true };
@@ -1312,23 +1267,15 @@ border: 2px solid #28a745;
             });
         });
         
-        // Generar filas
         for (let hora = horasInicio; hora <= horasFin; hora++) {
             const row = document.createElement('tr');
-            
-            // Celda de hora
             const horaCell = document.createElement('td');
             horaCell.textContent = `${hora}:00`;
             row.appendChild(horaCell);
             
-            // Celdas de días
             for (let dia = 0; dia < numDias; dia++) {
                 const ocup = ocupacion[hora][dia];
-                
-                // Si está cubierta por rowspan, NO generar celda
-                if (ocup && ocup.cubierto) {
-                    continue;
-                }
+                if (ocup && ocup.cubierto) continue;
                 
                 const cell = document.createElement('td');
                 
@@ -1336,15 +1283,11 @@ border: 2px solid #28a745;
                     const salonDelDia = ocup.ee.salonesPorDia[dia] || Object.values(ocup.ee.salonesPorDia)[0] || 'Por asignar';
                     const aulaCorta = extraerAula(salonDelDia);
                     const duracion = Math.ceil((timeToMinutes(ocup.horario.fin) - timeToMinutes(ocup.horario.inicio)) / 60);
-                    
                     const idx = appState.horarioSeleccionado.findIndex(e => e.crn === ocup.ee.crn);
                     const color = PALETA_COLORES[idx % PALETA_COLORES.length];
-                    
                     const esConflicto = conflictEEs.has(ocup.ee.crn);
                     
-                    if (ocup.rowspan > 1) {
-                        cell.rowSpan = ocup.rowspan;
-                    }
+                    if (ocup.rowspan > 1) cell.rowSpan = ocup.rowspan;
                     
                     cell.innerHTML = `
                         <div class="ee-card ${esConflicto ? 'conflicto' : ''}" data-crn="${ocup.ee.crn}" style="background:${color.bg}; color:${color.text};">
@@ -1356,14 +1299,11 @@ border: 2px solid #28a745;
                         </div>
                     `;
                 }
-                
                 row.appendChild(cell);
             }
-            
             table.appendChild(row);
         }
         
-        // Event listeners
         document.querySelectorAll('.ee-card').forEach(card => {
             card.addEventListener('click', function() {
                 const crn = this.dataset.crn;
@@ -1400,7 +1340,7 @@ border: 2px solid #28a745;
     function populateAreaFilter() {
         const select = document.getElementById('filter-area');
         const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
-        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
+        select.innerHTML = '<option value=""> Todas las áreas</option>';
         areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
     }
 
@@ -1409,6 +1349,7 @@ border: 2px solid #28a745;
         document.getElementById('search-ee').value = '';
         document.getElementById('filter-area').value = '';
         document.getElementById('filter-turno').value = '';
+        document.getElementById('filter-bloque').value = '';
         eeList.innerHTML = '';
 
         const diasNombre = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
@@ -1420,6 +1361,7 @@ border: 2px solid #28a745;
             item.dataset.search = `${ee.nombre} ${ee.docente} ${ee.crn} ${ee.area}`.toLowerCase();
             item.dataset.area = ee.area || '';
             item.dataset.turno = ee.bloqueInfo.turno || '';
+            item.dataset.bloque = ee.bloqueAsignado || '';
             
             const horariosDetallados = ee.horarios.map(h => {
                 const salonDelDia = ee.salonesPorDia[h.dia] || Object.values(ee.salonesPorDia)[0] || '';
@@ -1430,17 +1372,17 @@ border: 2px solid #28a745;
             const yaAgregada = appState.horarioSeleccionado.some(e => e.crn === ee.crn);
             if (yaAgregada) item.classList.add('added');
             
+            const bloqueInfo = ee.bloqueAsignado ? ` · <strong>Bloque ${ee.bloqueAsignado}</strong>` : '';
+            
             item.innerHTML = `
                 <h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4>
-                <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>NRC:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}</p>
+                <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>NRC:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}${bloqueInfo}</p>
                 <p><strong>Docente:</strong> ${ee.docente}</p>
                 <p><strong>Horario:</strong> ${horariosDetallados}</p>
                 <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : ee.bloqueInfo.turno === 'V' ? 'Vespertino' : 'Escolarizado'}</p>
             `;
             
-            if (!yaAgregada) {
-                item.onclick = () => addEEToHorario(ee);
-            }
+            if (!yaAgregada) item.onclick = () => addEEToHorario(ee);
             eeList.appendChild(item);
         });
 
@@ -1451,13 +1393,16 @@ border: 2px solid #28a745;
         const search = document.getElementById('search-ee').value.toLowerCase();
         const areaFilter = document.getElementById('filter-area').value;
         const turnoFilter = document.getElementById('filter-turno').value;
+        const bloqueFilter = document.getElementById('filter-bloque').value;
         
         document.querySelectorAll('.ee-item').forEach(item => {
             const matchSearch = item.dataset.search.includes(search);
             const matchArea = !areaFilter || item.dataset.area === areaFilter;
             const filterTurnoVisible = document.getElementById('filter-turno').style.display !== 'none';
             const matchTurno = !filterTurnoVisible || !turnoFilter || item.dataset.turno === turnoFilter;
-            item.style.display = (matchSearch && matchArea && matchTurno) ? 'block' : 'none';
+            const filterBloqueVisible = document.getElementById('filter-bloque').style.display !== 'none';
+            const matchBloque = !filterBloqueVisible || !bloqueFilter || item.dataset.bloque === bloqueFilter;
+            item.style.display = (matchSearch && matchArea && matchTurno && matchBloque) ? 'block' : 'none';
         });
     }
 
@@ -1496,5 +1441,7 @@ border: 2px solid #28a745;
         setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000);
     }
 </script>
+        </body>
+</html>
 </body>
 </html>
