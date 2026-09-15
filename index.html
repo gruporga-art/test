@@ -7,511 +7,119 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-background: #f5f5f5;
-min-height: 100vh;
-}
-.container {
-max-width: 1400px;
-margin: 0 auto;
-background: white;
-border-radius: 10px;
-box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-overflow: hidden;
-min-height: 100vh;
-}
-.header {
-background: #1a3a6b;
-color: white;
-padding: 20px;
-text-align: center;
-border-bottom: 4px solid #28a745;
-position: relative;
-}
-.header .uv-badge {
-background: #28a745;
-color: white;
-padding: 5px 15px;
-border-radius: 20px;
-font-size: 0.85em;
-font-weight: bold;
-display: inline-block;
-margin-bottom: 10px;
-}
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; min-height: 100vh; }
+.container { max-width: 1400px; margin: 0 auto; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); overflow: hidden; min-height: 100vh; }
+.header { background: #1a3a6b; color: white; padding: 20px; text-align: center; border-bottom: 4px solid #28a745; position: relative; }
+.header .uv-badge { background: #28a745; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: bold; display: inline-block; margin-bottom: 10px; }
 .header h1 { font-size: 1.8em; margin-bottom: 5px; }
 .header h1::before { content: '📅 '; }
 .header .subtitle { font-size: 1em; opacity: 0.9; margin-bottom: 10px; }
-.header .plan-badge {
-background: rgba(255,255,255,0.2);
-padding: 5px 15px;
-border-radius: 20px;
-font-size: 0.9em;
-display: inline-block;
-}
-.back-btn {
-position: absolute;
-top: 15px;
-left: 15px;
-background: rgba(255,255,255,0.2);
-color: white;
-border: 2px solid rgba(255,255,255,0.5);
-padding: 8px 16px;
-border-radius: 8px;
-cursor: pointer;
-font-size: 0.9em;
-transition: all 0.3s;
-}
+.header .plan-badge { background: rgba(255,255,255,0.2); padding: 5px 15px; border-radius: 20px; font-size: 0.9em; display: inline-block; }
+.back-btn { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.5); padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
 .back-btn:hover { background: rgba(255,255,255,0.3); }
 .content { padding: 20px; }
 .screen { display: none; animation: fadeIn 0.4s ease-in; }
 .screen.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.steps-indicator {
-display: flex;
-justify-content: center;
-gap: 10px;
-margin-bottom: 30px;
-padding: 15px;
-background: #f8f9fa;
-border-radius: 10px;
-}
+.steps-indicator { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; padding: 15px; background: #f8f9fa; border-radius: 10px; }
 .step { display: flex; align-items: center; gap: 8px; }
-.step-number {
-width: 35px; height: 35px;
-border-radius: 50%;
-background: #e0e0e0;
-color: #999;
-display: flex;
-align-items: center;
-justify-content: center;
-font-weight: bold;
-transition: all 0.3s;
-}
+.step-number { width: 35px; height: 35px; border-radius: 50%; background: #e0e0e0; color: #999; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: all 0.3s; }
 .step.active .step-number { background: #1a3a6b; color: white; }
 .step.completed .step-number { background: #28a745; color: white; }
 .step-label { font-size: 0.9em; color: #999; }
 .step.active .step-label { color: #1a3a6b; font-weight: bold; }
 .step.completed .step-label { color: #28a745; }
 .step-connector { width: 30px; height: 2px; background: #e0e0e0; align-self: center; }
-.section-title {
-font-size: 1.5em;
-color: #1a3a6b;
-margin-bottom: 10px;
-font-weight: bold;
-}
+.section-title { font-size: 1.5em; color: #1a3a6b; margin-bottom: 10px; font-weight: bold; }
 .section-subtitle { color: #666; margin-bottom: 25px; line-height: 1.6; }
-.selector-grid {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-gap: 20px;
-margin-bottom: 20px;
-}
-.option-card {
-padding: 30px;
-border: 3px solid #e0e0e0;
-border-radius: 15px;
-cursor: pointer;
-transition: all 0.3s;
-background: #f9f9f9;
-text-align: center;
-}
-.option-card:hover {
-border-color: #1a3a6b;
-transform: translateY(-5px);
-box-shadow: 0 10px 20px rgba(26, 58, 107, 0.15);
-}
-.option-card.selected {
-border-color: #28a745;
-background: linear-gradient(135deg, #1a3a6b 0%, #28a745 100%);
-color: white;
-transform: translateY(-5px);
-box-shadow: 0 10px 25px rgba(26, 58, 107, 0.3);
-}
+.selector-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 20px; }
+.option-card { padding: 30px; border: 3px solid #e0e0e0; border-radius: 15px; cursor: pointer; transition: all 0.3s; background: #f9f9f9; text-align: center; }
+.option-card:hover { border-color: #1a3a6b; transform: translateY(-5px); box-shadow: 0 10px 20px rgba(26, 58, 107, 0.15); }
+.option-card.selected { border-color: #28a745; background: linear-gradient(135deg, #1a3a6b 0%, #28a745 100%); color: white; transform: translateY(-5px); box-shadow: 0 10px 25px rgba(26, 58, 107, 0.3); }
 .option-card .icon { font-size: 3em; margin-bottom: 15px; }
 .option-card h3 { font-size: 1.5em; margin-bottom: 10px; }
 .option-card p { font-size: 0.95em; line-height: 1.6; }
-.nav-buttons {
-display: flex;
-justify-content: space-between;
-gap: 15px;
-margin-top: 30px;
-}
-.btn {
-background: #28a745;
-color: white;
-border: none;
-padding: 15px 35px;
-border-radius: 10px;
-font-size: 1.1em;
-font-weight: bold;
-cursor: pointer;
-transition: all 0.3s;
-}
+.nav-buttons { display: flex; justify-content: space-between; gap: 15px; margin-top: 30px; }
+.btn { background: #28a745; color: white; border: none; padding: 15px 35px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.3s; }
 .btn:hover:not(:disabled) { background: #218838; transform: translateY(-2px); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .btn-secondary { background: #6c757d; }
 .btn-secondary:hover:not(:disabled) { background: #5a6268; }
-.btn-danger { background: #dc3545; }
-.btn-danger:hover:not(:disabled) { background: #c82333; }
-.oferta-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 20px;
-flex-wrap: wrap;
-gap: 10px;
-}
+.oferta-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
 .oferta-title { font-size: 1.3em; color: #1a3a6b; font-weight: bold; }
-.btn-cambiar {
-background: white;
-border: 2px solid #1a3a6b;
-color: #1a3a6b;
-padding: 8px 20px;
-border-radius: 8px;
-cursor: pointer;
-font-size: 0.9em;
-transition: all 0.3s;
-}
+.btn-cambiar { background: white; border: 2px solid #1a3a6b; color: #1a3a6b; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9em; transition: all 0.3s; }
 .btn-cambiar:hover { background: #1a3a6b; color: white; }
-.stats {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 15px;
-margin-bottom: 20px;
-}
-.stat-card {
-background: white;
-border: 2px solid #e0e0e0;
-border-left: 4px solid #28a745;
-border-radius: 10px;
-padding: 20px;
-text-align: center;
-}
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+.stat-card { background: white; border: 2px solid #e0e0e0; border-left: 4px solid #28a745; border-radius: 10px; padding: 20px; text-align: center; }
 .stat-value { font-size: 2.5em; font-weight: bold; color: #1a3a6b; margin-bottom: 5px; }
 .stat-label { font-size: 0.9em; color: #666; }
-.btn-agregar {
-width: 100%;
-background: #28a745;
-color: white;
-border: none;
-padding: 18px;
-border-radius: 10px;
-font-size: 1.2em;
-font-weight: bold;
-cursor: pointer;
-transition: all 0.3s;
-margin-bottom: 20px;
-}
+.btn-agregar { width: 100%; background: #28a745; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: all 0.3s; margin-bottom: 20px; }
 .btn-agregar:hover { background: #218838; }
 .btn-agregar::before { content: '➕ '; }
 .instruccion { text-align: center; color: #666; font-size: 0.9em; margin-bottom: 20px; }
 .instruccion::before { content: '👆 '; }
-.bloques-grid {
-width: 100%;
-border-collapse: collapse;
-margin-bottom: 20px;
-font-size: 0.9em;
-}
-.bloques-grid th {
-background: #7c3aed;
-color: white;
-padding: 12px 8px;
-text-align: center;
-font-weight: bold;
-}
+.bloques-grid { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.9em; }
+.bloques-grid th { background: #7c3aed; color: white; padding: 12px 8px; text-align: center; font-weight: bold; }
 .bloques-grid th:first-child { background: #1a3a6b; }
 .bloques-grid th .bloque-num { font-size: 1.1em; display: block; margin-bottom: 3px; }
 .bloques-grid th .bloque-fecha { font-size: 0.8em; font-weight: normal; opacity: 0.95; display: block; }
-.bloques-grid td {
-border: 1px solid #e0e0e0;
-padding: 12px 8px;
-text-align: center;
-vertical-align: middle;
-}
-.bloques-grid td:first-child {
-background: #f8f9fa;
-font-weight: bold;
-color: #1a3a6b;
-font-size: 1.05em;
-}
-.bloque-cell {
-cursor: pointer;
-transition: all 0.3s;
-min-height: 80px;
-}
+.bloques-grid td { border: 1px solid #e0e0e0; padding: 12px 8px; text-align: center; vertical-align: middle; }
+.bloques-grid td:first-child { background: #f8f9fa; font-weight: bold; color: #1a3a6b; font-size: 1.05em; }
+.bloque-cell { cursor: pointer; transition: all 0.3s; min-height: 80px; }
 .bloque-cell:hover { background: #f0f4ff; }
 .bloque-cell.empty { color: #ccc; font-size: 1.5em; }
-.bloque-cell.occupied {
-background: #e8f5e9;
-border: 2px solid #28a745;
-}
+.bloque-cell.occupied { background: #e8f5e9; border: 2px solid #28a745; }
 .bloque-cell .ee-nombre { font-weight: bold; color: #1a3a6b; font-size: 0.95em; margin-bottom: 5px; }
 .bloque-cell .ee-info { font-size: 0.8em; color: #666; line-height: 1.4; }
-            /* GRID ESCOLARIZADO */
-    .horario-table-wrapper {
-        width: 100%;
-        overflow-x: auto;
-        margin-bottom: 20px;
-    }
-    .horario-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-    }
-    .horario-table th {
-        background: #1a3a6b;
-        color: white;
-        padding: 12px 4px;
-        text-align: center;
-        font-weight: bold;
-        font-size: 0.95em;
-        border: 1px solid #0f2444;
-    }
-    .horario-table th:first-child {
-        width: 70px;
-        min-width: 70px;
-        max-width: 70px;
-    }
-    .horario-table th:not(:first-child) {
-        width: calc((100% - 70px) / 5);
-    }
-    .horario-table td {
-        border: 1px solid #d0d0d0;
-        padding: 2px;
-        vertical-align: top;
-        height: 55px;
-        overflow: hidden;
-    }
-    .horario-table td:first-child {
-        background: #f0f0f0;
-        font-weight: bold;
-        text-align: center;
-        font-size: 0.9em;
-        padding: 8px 4px;
-        vertical-align: middle;
-    }
-    .horario-table .ee-card {
-        color: white;
-        padding: 6px 8px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        overflow: hidden;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-    }
-    .horario-table .ee-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.25);
-        z-index: 10;
-        position: relative;
-    }
-    .horario-table .ee-card .ee-nombre {
-        font-weight: bold;
-        font-size: 0.85em;
-        margin-bottom: 3px;
-        line-height: 1.2;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .horario-table .ee-card .ee-nrc {
-        font-size: 0.75em;
-        opacity: 0.95;
-        margin-bottom: 2px;
-    }
-    .horario-table .ee-card .ee-docente {
-        font-size: 0.75em;
-        opacity: 0.9;
-        margin-bottom: 2px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    .horario-table .ee-card .ee-horario {
-        font-size: 0.75em;
-        opacity: 0.9;
-        margin-bottom: 2px;
-    }
-    .horario-table .ee-card .ee-salon {
-        font-size: 0.75em;
-        opacity: 0.9;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    .horario-table .ee-card.conflicto {
-        animation: pulseConflicto 1.5s infinite;
-        box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4);
-    }
-    @keyframes pulseConflicto {
-        0%, 100% { box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4); }
-        50% { box-shadow: 0 0 0 5px #ff0000, 0 4px 12px rgba(255,0,0,0.6); }
-    }
-    
-    .botones-inferiores {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-    .btn-inferior {
-        padding: 15px;
-        border: none;
-        border-radius: 10px;
-        font-size: 1.1em;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    .btn-imprimir { background: #6c757d; color: white; }
-    .btn-imprimir:hover { background: #5a6268; }
-    .btn-limpiar { background: #dc3545; color: white; }
-    .btn-limpiar:hover { background: #c82333; }
-    .footer {
-        background: #f8f9fa;
-        border-top: 4px solid #28a745;
-        padding: 20px;
-        text-align: center;
-        color: #666;
-        font-size: 0.85em;
-        line-height: 1.6;
-    }
-    .footer a { color: #1a3a6b; text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
-    .loading { text-align: center; padding: 40px; color: #1a3a6b; }
-    .loading-spinner {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #1a3a6b;
-        border-radius: 50%;
-        width: 50px; height: 50px;
-        animation: spin 1s linear infinite;
-        margin: 20px auto;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    .error { background: #fee; border: 2px solid #fcc; color: #c33; padding: 20px; border-radius: 10px; margin: 20px 0; white-space: pre-wrap; }
-    .success { background: #efe; border: 2px solid #cfc; color: #3c3; padding: 20px; border-radius: 10px; margin: 20px 0; }
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.7);
-        z-index: 1000;
-        align-items: center;
-        justify-content: center;
-    }
-    .modal.active { display: flex; }
-    .modal-content {
-        background: white;
-        border-radius: 15px;
-        padding: 25px;
-        max-width: 900px;
-        width: 90%;
-        max-height: 85vh;
-        overflow-y: auto;
-    }
-    .modal-header { font-size: 1.5em; color: #1a3a6b; margin-bottom: 20px; font-weight: bold; }
-    .search-box {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        font-size: 1em;
-    }
-    .search-box:focus { outline: none; border-color: #1a3a6b; }
-    .filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
-    .filter-bar select {
-        padding: 10px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 0.95em;
-        background: white;
-        flex: 1;
-        min-width: 150px;
-    }
-    .ee-list { max-height: 500px; overflow-y: auto; }
-    .ee-item {
-        padding: 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-    .ee-item:hover { border-color: #1a3a6b; background: #f0f4ff; }
-    .ee-item h4 { color: #1a3a6b; margin-bottom: 5px; }
-    .ee-item p { font-size: 0.9em; color: #666; margin: 3px 0; }
-    .ee-item.added { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; }
-    .area-badge {
-        display: inline-block;
-        background: #e0e0e0;
-        color: #333;
-        padding: 3px 8px;
-        border-radius: 5px;
-        font-size: 0.8em;
-        margin-right: 5px;
-    }
-    .btn-cerrar-modal {
-        background: #6c757d;
-        color: white;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 10px;
-        font-size: 1em;
-        cursor: pointer;
-        margin-top: 15px;
-    }
-    .conflict-warning {
-        background: #fff3cd;
-        border: 2px solid #ffc107;
-        color: #856404;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        display: none;
-    }
-    .conflict-warning.show { display: block; }
-    @media (max-width: 768px) {
-        .stats { grid-template-columns: repeat(2, 1fr); }
-        .botones-inferiores { grid-template-columns: 1fr; }
-        .bloques-grid { font-size: 0.75em; }
-        .horario-table th, .horario-table td { font-size: 0.7em; padding: 2px; }
-        .horario-table th:first-child { width: 50px; }
-        .header h1 { font-size: 1.4em; }
-        .step-label { display: none; }
-        .selector-grid { grid-template-columns: 1fr; }
-    }
-    @media print {
-        @page { size: landscape; margin: 8mm; }
-        body { background: white !important; padding: 0 !important; margin: 0 !important; }
-        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-        .container { box-shadow: none !important; border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; }
-        .header, .steps-indicator, .screen:not(#screen-3), .oferta-header, .stats, .btn-agregar, .instruccion,
-        .botones-inferiores, .footer, .back-btn, .conflict-warning, #loading-section, #error-section, #success-section,
-        #vista-abierto, .modal { display: none !important; }
-        #screen-3, #app-main, #vista-escolarizado { display: block !important; }
-        .horario-table-wrapper { overflow: visible !important; }
-        .horario-table { width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important; font-size: 8pt !important; }
-        .horario-table th { background: #1a3a6b !important; color: white !important; padding: 4px 2px !important; font-size: 9pt !important; border: 1px solid #000 !important; }
-        .horario-table th:first-child { width: 50px !important; }
-        .horario-table td { padding: 2px !important; border: 1px solid #999 !important; height: auto !important; overflow: hidden !important; }
-        .horario-table td:first-child { background: #f0f0f0 !important; font-size: 8pt !important; padding: 4px 2px !important; }
-        .horario-table .ee-card { padding: 3px 4px !important; font-size: 7pt !important; box-shadow: none !important; border-radius: 2px !important; overflow: hidden !important; }
-        .horario-table .ee-card .ee-nombre { font-size: 7.5pt !important; white-space: normal !important; overflow: visible !important; text-overflow: clip !important; }
-        .horario-table .ee-card .ee-nrc, .horario-table .ee-card .ee-docente, .horario-table .ee-card .ee-horario, .horario-table .ee-card .ee-salon { font-size: 6.5pt !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }
-    }
+.horario-table-wrapper { width: 100%; overflow-x: auto; margin-bottom: 20px; }
+.horario-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.horario-table th { background: #1a3a6b; color: white; padding: 12px 4px; text-align: center; font-weight: bold; font-size: 0.95em; border: 1px solid #0f2444; }
+.horario-table th:first-child { width: 70px; min-width: 70px; max-width: 70px; }
+.horario-table th:not(:first-child) { width: calc((100% - 70px) / 5); }
+.horario-table td { border: 1px solid #d0d0d0; padding: 2px; vertical-align: top; height: 55px; overflow: hidden; }
+.horario-table td:first-child { background: #f0f0f0; font-weight: bold; text-align: center; font-size: 0.9em; padding: 8px 4px; vertical-align: middle; }
+.horario-table .ee-card { color: white; padding: 6px 8px; border-radius: 5px; cursor: pointer; transition: all 0.3s; height: 100%; display: flex; flex-direction: column; justify-content: center; box-shadow: 0 2px 4px rgba(0,0,0,0.15); overflow: hidden; }
+.horario-table .ee-card:hover { transform: scale(1.02); box-shadow: 0 4px 8px rgba(0,0,0,0.25); z-index: 10; position: relative; }
+.horario-table .ee-card .ee-nombre { font-weight: bold; font-size: 0.85em; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.horario-table .ee-card .ee-nrc, .horario-table .ee-card .ee-docente, .horario-table .ee-card .ee-horario, .horario-table .ee-card .ee-salon { font-size: 0.75em; opacity: 0.9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.horario-table .ee-card.conflicto { animation: pulseConflicto 1.5s infinite; box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4); }
+@keyframes pulseConflicto { 0%, 100% { box-shadow: 0 0 0 3px #ff0000, 0 4px 8px rgba(255,0,0,0.4); } 50% { box-shadow: 0 0 0 5px #ff0000, 0 4px 12px rgba(255,0,0,0.6); } }
+.botones-inferiores { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+.btn-inferior { padding: 15px; border: none; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: all 0.3s; }
+.btn-imprimir { background: #6c757d; color: white; }
+.btn-imprimir:hover { background: #5a6268; }
+.btn-limpiar { background: #dc3545; color: white; }
+.btn-limpiar:hover { background: #c82333; }
+.footer { background: #f8f9fa; border-top: 4px solid #28a745; padding: 20px; text-align: center; color: #666; font-size: 0.85em; line-height: 1.6; }
+.footer a { color: #1a3a6b; text-decoration: none; }
+.loading { text-align: center; padding: 40px; color: #1a3a6b; }
+.loading-spinner { border: 4px solid #f3f3f3; border-top: 4px solid #1a3a6b; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.error { background: #fee; border: 2px solid #fcc; color: #c33; padding: 20px; border-radius: 10px; margin: 20px 0; white-space: pre-wrap; }
+.success { background: #efe; border: 2px solid #cfc; color: #3c3; padding: 20px; border-radius: 10px; margin: 20px 0; }
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+.modal.active { display: flex; }
+.modal-content { background: white; border-radius: 15px; padding: 25px; max-width: 900px; width: 90%; max-height: 85vh; overflow-y: auto; }
+.modal-header { font-size: 1.5em; color: #1a3a6b; margin-bottom: 20px; font-weight: bold; }
+.search-box { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 15px; font-size: 1em; }
+.search-box:focus { outline: none; border-color: #1a3a6b; }
+.filter-bar { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+.filter-bar select { padding: 10px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 0.95em; background: white; flex: 1; min-width: 150px; }
+.ee-list { max-height: 500px; overflow-y: auto; }
+.ee-item { padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px; cursor: pointer; transition: all 0.3s; }
+.ee-item:hover { border-color: #1a3a6b; background: #f0f4ff; }
+.ee-item h4 { color: #1a3a6b; margin-bottom: 5px; }
+.ee-item p { font-size: 0.9em; color: #666; margin: 3px 0; }
+.ee-item.added { opacity: 0.5; cursor: not-allowed; background: #f0f0f0; }
+.area-badge { display: inline-block; background: #e0e0e0; color: #333; padding: 3px 8px; border-radius: 5px; font-size: 0.8em; margin-right: 5px; }
+.btn-cerrar-modal { background: #6c757d; color: white; border: none; padding: 12px 30px; border-radius: 10px; font-size: 1em; cursor: pointer; margin-top: 15px; }
+.conflict-warning { background: #fff3cd; border: 2px solid #ffc107; color: #856404; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none; }
+.conflict-warning.show { display: block; }
+.debug-panel { background: #f0f0f0; border: 1px solid #ccc; padding: 10px; margin: 10px 0; font-size: 0.85em; font-family: monospace; max-height: 200px; overflow-y: auto; }
+@media (max-width: 768px) { .stats { grid-template-columns: repeat(2, 1fr); } .botones-inferiores { grid-template-columns: 1fr; } .bloques-grid { font-size: 0.75em; } .horario-table th, .horario-table td { font-size: 0.7em; padding: 2px; } .horario-table th:first-child { width: 50px; } .header h1 { font-size: 1.4em; } .step-label { display: none; } .selector-grid { grid-template-columns: 1fr; } }
+@media print { @page { size: landscape; margin: 8mm; } body { background: white !important; padding: 0 !important; margin: 0 !important; } * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } .container { box-shadow: none !important; max-width: 100% !important; margin: 0 !important; } .header, .steps-indicator, .screen:not(#screen-3), .oferta-header, .stats, .btn-agregar, .instruccion, .botones-inferiores, .footer, .back-btn, .conflict-warning, #loading-section, #error-section, #success-section, #vista-abierto, .modal, .debug-panel { display: none !important; } #screen-3, #app-main, #vista-escolarizado { display: block !important; } .horario-table-wrapper { overflow: visible !important; } .horario-table { width: 100% !important; table-layout: fixed !important; font-size: 8pt !important; } .horario-table th { background: #1a3a6b !important; color: white !important; padding: 4px 2px !important; font-size: 9pt !important; } .horario-table th:first-child { width: 50px !important; } .horario-table td { padding: 2px !important; border: 1px solid #999 !important; height: auto !important; overflow: hidden !important; } .horario-table td:first-child { background: #f0f0f0 !important; font-size: 8pt !important; } .horario-table .ee-card { padding: 3px 4px !important; font-size: 7pt !important; box-shadow: none !important; } }
 </style>
-        </head>
+</head>
 <body>
 <div class="container">
 <div class="header">
@@ -521,268 +129,142 @@ border: 2px solid #28a745;
 <div class="subtitle" id="header-subtitle">Periodo Agosto 2026 - Enero 2027</div>
 <div class="plan-badge" id="header-plan-badge">Selecciona tu plan</div>
 </div>
-    <div class="content">
-        <div class="steps-indicator" id="steps-indicator">
-            <div class="step active" data-step="1"><div class="step-number">1</div><div class="step-label">Modalidad</div></div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="2"><div class="step-number">2</div><div class="step-label">Plan</div></div>
-            <div class="step-connector"></div>
-            <div class="step" data-step="3"><div class="step-number">3</div><div class="step-label">Mi Horario</div></div>
-        </div>
-
-        <div class="screen active" id="screen-1">
-            <div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
-            <p class="section-subtitle">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas. Selecciona la que corresponda a tu situación.</p>
-            <div class="selector-grid">
-                <div class="option-card" data-modalidad="E" onclick="selectModalidad('E')">
-                    <div class="icon">🏫</div>
-                    <h3>Escolarizado</h3>
-                    <p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p>
-                </div>
-                <div class="option-card" data-modalidad="A" onclick="selectModalidad('A')">
-                    <div class="icon">📚</div>
-                    <h3>Abierto</h3>
-                    <p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>, según el calendario oficial.</p>
-                </div>
-            </div>
-            <div class="nav-buttons">
-                <div></div>
-                <button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button>
-            </div>
-        </div>
-
-        <div class="screen" id="screen-2">
-            <div class="section-title">Paso 2: ¿A qué plan de estudios perteneces?</div>
-            <p class="section-subtitle">Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.</p>
-            <div class="selector-grid">
-                <div class="option-card" data-plan="04" onclick="selectPlan('04')">
-                    <div class="icon">📜</div>
-                    <h3>Plan 2004</h3>
-                    <p>Si te inscribiste a la Facultad en <strong>2024 o antes</strong>. Podrás ver la equivalencia con el Plan 2025.</p>
-                </div>
-                <div class="option-card" data-plan="25" onclick="selectPlan('25')">
-                    <div class="icon">📜</div>
-                    <h3>Plan 2025</h3>
-                    <p>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las EEs vigentes.</p>
-                </div>
-            </div>
-            <div class="nav-buttons">
-                <button class="btn btn-secondary" onclick="goToScreen(1)">← Atrás</button>
-                <button class="btn" id="btn-next-2" disabled onclick="goToScreen(3)">Ver mi oferta académica →</button>
-            </div>
-        </div>
-
-        <div class="screen" id="screen-3">
-            <div id="loading-section" class="loading">
-                <div class="loading-spinner"></div>
-                <p id="loading-message">Conectando con Google Drive y cargando oferta académica...</p>
-                <p style="font-size:0.9em;color:#999;margin-top:10px;">Esto puede tomar unos segundos la primera vez</p>
-            </div>
-
-            <div id="error-section" class="error" style="display: none;"></div>
-            <div id="success-section" class="success" style="display: none;"></div>
-
-            <div id="app-main" style="display: none;">
-                <div class="oferta-header">
-                    <div class="oferta-title" id="oferta-title">Oferta Académica</div>
-                    <button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button>
-                </div>
-
-                <div class="stats">
-                    <div class="stat-card"><div class="stat-value" id="stat-ee">0</div><div class="stat-label">Experiencias Educativas</div></div>
-                    <div class="stat-card"><div class="stat-value" id="stat-creditos">0</div><div class="stat-label">Créditos</div></div>
-                    <div class="stat-card"><div class="stat-value" id="stat-horas">0.0</div><div class="stat-label" id="stat-horas-label">Horas/Sábado</div></div>
-                    <div class="stat-card"><div class="stat-value" id="stat-choques">0</div><div class="stat-label">Choques</div></div>
-                </div>
-
-                <button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
-
-                <div class="conflict-warning" id="conflict-warning">⚠️ ¡Choque de horario detectado! Las experiencias en conflicto están marcadas con un borde rojo pulsante. Toca una para quitarla.</div>
-
-                <div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
-
-                <div id="vista-abierto" style="display:none;">
-                    <table class="bloques-grid" id="bloques-grid">
-                        <thead>
-                            <tr>
-                                <th>Turno</th>
-                                <th><span class="bloque-num">Bloque 1</span><span class="bloque-fecha" id="fecha-bloque-1">Cargando...</span></th>
-                                <th><span class="bloque-num">Bloque 2</span><span class="bloque-fecha" id="fecha-bloque-2">Cargando...</span></th>
-                                <th><span class="bloque-num">Bloque 3</span><span class="bloque-fecha" id="fecha-bloque-3">Cargando...</span></th>
-                                <th><span class="bloque-num">Bloque 4</span><span class="bloque-fecha" id="fecha-bloque-4">Cargando...</span></th>
-                                <th><span class="bloque-num">Bloque 5</span><span class="bloque-fecha" id="fecha-bloque-5">Cargando...</span></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Matutino</td>
-                                <td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClickBloque('M', 1)">—</td>
-                                <td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClickBloque('M', 2)">—</td>
-                                <td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClickBloque('M', 3)">—</td>
-                                <td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClickBloque('M', 4)">—</td>
-                                <td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClickBloque('M', 5)">—</td>
-                            </tr>
-                            <tr>
-                                <td>Vespertino</td>
-                                <td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClickBloque('V', 1)">—</td>
-                                <td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClickBloque('V', 2)">—</td>
-                                <td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClickBloque('V', 3)">—</td>
-                                <td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClickBloque('V', 4)">—</td>
-                                <td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClickBloque('V', 5)">—</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="vista-escolarizado" style="display:none;">
-                    <div class="horario-table-wrapper">
-                        <table class="horario-table" id="horario-table"></table>
-                    </div>
-                </div>
-
-                <div class="botones-inferiores">
-                    <button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button>
-                    <button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <p><strong>Facultad de Ciencias y Técnicas de la Comunicación</strong> · Universidad Veracruzana · 2026</p>
-        <p>Verifica siempre la oferta oficial en la plataforma de la UV (<a href="https://www.uv.mx/veracruz/fcc/programacion-academica" target="_blank">www.uv.mx/veracruz/fcc/programacion-academica</a>).</p>
-        <p>Herramienta de apoyo diseñada por el docente <a href="mailto:alfreyes@uv.mx">Dr. Alfredo Reyes Gutiérrez</a> para sus Tutorados.</p>
-    </div>
+<div class="content">
+<div class="steps-indicator" id="steps-indicator">
+<div class="step active" data-step="1"><div class="step-number">1</div><div class="step-label">Modalidad</div></div>
+<div class="step-connector"></div>
+<div class="step" data-step="2"><div class="step-number">2</div><div class="step-label">Plan</div></div>
+<div class="step-connector"></div>
+<div class="step" data-step="3"><div class="step-number">3</div><div class="step-label">Mi Horario</div></div>
 </div>
-
+<div class="screen active" id="screen-1">
+<div class="section-title">Paso 1: ¿En qué modalidad estudias?</div>
+<p class="section-subtitle">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas.</p>
+<div class="selector-grid">
+<div class="option-card" data-modalidad="E" onclick="selectModalidad('E')"><div class="icon">🏫</div><h3>Escolarizado</h3><p>Clases de <strong>Lunes a Viernes</strong>, en horarios fijos durante todo el periodo.</p></div>
+<div class="option-card" data-modalidad="A" onclick="selectModalidad('A')"><div class="icon">📚</div><h3>Abierto</h3><p>Clases los <strong>Sábados</strong>, organizadas en <strong>bloques matutinos y vespertinos</strong>.</p></div>
+</div>
+<div class="nav-buttons"><div></div><button class="btn" id="btn-next-1" disabled onclick="goToScreen(2)">Siguiente →</button></div>
+</div>
+<div class="screen" id="screen-2">
+<div class="section-title">Paso 2: ¿A qué plan de estudios perteneces?</div>
+<p class="section-subtitle">Esto determina qué Experiencias Educativas verás disponibles.</p>
+<div class="selector-grid">
+<div class="option-card" data-plan="04" onclick="selectPlan('04')"><div class="icon">📜</div><h3>Plan 2004</h3><p>Si te inscribiste en <strong>2024 o antes</strong>.</p></div>
+<div class="option-card" data-plan="25" onclick="selectPlan('25')"><div class="icon">📜</div><h3>Plan 2025</h3><p>Si te inscribiste <strong>a partir del 2025</strong>.</p></div>
+</div>
+<div class="nav-buttons"><button class="btn btn-secondary" onclick="goToScreen(1)">← Atrás</button><button class="btn" id="btn-next-2" disabled onclick="goToScreen(3)">Ver mi oferta académica →</button></div>
+</div>
+<div class="screen" id="screen-3">
+<div id="loading-section" class="loading"><div class="loading-spinner"></div><p id="loading-message">Conectando con Google Drive...</p></div>
+<div id="error-section" class="error" style="display: none;"></div>
+<div id="success-section" class="success" style="display: none;"></div>
+<div id="debug-section" class="debug-panel" style="display: none;"></div>
+<div id="app-main" style="display: none;">
+<div class="oferta-header"><div class="oferta-title" id="oferta-title">Oferta Académica</div><button class="btn-cambiar" onclick="cambiarPlan()">Cambiar plan</button></div>
+<div class="stats">
+<div class="stat-card"><div class="stat-value" id="stat-ee">0</div><div class="stat-label">Experiencias Educativas</div></div>
+<div class="stat-card"><div class="stat-value" id="stat-creditos">0</div><div class="stat-label">Créditos</div></div>
+<div class="stat-card"><div class="stat-value" id="stat-horas">0.0</div><div class="stat-label" id="stat-horas-label">Horas/Sábado</div></div>
+<div class="stat-card"><div class="stat-value" id="stat-choques">0</div><div class="stat-label">Choques</div></div>
+</div>
+<button class="btn-agregar" onclick="openModal()">Agregar Experiencia Educativa</button>
+<div class="conflict-warning" id="conflict-warning">⚠️ ¡Choque de horario detectado! Las experiencias en conflicto están marcadas con un borde rojo pulsante.</div>
+<div class="instruccion">Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</div>
+<div id="vista-abierto" style="display:none;">
+<table class="bloques-grid" id="bloques-grid">
+<thead><tr><th>Turno</th><th><span class="bloque-num">Bloque 1</span><span class="bloque-fecha" id="fecha-bloque-1">Cargando...</span></th><th><span class="bloque-num">Bloque 2</span><span class="bloque-fecha" id="fecha-bloque-2">Cargando...</span></th><th><span class="bloque-num">Bloque 3</span><span class="bloque-fecha" id="fecha-bloque-3">Cargando...</span></th><th><span class="bloque-num">Bloque 4</span><span class="bloque-fecha" id="fecha-bloque-4">Cargando...</span></th><th><span class="bloque-num">Bloque 5</span><span class="bloque-fecha" id="fecha-bloque-5">Cargando...</span></th></tr></thead>
+<tbody>
+<tr><td>Matutino</td><td class="bloque-cell empty" data-turno="M" data-bloque="1" onclick="cellClickBloque('M', 1)">—</td><td class="bloque-cell empty" data-turno="M" data-bloque="2" onclick="cellClickBloque('M', 2)">—</td><td class="bloque-cell empty" data-turno="M" data-bloque="3" onclick="cellClickBloque('M', 3)">—</td><td class="bloque-cell empty" data-turno="M" data-bloque="4" onclick="cellClickBloque('M', 4)">—</td><td class="bloque-cell empty" data-turno="M" data-bloque="5" onclick="cellClickBloque('M', 5)">—</td></tr>
+<tr><td>Vespertino</td><td class="bloque-cell empty" data-turno="V" data-bloque="1" onclick="cellClickBloque('V', 1)">—</td><td class="bloque-cell empty" data-turno="V" data-bloque="2" onclick="cellClickBloque('V', 2)">—</td><td class="bloque-cell empty" data-turno="V" data-bloque="3" onclick="cellClickBloque('V', 3)">—</td><td class="bloque-cell empty" data-turno="V" data-bloque="4" onclick="cellClickBloque('V', 4)">—</td><td class="bloque-cell empty" data-turno="V" data-bloque="5" onclick="cellClickBloque('V', 5)">—</td></tr>
+</tbody>
+</table>
+</div>
+<div id="vista-escolarizado" style="display:none;"><div class="horario-table-wrapper"><table class="horario-table" id="horario-table"></table></div></div>
+<div class="botones-inferiores"><button class="btn-inferior btn-imprimir" onclick="printHorario()">🖨️ Imprimir / Guardar PDF</button><button class="btn-inferior btn-limpiar" onclick="clearHorario()">🗑️ Limpiar Mi Horario</button></div>
+</div>
+</div>
+</div>
+<div class="footer"><p><strong>Facultad de Ciencias y Técnicas de la Comunicación</strong> · Universidad Veracruzana · 2026</p><p>Verifica siempre la oferta oficial en <a href="https://www.uv.mx/veracruz/fcc/programacion-academica" target="_blank">www.uv.mx/veracruz/fcc/programacion-academica</a>.</p><p>Herramienta de apoyo diseñada por el docente <a href="mailto:alfreyes@uv.mx">Dr. Alfredo Reyes Gutiérrez</a> para sus Tutorados.</p></div>
+</div>
 <div class="modal" id="ee-modal">
-    <div class="modal-content">
-        <div class="modal-header">➕ Agregar Experiencia Educativa</div>
-        <input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o NRC..." oninput="filterEEList()">
-        <div class="filter-bar">
-            <select id="filter-area" onchange="filterEEList()"><option value="">📁 Todas las áreas</option></select>
-            <select id="filter-turno" onchange="filterEEList()">
-                <option value="">🕐 Todos los turnos</option>
-                <option value="M">Matutino</option>
-                <option value="V">Vespertino</option>
-            </select>
-            <select id="filter-bloque" onchange="filterEEList()" style="display:none;">
-                <option value="">📅 Todos los bloques</option>
-                <option value="1">Bloque 1</option>
-                <option value="2">Bloque 2</option>
-                <option value="3">Bloque 3</option>
-                <option value="4">Bloque 4</option>
-                <option value="5">Bloque 5</option>
-            </select>
-        </div>
-        <div class="ee-list" id="ee-list"></div>
-        <button class="btn-cerrar-modal" onclick="closeModal()">Cerrar</button>
-    </div>
+<div class="modal-content">
+<div class="modal-header">➕ Agregar Experiencia Educativa</div>
+<input type="text" class="search-box" id="search-ee" placeholder="🔍 Buscar por nombre, docente o NRC..." oninput="filterEEList()">
+<div class="filter-bar">
+<select id="filter-area" onchange="filterEEList()"><option value="">📁 Todas las áreas</option></select>
+<select id="filter-turno" onchange="filterEEList()"><option value="">🕐 Todos los turnos</option><option value="M">Matutino</option><option value="V">Vespertino</option></select>
+<select id="filter-bloque" onchange="filterEEList()" style="display:none;"><option value="">📅 Todos los bloques</option><option value="1">Bloque 1</option><option value="2">Bloque 2</option><option value="3">Bloque 3</option><option value="4">Bloque 4</option><option value="5">Bloque 5</option></select>
 </div>
-
+<div class="ee-list" id="ee-list"></div>
+<button class="btn-cerrar-modal" onclick="closeModal()">Cerrar</button>
+</div>
+</div>
 <script>
-    const API_KEY = 'AIzaSyBI4tHjYhVazAn6y8CW1k2kC0zcxLX07xI';
-    const FOLDER_ID = '1j6zXhkThBBJs5Ur_gnaS8Fql4iRfDNkY';
-    
-    const FILE_PATTERNS = {
-        '04-E': /SYRPRAC.*04.*E.*\.xlsx$/i,
-        '04-A': /SYRPRAC.*04.*A.*\.xlsx$/i,
-        '25-E': /SYRPRAC.*25.*E.*\.xlsx$/i,
-        '25-A': /SYRPRAC.*25.*A.*\.xlsx$/i,
-        'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i,
-        'SEIL-04-A': /SYRSEIL.*04.*A.*\.xlsx$/i,
-        'SEIL-25-A': /SYRSEIL.*25.*A.*\.xlsx$/i
-    };
-
-    // Mapeo de PTRM_CODE a Bloque
-    const PTRM_TO_BLOQUE = {
-        '10': 1,
-        '11': 2,
-        '12': 3,
-        '13': 4,
-        '14': 5
-    };
-
-    const PALETA_COLORES = [
-        { bg: '#28a745', text: '#ffffff' },
-        { bg: '#007bff', text: '#ffffff' },
-        { bg: '#fd7e14', text: '#ffffff' },
-        { bg: '#6f42c1', text: '#ffffff' },
-        { bg: '#20c997', text: '#ffffff' },
-        { bg: '#e83e8c', text: '#ffffff' },
-        { bg: '#17a2b8', text: '#ffffff' },
-        { bg: '#ffc107', text: '#212529' },
-        { bg: '#dc3545', text: '#ffffff' },
-        { bg: '#6610f2', text: '#ffffff' },
-        { bg: '#343a40', text: '#ffffff' },
-        { bg: '#28a745', text: '#ffffff' }
-    ];
-
-    let appState = {
-        currentScreen: 1,
-        modalidad: null,
-        plan: null,
-        datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
-        bloquesFechas: {},
-        nrcBloque: {}, // { crn: bloqueNumero }
-        experienciasEducativas: [],
-        horarioSeleccionado: [],
-        datosCargadosOK: false
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {});
-
-    function goToScreen(num) {
-        if (num === 2 && !appState.modalidad) return;
-        if (num === 3 && (!appState.modalidad || !appState.plan)) return;
-        if (num === 3 && !appState.datosCargadosOK) loadFromGoogleDrive();
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        document.getElementById(`screen-${num}`).classList.add('active');
-        appState.currentScreen = num;
-        updateStepsIndicator();
-        updateBackButton();
-        window.scrollTo(0, 0);
-    }
-
-    function goBack() {
-        if (appState.currentScreen === 3) goToScreen(2);
-        else if (appState.currentScreen === 2) goToScreen(1);
-    }
-
-    function updateStepsIndicator() {
-        document.querySelectorAll('.step').forEach(step => {
-            const stepNum = parseInt(step.dataset.step);
-            step.classList.remove('active', 'completed');
-            if (stepNum === appState.currentScreen) step.classList.add('active');
-            else if (stepNum < appState.currentScreen) step.classList.add('completed');
-        });
-    }
-
-    function updateBackButton() {
-        document.getElementById('back-btn').style.display = appState.currentScreen > 1 ? 'block' : 'none';
-    }
-
-    function selectModalidad(mod) {
-        appState.modalidad = mod;
-        document.querySelectorAll('[data-modalidad]').forEach(card => card.classList.toggle('selected', card.dataset.modalidad === mod));
-        document.getElementById('btn-next-1').disabled = false;
-    }
-
-    function selectPlan(plan) {
-        appState.plan = plan;
-        document.querySelectorAll('[data-plan]').forEach(card => card.classList.toggle('selected', card.dataset.plan === plan));
-        document.getElementById('btn-next-2').disabled = false;
-    }
-
-    async function loadFromGoogleDrive() {
-        try {
-            document.getElementById('loading-section').style.display = 'block';
-            document.getElementById('app-main').style.display = 'none';
-            document.getElementById('error-section').style.display = 'none';
-            document.getElementById('success-section').style.display = 'none';
-            
+const API_KEY = 'AIzaSyBI4tHjYhVazAn6y8CW1k2kC0zcxLX07xI';
+const FOLDER_ID = '1j6zXhkThBBJs5Ur_gnaS8Fql4iRfDNkY';
+const FILE_PATTERNS = {
+'04-E': /SYRPRAC.*04.*E.*\.xlsx$/i,
+'04-A': /SYRPRAC.*04.*A.*\.xlsx$/i,
+'25-E': /SYRPRAC.*25.*E.*\.xlsx$/i,
+'25-A': /SYRPRAC.*25.*A.*\.xlsx$/i,
+'BLOQUES-A': /Bloques.*Abierto.*\.xlsx$/i,
+'SEIL-04-A': /SYRSEIL.*04.*A.*\.xlsx$/i,
+'SEIL-25-A': /SYRSEIL.*25.*A.*\.xlsx$/i
+};
+const PTRM_TO_BLOQUE = { '10': 1, '11': 2, '12': 3, '13': 4, '14': 5 };
+const PALETA_COLORES = [
+{ bg: '#28a745', text: '#ffffff' }, { bg: '#007bff', text: '#ffffff' }, { bg: '#fd7e14', text: '#ffffff' },
+{ bg: '#6f42c1', text: '#ffffff' }, { bg: '#20c997', text: '#ffffff' }, { bg: '#e83e8c', text: '#ffffff' },
+{ bg: '#17a2b8', text: '#ffffff' }, { bg: '#ffc107', text: '#212529' }, { bg: '#dc3545', text: '#ffffff' },
+{ bg: '#6610f2', text: '#ffffff' }, { bg: '#343a40', text: '#ffffff' }, { bg: '#28a745', text: '#ffffff' }
+];
+let appState = {
+currentScreen: 1, modalidad: null, plan: null,
+datosCargados: { '04-E': null, '04-A': null, '25-E': null, '25-A': null },
+bloquesFechas: {}, nrcBloque: {},
+experienciasEducativas: [], horarioSeleccionado: [], datosCargadosOK: false
+};
+document.addEventListener('DOMContentLoaded', () => {});
+function goToScreen(num) {
+if (num === 2 && !appState.modalidad) return;
+if (num === 3 && (!appState.modalidad || !appState.plan)) return;
+if (num === 3 && !appState.datosCargadosOK) loadFromGoogleDrive();
+document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+document.getElementById(`screen-${num}`).classList.add('active');
+appState.currentScreen = num;
+updateStepsIndicator(); updateBackButton(); window.scrollTo(0, 0);
+}
+function goBack() { if (appState.currentScreen === 3) goToScreen(2); else if (appState.currentScreen === 2) goToScreen(1); }
+function updateStepsIndicator() {
+document.querySelectorAll('.step').forEach(step => {
+const stepNum = parseInt(step.dataset.step);
+step.classList.remove('active', 'completed');
+if (stepNum === appState.currentScreen) step.classList.add('active');
+else if (stepNum < appState.currentScreen) step.classList.add('completed');
+});
+}
+function updateBackButton() { document.getElementById('back-btn').style.display = appState.currentScreen > 1 ? 'block' : 'none'; }
+function selectModalidad(mod) {
+appState.modalidad = mod;
+document.querySelectorAll('[data-modalidad]').forEach(card => card.classList.toggle('selected', card.dataset.modalidad === mod));
+document.getElementById('btn-next-1').disabled = false;
+}
+function selectPlan(plan) {
+appState.plan = plan;
+document.querySelectorAll('[data-plan]').forEach(card => card.classList.toggle('selected', card.dataset.plan === plan));
+document.getElementById('btn-next-2').disabled = false;
+}
+async function loadFromGoogleDrive() {
+try {
+document.getElementById('loading-section').style.display = 'block';
+document.getElementById('app-main').style.display = 'none';
+document.getElementById('error-section').style.display = 'none';
+document.getElementById('success-section').style.display = 'none';
+document.getElementById('debug-section').style.display = 'block';
             const files = await listFilesInFolder();
             console.log('Archivos encontrados:', files);
+            addDebug(`📁 Archivos encontrados: ${files.length}`);
             
             if (!files || files.length === 0) throw new Error('No se encontraron archivos en la carpeta de Google Drive.');
 
@@ -792,49 +274,78 @@ border: 2px solid #28a745;
                 if (file) {
                     archivosEncontrados[key] = file;
                     console.log(`✓ ${key}: ${file.name}`);
+                    addDebug(`✓ ${key}: ${file.name}`);
+                } else {
+                    console.log(`✗ ${key}: No encontrado`);
+                    addDebug(` ${key}: No encontrado`);
                 }
             }
 
-            let cargados = 0;
-            const total = Object.keys(archivosEncontrados).length;
-            
-            for (const [key, file] of Object.entries(archivosEncontrados)) {
+            // PASO 1: Procesar primero los archivos SYRSEIL para llenar nrcBloque
+            addDebug('\n📊 Paso 1: Procesando archivos SYRSEIL...');
+            const seilKeys = Object.keys(archivosEncontrados).filter(k => k.startsWith('SEIL-'));
+            for (const key of seilKeys) {
+                const file = archivosEncontrados[key];
                 try {
-                    updateLoadingMessage(`Cargando ${file.name}... (${cargados + 1}/${total})`);
-                    
-                    if (key === 'BLOQUES-A') {
-                        appState.bloquesFechas = await downloadAndProcessBloques(file.id);
-                    } else if (key.startsWith('SEIL-')) {
-                        // Procesar archivo SYRSEIL para obtener NRC -> Bloque
-                        const nrcMap = await downloadAndProcessSEIL(file.id);
-                        // Fusionar con el mapa existente
-                        Object.assign(appState.nrcBloque, nrcMap);
-                        console.log(`✓ ${key}: ${Object.keys(nrcMap).length} NRCs con bloque asignado`);
-                    } else {
-                        appState.datosCargados[key] = await downloadAndProcessFile(file.id);
-                    }
-                    cargados++;
+                    updateLoadingMessage(`Cargando ${file.name}...`);
+                    const nrcMap = await downloadAndProcessSEIL(file.id);
+                    Object.assign(appState.nrcBloque, nrcMap);
+                    addDebug(`✓ ${key}: ${Object.keys(nrcMap).length} NRCs con bloque asignado`);
+                    console.log(`✓ ${key}: ${Object.keys(nrcMap).length} NRCs`);
                 } catch (err) {
                     console.error(`Error procesando ${file.name}:`, err);
+                    addDebug(`✗ Error en ${key}: ${err.message}`);
+                }
+            }
+            addDebug(`Total NRCs en mapa: ${Object.keys(appState.nrcBloque).length}`);
+
+            // PASO 2: Procesar archivos Bloques-Abierto
+            if (archivosEncontrados['BLOQUES-A']) {
+                updateLoadingMessage(`Cargando Bloques-Abierto.xlsx...`);
+                appState.bloquesFechas = await downloadAndProcessBloques(archivosEncontrados['BLOQUES-A'].id);
+                addDebug(`✓ Bloques-Abierto: fechas cargadas`);
+            }
+
+            // PASO 3: Procesar archivos SYRPRAC (ahora nrcBloque ya está lleno)
+            addDebug('\n📋 Paso 2: Procesando archivos SYRPRAC...');
+            const pracKeys = Object.keys(archivosEncontrados).filter(k => !k.startsWith('SEIL-') && k !== 'BLOQUES-A');
+            for (const key of pracKeys) {
+                const file = archivosEncontrados[key];
+                try {
+                    updateLoadingMessage(`Cargando ${file.name}...`);
+                    const data = await downloadAndProcessFile(file.id);
+                    appState.datosCargados[key] = data;
+                    addDebug(`✓ ${key}: ${data.length} EEs procesadas`);
+                    console.log(`✓ ${key}: ${data.length} EEs`);
+                } catch (err) {
+                    console.error(`Error procesando ${file.name}:`, err);
+                    addDebug(`✗ Error en ${key}: ${err.message}`);
                 }
             }
 
-            if (cargados === 0) throw new Error('No se pudo procesar ningún archivo.');
+            const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
+            
+            if (totalEE === 0) throw new Error('No se pudo procesar ningún archivo SYRPRAC.');
 
             appState.datosCargadosOK = true;
             updateBloquesFechas();
             
-            const totalEE = Object.values(appState.datosCargados).reduce((sum, d) => sum + (d ? d.length : 0), 0);
-            showSuccess(`✅ Datos cargados (${cargados} archivos, ${totalEE} EEs, ${Object.keys(appState.nrcBloque).length} NRCs con bloque)`);
+            addDebug(`\n✅ Carga completa: ${totalEE} EEs totales`);
+            showSuccess(`✅ Datos cargados (${totalEE} EEs, ${Object.keys(appState.nrcBloque).length} NRCs con bloque)`);
             
             initializeApp();
 
         } catch (error) {
             showError('❌ Error: ' + error.message);
             console.error(error);
+            addDebug(`❌ Error: ${error.message}`);
         }
     }
-
+    function addDebug(msg) {
+        const debug = document.getElementById('debug-section');
+        debug.innerHTML += msg + '<br>';
+        debug.scrollTop = debug.scrollHeight;
+    }
     async function listFilesInFolder() {
         const url = `https://www.googleapis.com/drive/v3/files?q='${FOLDER_ID}'+in+parents+and+trashed=false&key=${API_KEY}&fields=files(id,name,mimeType)`;
         const response = await fetch(url);
@@ -842,7 +353,6 @@ border: 2px solid #28a745;
         if (data.error) throw new Error(data.error.message);
         return data.files || [];
     }
-
     async function downloadAndProcessFile(fileId) {
         const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
         const response = await fetch(url);
@@ -855,7 +365,6 @@ border: 2px solid #28a745;
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
         return processData(jsonData);
     }
-
     async function downloadAndProcessBloques(fileId) {
         const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
         const response = await fetch(url);
@@ -868,7 +377,6 @@ border: 2px solid #28a745;
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
         return processBloquesData(jsonData);
     }
-
     async function downloadAndProcessSEIL(fileId) {
         const url = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
         const response = await fetch(url);
@@ -881,12 +389,9 @@ border: 2px solid #28a745;
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: '' });
         return processSEILData(jsonData);
     }
-
     function processBloquesData(data) {
         const bloques = {};
-        let headerRow = null;
-        let fechasRow = null;
-        
+        let headerRow = null, fechasRow = null;
         for (let i = 0; i < data.length; i++) {
             const row = data[i];
             if (!row) continue;
@@ -894,7 +399,6 @@ border: 2px solid #28a745;
             if (firstCell === 'bloques' || firstCell.includes('bloque')) headerRow = i;
             if (firstCell === 'fechas') fechasRow = i;
         }
-        
         if (headerRow !== null && fechasRow !== null) {
             const headerCells = data[headerRow];
             const fechasCells = data[fechasRow];
@@ -906,15 +410,10 @@ border: 2px solid #28a745;
         }
         return bloques;
     }
-
     function processSEILData(data) {
-        // Buscar columnas SSBSECT_CRN y SWBSEIL_PTRM_CODE
         const nrcMap = {};
-        
         if (!data || data.length < 2) return nrcMap;
-        
-        let headerRowIndex = 0;
-        let headers = [];
+        let headerRowIndex = 0, headers = [];
         for (let i = 0; i < Math.min(10, data.length); i++) {
             const row = data[i];
             if (row && row.includes('SSBSECT_CRN') && row.includes('SWBSEIL_PTRM_CODE')) {
@@ -923,39 +422,29 @@ border: 2px solid #28a745;
                 break;
             }
         }
-        
-        if (headers.length === 0) {
-            headers = data[0].map(h => String(h).trim());
-        }
-        
+        if (headers.length === 0) headers = data[0].map(h => String(h).trim());
         const idxCRN = headers.indexOf('SSBSECT_CRN');
         const idxPTRM = headers.indexOf('SWBSEIL_PTRM_CODE');
-        
         if (idxCRN < 0 || idxPTRM < 0) {
-            console.warn('No se encontraron columnas SSBSECT_CRN o SWBSEIL_PTRM_CODE en el archivo SYRSEIL');
+            console.warn('No se encontraron columnas SSBSECT_CRN o SWBSEIL_PTRM_CODE');
+            addDebug(`⚠️ Columnas no encontradas: CRN=${idxCRN}, PTRM=${idxPTRM}`);
+            addDebug(`Encabezados encontrados: ${headers.join(', ')}`);
             return nrcMap;
         }
-        
         for (let i = headerRowIndex + 1; i < data.length; i++) {
             const row = data[i];
             if (!row || row.length === 0) continue;
-            
             const crn = row[idxCRN];
             const ptrm = row[idxPTRM];
-            
             if (!crn || !ptrm) continue;
-            
             const crnStr = String(crn).trim();
             const ptrmStr = String(ptrm).trim();
-            
             if (PTRM_TO_BLOQUE[ptrmStr]) {
                 nrcMap[crnStr] = PTRM_TO_BLOQUE[ptrmStr];
             }
         }
-        
         return nrcMap;
     }
-
     function updateBloquesFechas() {
         for (let i = 1; i <= 5; i++) {
             const fechas = appState.bloquesFechas[i] || 'Fechas por definir';
@@ -963,12 +452,9 @@ border: 2px solid #28a745;
             if (el) el.textContent = fechas;
         }
     }
-
     function processData(data) {
         if (!data || data.length < 2) return [];
-        
-        let headerRowIndex = 0;
-        let headers = [];
+        let headerRowIndex = 0, headers = [];
         for (let i = 0; i < Math.min(5, data.length); i++) {
             const row = data[i];
             if (row && row.includes('TITULO') && row.includes('SSBSECT_CRN')) {
@@ -978,70 +464,45 @@ border: 2px solid #28a745;
             }
         }
         if (headers.length === 0) headers = data[0].map(h => String(h).trim());
-        
         const idx = {
-            titulo: headers.indexOf('TITULO'),
-            creditos: headers.indexOf('SCBCRSE_CREDIT_HR_LOW'),
-            crn: headers.indexOf('SSBSECT_CRN'),
-            docente: headers.indexOf('NOMBRED'),
-            salon: headers.indexOf('SSRMEET_ROOM_CODE'),
-            edificio: headers.indexOf('SSRMEET_BLDG_CODE'),
-            area: headers.indexOf('SMRALIB_AREA_DESC'),
-            areaCode: headers.indexOf('SMRPAAP_AREA'),
+            titulo: headers.indexOf('TITULO'), creditos: headers.indexOf('SCBCRSE_CREDIT_HR_LOW'),
+            crn: headers.indexOf('SSBSECT_CRN'), docente: headers.indexOf('NOMBRED'),
+            salon: headers.indexOf('SSRMEET_ROOM_CODE'), edificio: headers.indexOf('SSRMEET_BLDG_CODE'),
+            area: headers.indexOf('SMRALIB_AREA_DESC'), areaCode: headers.indexOf('SMRPAAP_AREA'),
             maxEnrl: headers.indexOf('SSBSECT_MAX_ENRL'),
-            IL: headers.indexOf('IL'), FL: headers.indexOf('FL'),
-            IM: headers.indexOf('IM'), FM: headers.indexOf('FM'),
-            II: headers.indexOf('II'), FI: headers.indexOf('FI'),
-            IJ: headers.indexOf('IJ'), FJ: headers.indexOf('FJ'),
-            IV: headers.indexOf('IV'), FV: headers.indexOf('FV'),
-            ISS: headers.indexOf('ISS'), FSS: headers.indexOf('FSS'),
+            IL: headers.indexOf('IL'), FL: headers.indexOf('FL'), IM: headers.indexOf('IM'), FM: headers.indexOf('FM'),
+            II: headers.indexOf('II'), FI: headers.indexOf('FI'), IJ: headers.indexOf('IJ'), FJ: headers.indexOf('FJ'),
+            IV: headers.indexOf('IV'), FV: headers.indexOf('FV'), ISS: headers.indexOf('ISS'), FSS: headers.indexOf('FSS'),
             ID: headers.indexOf('ID'), FD: headers.indexOf('FD')
         };
-
         const crnMap = {};
-        
         for (let i = headerRowIndex + 1; i < data.length; i++) {
             const row = data[i];
             if (!row || row.length === 0) continue;
-            
-            const titulo = row[idx.titulo];
-            const crn = row[idx.crn];
+            const titulo = row[idx.titulo], crn = row[idx.crn];
             if (!titulo || !crn) continue;
             const tituloStr = String(titulo).trim();
             if (tituloStr.includes('CF_DESC_LEVL') || tituloStr === 'LICENCIATURA' || tituloStr === '') continue;
-            
             const salon = String(row[idx.salon] || '').trim();
             const edificio = String(row[idx.edificio] || '').trim();
             const salonCompleto = salon + (edificio ? ' (' + edificio + ')' : '');
-            
             if (!crnMap[crn]) {
                 crnMap[crn] = {
-                    nombre: tituloStr,
-                    creditos: parseInt(row[idx.creditos]) || 0,
-                    crn: String(crn),
-                    docente: String(row[idx.docente] || '').trim() || 'Por asignar',
-                    area: String(row[idx.area] || '').trim(),
-                    areaCode: String(row[idx.areaCode] || '').trim(),
-                    maxEnrl: parseInt(row[idx.maxEnrl]) || 0,
-                    horarios: [],
-                    salonesPorDia: {}
+                    nombre: tituloStr, creditos: parseInt(row[idx.creditos]) || 0,
+                    crn: String(crn), docente: String(row[idx.docente] || '').trim() || 'Por asignar',
+                    area: String(row[idx.area] || '').trim(), areaCode: String(row[idx.areaCode] || '').trim(),
+                    maxEnrl: parseInt(row[idx.maxEnrl]) || 0, horarios: [], salonesPorDia: {}
                 };
             }
-            
             const dias = [
-                { ini: idx.IL, fin: idx.FL, dia: 0 },
-                { ini: idx.IM, fin: idx.FM, dia: 1 },
-                { ini: idx.II, fin: idx.FI, dia: 2 },
-                { ini: idx.IJ, fin: idx.FJ, dia: 3 },
-                { ini: idx.IV, fin: idx.FV, dia: 4 },
-                { ini: idx.ISS, fin: idx.FSS, dia: 5 },
+                { ini: idx.IL, fin: idx.FL, dia: 0 }, { ini: idx.IM, fin: idx.FM, dia: 1 },
+                { ini: idx.II, fin: idx.FI, dia: 2 }, { ini: idx.IJ, fin: idx.FJ, dia: 3 },
+                { ini: idx.IV, fin: idx.FV, dia: 4 }, { ini: idx.ISS, fin: idx.FSS, dia: 5 },
                 { ini: idx.ID, fin: idx.FD, dia: 6 }
             ];
-            
             dias.forEach(d => {
                 if (d.ini < 0 || d.fin < 0) return;
-                const ini = parseInt(row[d.ini]);
-                const fin = parseInt(row[d.fin]);
+                const ini = parseInt(row[d.ini]), fin = parseInt(row[d.fin]);
                 if (!isNaN(ini) && !isNaN(fin) && ini > 0 && fin > 0 && fin > ini) {
                     const existe = crnMap[crn].horarios.some(eh => eh.dia === d.dia && eh.inicio === ini && eh.fin === fin);
                     if (!existe) crnMap[crn].horarios.push({ dia: d.dia, inicio: ini, fin: fin });
@@ -1049,17 +510,17 @@ border: 2px solid #28a745;
                 }
             });
         }
-        
         return Object.values(crnMap).map(ee => {
             ee.bloqueInfo = clasificarBloque(ee.horarios);
-            // Asignar bloque desde SYRSEIL si está disponible
+            // Asignar bloque desde SYRSEIL (ya cargado)
             if (appState.nrcBloque[ee.crn]) {
                 ee.bloqueAsignado = appState.nrcBloque[ee.crn];
+            } else {
+                ee.bloqueAsignado = null;
             }
             return ee;
         });
     }
-
     function clasificarBloque(horarios) {
         const sabado = horarios.filter(h => h.dia === 5);
         if (sabado.length === 0) return { tipo: 'escolarizado', turno: null };
@@ -1067,36 +528,28 @@ border: 2px solid #28a745;
         const turno = promedio < 1400 ? 'M' : 'V';
         return { tipo: 'abierto', turno: turno };
     }
-
     function extraerAula(salonCompleto) {
         if (!salonCompleto) return 'Por asignar';
         const match = salonCompleto.match(/^([A-Z0-9\-]+(?:\s+[A-Z0-9\-]+)*)/);
         return match ? match[1].trim() : salonCompleto;
     }
-
     function initializeApp() {
         const key = `${appState.plan}-${appState.modalidad}`;
         const datos = appState.datosCargados[key];
-        
         if (!datos || datos.length === 0) {
             showError('⚠️ No hay datos disponibles para esta combinación de plan y modalidad.');
             return;
         }
-        
         appState.experienciasEducativas = datos;
         appState.horarioSeleccionado = [];
-        
         document.getElementById('loading-section').style.display = 'none';
         document.getElementById('app-main').style.display = 'block';
-        
         const modalidadTxt = appState.modalidad === 'E' ? 'Escolarizado' : 'Abierto';
         const planTxt = appState.plan === '04' ? 'Plan 2004' : 'Plan 2025';
         document.getElementById('header-subtitle').textContent = `Periodo Agosto 2026 - Enero 2027 · ${modalidadTxt} · Sábados por bloques`;
         document.getElementById('header-plan-badge').textContent = `${modalidadTxt} · ${planTxt}`;
         document.getElementById('oferta-title').textContent = `Oferta Académica · ${modalidadTxt} · ${planTxt}`;
         document.getElementById('stat-horas-label').textContent = appState.modalidad === 'A' ? 'Horas/Sábado' : 'Horas/Semana';
-        
-        // Mostrar/ocultar filtros según modalidad
         const filterTurno = document.getElementById('filter-turno');
         const filterBloque = document.getElementById('filter-bloque');
         if (appState.modalidad === 'E') {
@@ -1106,7 +559,6 @@ border: 2px solid #28a745;
             filterTurno.style.display = 'block';
             filterBloque.style.display = 'block';
         }
-        
         if (appState.modalidad === 'A') {
             document.getElementById('vista-abierto').style.display = 'block';
             document.getElementById('vista-escolarizado').style.display = 'none';
@@ -1115,170 +567,138 @@ border: 2px solid #28a745;
             document.getElementById('vista-abierto').style.display = 'none';
             document.getElementById('vista-escolarizado').style.display = 'block';
         }
-        
         populateAreaFilter();
         updateStats();
         renderVista();
+        // Debug info
+        const conBloque = datos.filter(ee => ee.bloqueAsignado).length;
+        const sinBloque = datos.filter(ee => !ee.bloqueAsignado).length;
+        addDebug(`\n📊 EEs en ${key}: ${datos.length} total, ${conBloque} con bloque, ${sinBloque} sin bloque`);
+        if (conBloque > 0) {
+            const ejemplo = datos.find(ee => ee.bloqueAsignado);
+            addDebug(`Ejemplo: NRC ${ejemplo.crn} → Bloque ${ejemplo.bloqueAsignado}, Turno ${ejemplo.bloqueInfo.turno}`);
+        }
     }
-
     function cambiarPlan() {
         appState.plan = appState.plan === '04' ? '25' : '04';
         appState.horarioSeleccionado = [];
         initializeApp();
     }
-
-    function timeToMinutes(time) {
-        const hours = Math.floor(time / 100);
-        const minutes = time % 100;
-        return hours * 60 + minutes;
-    }
-
-    function formatTime(time) {
-        const hours = Math.floor(time / 100);
-        const minutes = time % 100;
-        return `${hours}:${String(minutes).padStart(2, '0')}`;
-    }
-
+    function timeToMinutes(time) { const hours = Math.floor(time / 100); const minutes = time % 100; return hours * 60 + minutes; }
+    function formatTime(time) { const hours = Math.floor(time / 100); const minutes = time % 100; return `${hours}:${String(minutes).padStart(2, '0')}`; }
     function updateStats() {
         const totalEE = appState.horarioSeleccionado.length;
         const totalCreditos = appState.horarioSeleccionado.reduce((sum, ee) => sum + (ee.creditos || 0), 0);
         let totalMinutos = 0;
-        appState.horarioSeleccionado.forEach(ee => {
-            ee.horarios.forEach(h => { totalMinutos += timeToMinutes(h.fin) - timeToMinutes(h.inicio); });
-        });
+        appState.horarioSeleccionado.forEach(ee => { ee.horarios.forEach(h => { totalMinutos += timeToMinutes(h.fin) - timeToMinutes(h.inicio); }); });
         const totalHoras = (totalMinutos / 60).toFixed(1);
         const choques = detectConflicts();
-        
         document.getElementById('stat-ee').textContent = totalEE;
         document.getElementById('stat-creditos').textContent = totalCreditos;
         document.getElementById('stat-horas').textContent = totalHoras;
         document.getElementById('stat-choques').textContent = choques;
         document.getElementById('conflict-warning').classList.toggle('show', choques > 0);
     }
-
-    function renderVista() {
-        if (appState.modalidad === 'A') renderBloquesGrid();
-        else renderHorarioTable();
-    }
-
+    function renderVista() { if (appState.modalidad === 'A') renderBloquesGrid(); else renderHorarioTable(); }
     function renderBloquesGrid() {
-        // Limpiar todas las celdas
-        document.querySelectorAll('.bloque-cell').forEach(cell => {
-            cell.className = 'bloque-cell empty';
-            cell.innerHTML = '—';
-        });
-        
-        // Colocar cada EE en su bloque asignado (desde SYRSEIL)
-        appState.horarioSeleccionado.forEach(ee => {
+        document.querySelectorAll('.bloque-cell').forEach(cell => { cell.className = 'bloque-cell empty'; cell.innerHTML = '—'; });
+        addDebug(`\n Renderizando grid de bloques...`);
+        addDebug(`EEs seleccionadas: ${appState.horarioSeleccionado.length}`);
+        appState.horarioSeleccionado.forEach((ee, idx) => {
             const turno = ee.bloqueInfo.turno;
-            const bloque = ee.bloqueAsignado; // Bloque asignado desde SYRSEIL
-            
-            if (!turno || !bloque) return;
-            
+            const bloque = ee.bloqueAsignado;
+            addDebug(`  EE ${idx+1}: "${ee.nombre.substring(0, 30)}..." - Turno: ${turno}, Bloque: ${bloque}, CRN: ${ee.crn}`);
+            if (!turno || !bloque) {
+                addDebug(`  ⚠️ Saltando: turno=${turno}, bloque=${bloque}`);
+                return;
+            }
             const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
-            if (cell && cell.classList.contains('empty')) {
-                cell.className = 'bloque-cell occupied';
-                const nombreCorto = ee.nombre.length > 30 ? ee.nombre.substring(0, 30) + '...' : ee.nombre;
-                cell.innerHTML = `
-                    <div class="ee-nombre">${nombreCorto}</div>
-                    <div class="ee-info">
-                        NRC ${ee.crn}<br>
-                        ${ee.docente.substring(0, 25)}<br>
-                        📍 ${Object.values(ee.salonesPorDia)[0] || 'Por asignar'}<br>
-                        🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}
-                    </div>
-                `;
+            if (cell) {
+                if (cell.classList.contains('empty')) {
+                    cell.className = 'bloque-cell occupied';
+                    const nombreCorto = ee.nombre.length > 30 ? ee.nombre.substring(0, 30) + '...' : ee.nombre;
+                    cell.innerHTML = `<div class="ee-nombre">${nombreCorto}</div><div class="ee-info">NRC ${ee.crn}<br>${ee.docente.substring(0, 25)}<br>📍 ${Object.values(ee.salonesPorDia)[0] || 'Por asignar'}<br>🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}</div>`;
+                    addDebug(`  ✓ Colocada en Bloque ${bloque} ${turno === 'M' ? 'Matutino' : 'Vespertino'}`);
+                } else {
+                    addDebug(`  ⚠️ Celda ocupada, buscando siguiente bloque...`);
+                    // Buscar siguiente bloque disponible
+                    for (let b = bloque + 1; b <= 5; b++) {
+                        const nextCell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${b}"]`);
+                        if (nextCell && nextCell.classList.contains('empty')) {
+                            nextCell.className = 'bloque-cell occupied';
+                            const nombreCorto = ee.nombre.length > 30 ? ee.nombre.substring(0, 30) + '...' : ee.nombre;
+                            nextCell.innerHTML = `<div class="ee-nombre">${nombreCorto}</div><div class="ee-info">NRC ${ee.crn}<br>${ee.docente.substring(0, 25)}<br>📍 ${Object.values(ee.salonesPorDia)[0] || 'Por asignar'}<br>🕐 ${ee.horarios.map(h => formatTime(h.inicio) + '-' + formatTime(h.fin)).join(', ')}</div>`;
+                            addDebug(`  ✓ Colocada en Bloque ${b} (alternativo)`);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                addDebug(`  ✗ No se encontró celda para turno=${turno}, bloque=${bloque}`);
             }
         });
     }
-
     function cellClickBloque(turno, bloque) {
         const cell = document.querySelector(`.bloque-cell[data-turno="${turno}"][data-bloque="${bloque}"]`);
         if (cell.classList.contains('occupied')) {
             const eeNombre = cell.querySelector('.ee-nombre').textContent;
             if (confirm(`¿Quitar "${eeNombre}" de tu horario?`)) {
-                const ee = appState.horarioSeleccionado.find(e => 
-                    e.bloqueInfo.turno === turno && e.nombre.startsWith(eeNombre.replace('...', ''))
-                );
+                const ee = appState.horarioSeleccionado.find(e => e.bloqueInfo.turno === turno && e.nombre.startsWith(eeNombre.replace('...', '')));
                 if (ee) {
                     appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== ee.crn);
-                    updateStats();
-                    renderBloquesGrid();
+                    updateStats(); renderBloquesGrid();
                 }
             }
         }
     }
-
     function renderHorarioTable() {
         const table = document.getElementById('horario-table');
         table.innerHTML = '';
-        
         const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-        const horasInicio = 7;
-        const horasFin = 21;
-        const numDias = 5;
-        
+        const horasInicio = 7, horasFin = 21, numDias = 5;
         const conflictEEs = new Set();
         for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
             for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
-                const ee1 = appState.horarioSeleccionado[i];
-                const ee2 = appState.horarioSeleccionado[j];
+                const ee1 = appState.horarioSeleccionado[i], ee2 = appState.horarioSeleccionado[j];
                 for (const h1 of ee1.horarios) {
                     for (const h2 of ee2.horarios) {
                         if (h1.dia === h2.dia) {
                             const ini1 = timeToMinutes(h1.inicio), fin1 = timeToMinutes(h1.fin);
                             const ini2 = timeToMinutes(h2.inicio), fin2 = timeToMinutes(h2.fin);
-                            if (ini1 < fin2 && ini2 < fin1) {
-                                conflictEEs.add(ee1.crn);
-                                conflictEEs.add(ee2.crn);
-                            }
+                            if (ini1 < fin2 && ini2 < fin1) { conflictEEs.add(ee1.crn); conflictEEs.add(ee2.crn); }
                         }
                     }
                 }
             }
         }
-        
         const headerRow = document.createElement('tr');
         headerRow.innerHTML = '<th>Hora</th>' + dias.map(d => `<th>${d}</th>`).join('');
         table.appendChild(headerRow);
-        
         const ocupacion = {};
-        for (let h = horasInicio; h <= horasFin; h++) {
-            ocupacion[h] = {};
-            for (let d = 0; d < numDias; d++) ocupacion[h][d] = null;
-        }
-        
+        for (let h = horasInicio; h <= horasFin; h++) { ocupacion[h] = {}; for (let d = 0; d < numDias; d++) ocupacion[h][d] = null; }
         appState.horarioSeleccionado.forEach(ee => {
             ee.horarios.forEach(h => {
                 if (h.dia >= 0 && h.dia < numDias) {
-                    const iniHora = Math.floor(timeToMinutes(h.inicio) / 60);
-                    const finHora = Math.ceil(timeToMinutes(h.fin) / 60);
+                    const iniHora = Math.floor(timeToMinutes(h.inicio) / 60), finHora = Math.ceil(timeToMinutes(h.fin) / 60);
                     const rowspan = finHora - iniHora;
-                    
                     if (ocupacion[iniHora] && ocupacion[iniHora][h.dia] === null) {
                         ocupacion[iniHora][h.dia] = { ee, horario: h, esInicio: true, rowspan: Math.min(rowspan, horasFin - iniHora + 1) };
                     }
                     for (let hora = iniHora + 1; hora < finHora && hora <= horasFin; hora++) {
-                        if (ocupacion[hora] && ocupacion[hora][h.dia] === null) {
-                            ocupacion[hora][h.dia] = { cubierto: true };
-                        }
+                        if (ocupacion[hora] && ocupacion[hora][h.dia] === null) ocupacion[hora][h.dia] = { cubierto: true };
                     }
                 }
             });
         });
-        
         for (let hora = horasInicio; hora <= horasFin; hora++) {
             const row = document.createElement('tr');
             const horaCell = document.createElement('td');
             horaCell.textContent = `${hora}:00`;
             row.appendChild(horaCell);
-            
             for (let dia = 0; dia < numDias; dia++) {
                 const ocup = ocupacion[hora][dia];
                 if (ocup && ocup.cubierto) continue;
-                
                 const cell = document.createElement('td');
-                
                 if (ocup && ocup.esInicio) {
                     const salonDelDia = ocup.ee.salonesPorDia[dia] || Object.values(ocup.ee.salonesPorDia)[0] || 'Por asignar';
                     const aulaCorta = extraerAula(salonDelDia);
@@ -1286,43 +706,29 @@ border: 2px solid #28a745;
                     const idx = appState.horarioSeleccionado.findIndex(e => e.crn === ocup.ee.crn);
                     const color = PALETA_COLORES[idx % PALETA_COLORES.length];
                     const esConflicto = conflictEEs.has(ocup.ee.crn);
-                    
                     if (ocup.rowspan > 1) cell.rowSpan = ocup.rowspan;
-                    
-                    cell.innerHTML = `
-                        <div class="ee-card ${esConflicto ? 'conflicto' : ''}" data-crn="${ocup.ee.crn}" style="background:${color.bg}; color:${color.text};">
-                            <div class="ee-nombre">${ocup.ee.nombre}</div>
-                            <div class="ee-nrc">NRC ${ocup.ee.crn}</div>
-                            <div class="ee-docente">${ocup.ee.docente}</div>
-                            <div class="ee-horario">${formatTime(ocup.horario.inicio)}-${formatTime(ocup.horario.fin)} (${duracion}h)</div>
-                            <div class="ee-salon">📍 ${aulaCorta}</div>
-                        </div>
-                    `;
+                    cell.innerHTML = `<div class="ee-card ${esConflicto ? 'conflicto' : ''}" data-crn="${ocup.ee.crn}" style="background:${color.bg}; color:${color.text};"><div class="ee-nombre">${ocup.ee.nombre}</div><div class="ee-nrc">NRC ${ocup.ee.crn}</div><div class="ee-docente">${ocup.ee.docente}</div><div class="ee-horario">${formatTime(ocup.horario.inicio)}-${formatTime(ocup.horario.fin)} (${duracion}h)</div><div class="ee-salon">📍 ${aulaCorta}</div></div>`;
                 }
                 row.appendChild(cell);
             }
             table.appendChild(row);
         }
-        
         document.querySelectorAll('.ee-card').forEach(card => {
             card.addEventListener('click', function() {
                 const crn = this.dataset.crn;
                 const ee = appState.horarioSeleccionado.find(e => e.crn === crn);
                 if (ee && confirm(`¿Quitar "${ee.nombre}" de tu horario?`)) {
                     appState.horarioSeleccionado = appState.horarioSeleccionado.filter(e => e.crn !== crn);
-                    updateStats();
-                    renderHorarioTable();
+                    updateStats(); renderHorarioTable();
                 }
             });
         });
     }
-
     function detectConflicts() {
         let conflicts = 0;
         for (let i = 0; i < appState.horarioSeleccionado.length; i++) {
             for (let j = i + 1; j < appState.horarioSeleccionado.length; j++) {
-                const ee1 = appState.horarioSeleccionado[i];
-                const ee2 = appState.horarioSeleccionado[j];
+                const ee1 = appState.horarioSeleccionado[i], ee2 = appState.horarioSeleccionado[j];
                 for (const h1 of ee1.horarios) {
                     for (const h2 of ee2.horarios) {
                         if (h1.dia === h2.dia) {
@@ -1336,14 +742,12 @@ border: 2px solid #28a745;
         }
         return conflicts;
     }
-
     function populateAreaFilter() {
         const select = document.getElementById('filter-area');
         const areas = [...new Set(appState.experienciasEducativas.map(ee => ee.area).filter(a => a))].sort();
-        select.innerHTML = '<option value=""> Todas las áreas</option>';
+        select.innerHTML = '<option value="">📁 Todas las áreas</option>';
         areas.forEach(area => select.innerHTML += `<option value="${area}">${area}</option>`);
     }
-
     function openModal() {
         const eeList = document.getElementById('ee-list');
         document.getElementById('search-ee').value = '';
@@ -1351,10 +755,8 @@ border: 2px solid #28a745;
         document.getElementById('filter-turno').value = '';
         document.getElementById('filter-bloque').value = '';
         eeList.innerHTML = '';
-
         const diasNombre = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
         const eesOrdenadas = [...appState.experienciasEducativas].sort((a, b) => a.nombre.localeCompare(b.nombre));
-        
         eesOrdenadas.forEach(ee => {
             const item = document.createElement('div');
             item.className = 'ee-item';
@@ -1362,39 +764,25 @@ border: 2px solid #28a745;
             item.dataset.area = ee.area || '';
             item.dataset.turno = ee.bloqueInfo.turno || '';
             item.dataset.bloque = ee.bloqueAsignado || '';
-            
             const horariosDetallados = ee.horarios.map(h => {
                 const salonDelDia = ee.salonesPorDia[h.dia] || Object.values(ee.salonesPorDia)[0] || '';
                 const aula = extraerAula(salonDelDia);
                 return `${diasNombre[h.dia]} ${formatTime(h.inicio)}-${formatTime(h.fin)} (${aula})`;
             }).join(' · ');
-            
             const yaAgregada = appState.horarioSeleccionado.some(e => e.crn === ee.crn);
             if (yaAgregada) item.classList.add('added');
-            
             const bloqueInfo = ee.bloqueAsignado ? ` · <strong>Bloque ${ee.bloqueAsignado}</strong>` : '';
-            
-            item.innerHTML = `
-                <h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4>
-                <p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>NRC:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}${bloqueInfo}</p>
-                <p><strong>Docente:</strong> ${ee.docente}</p>
-                <p><strong>Horario:</strong> ${horariosDetallados}</p>
-                <p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : ee.bloqueInfo.turno === 'V' ? 'Vespertino' : 'Escolarizado'}</p>
-            `;
-            
+            item.innerHTML = `<h4>${ee.nombre} ${yaAgregada ? '✓ (Ya agregada)' : ''}</h4><p><span class="area-badge">${ee.areaCode || 'N/A'}</span> <strong>NRC:</strong> ${ee.crn} · <strong>Créditos:</strong> ${ee.creditos}${bloqueInfo}</p><p><strong>Docente:</strong> ${ee.docente}</p><p><strong>Horario:</strong> ${horariosDetallados}</p><p><strong>Turno:</strong> ${ee.bloqueInfo.turno === 'M' ? 'Matutino' : ee.bloqueInfo.turno === 'V' ? 'Vespertino' : 'Escolarizado'}</p>`;
             if (!yaAgregada) item.onclick = () => addEEToHorario(ee);
             eeList.appendChild(item);
         });
-
         document.getElementById('ee-modal').classList.add('active');
     }
-
     function filterEEList() {
         const search = document.getElementById('search-ee').value.toLowerCase();
         const areaFilter = document.getElementById('filter-area').value;
         const turnoFilter = document.getElementById('filter-turno').value;
         const bloqueFilter = document.getElementById('filter-bloque').value;
-        
         document.querySelectorAll('.ee-item').forEach(item => {
             const matchSearch = item.dataset.search.includes(search);
             const matchArea = !areaFilter || item.dataset.area === areaFilter;
@@ -1405,41 +793,17 @@ border: 2px solid #28a745;
             item.style.display = (matchSearch && matchArea && matchTurno && matchBloque) ? 'block' : 'none';
         });
     }
-
     function closeModal() { document.getElementById('ee-modal').classList.remove('active'); }
-
     function addEEToHorario(ee) {
-        if (appState.horarioSeleccionado.find(e => e.crn === ee.crn)) {
-            alert('Esta EE ya está en tu horario');
-            return;
-        }
+        if (appState.horarioSeleccionado.find(e => e.crn === ee.crn)) { alert('Esta EE ya está en tu horario'); return; }
         appState.horarioSeleccionado.push(ee);
-        updateStats();
-        renderVista();
-        closeModal();
+        updateStats(); renderVista(); closeModal();
     }
-
-    function clearHorario() {
-        if (confirm('¿Limpiar todo el horario?')) {
-            appState.horarioSeleccionado = [];
-            updateStats();
-            renderVista();
-        }
-    }
-
+    function clearHorario() { if (confirm('¿Limpiar todo el horario?')) { appState.horarioSeleccionado = []; updateStats(); renderVista(); } }
     function printHorario() { window.print(); }
-
     function updateLoadingMessage(msg) { document.getElementById('loading-message').textContent = msg; }
-    function showError(message) {
-        document.getElementById('loading-section').style.display = 'none';
-        document.getElementById('error-section').textContent = message;
-        document.getElementById('error-section').style.display = 'block';
-    }
-    function showSuccess(message) {
-        document.getElementById('success-section').textContent = message;
-        document.getElementById('success-section').style.display = 'block';
-        setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000);
-    }
+    function showError(message) { document.getElementById('loading-section').style.display = 'none'; document.getElementById('error-section').textContent = message; document.getElementById('error-section').style.display = 'block'; }
+    function showSuccess(message) { document.getElementById('success-section').textContent = message; document.getElementById('success-section').style.display = 'block'; setTimeout(() => { document.getElementById('success-section').style.display = 'none'; }, 5000); }
 </script>
 </body>
 </html>
