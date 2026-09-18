@@ -4,50 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Planeador de Horarios LCC | Universidad Veracruzana</title>
-<!-- Librería para lectura de Excel -->
 <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
 <style>
   :root {
     --azul-uv: #18529D;
     --azul-uv-dark: #0f3a73;
-    --azul-uv-light: #e8f0fa;
     --verde-uv: #28AD56;
     --verde-uv-dark: #1d8240;
-    --verde-uv-light: #e6f7ec;
     --alerta: #dc2626;
     --alerta-bg: #fef2f2;
-    --gris-claro: #f8fafc;
-    --border-color: #cbd5e1;
+    --gris-claro: #f5f7fa;
   }
-  
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: linear-gradient(135deg, var(--azul-uv) 0%, var(--verde-uv) 100%);
     min-height: 100vh;
     padding: 16px;
-    color: #1e293b;
+    color: #333;
   }
-
   .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     overflow: hidden;
   }
-
   header {
     background: var(--azul-uv);
     color: #fff;
-    padding: 24px 20px;
+    padding: 20px;
     text-align: center;
     border-bottom: 4px solid var(--verde-uv);
   }
   header h1 { font-size: 1.4em; margin-bottom: 4px; }
-  header p { opacity: 0.95; font-size: 0.9em; }
+  header p { opacity: 0.9; font-size: 0.9em; }
   header .uv-badge {
     display: inline-block;
     background: var(--verde-uv);
@@ -58,167 +50,90 @@
     font-weight: 700;
   }
 
-  /* Selector Inicial Modalidad y Plan */
-  .selector-config {
-    background: var(--gris-claro);
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border-color);
+  /* Selector de Modalidad y Plan */
+  .selector-modalidad {
+    padding: 20px;
+    background: #e8f0fa;
+    border-bottom: 2px solid var(--azul-uv);
     display: grid;
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  @media (min-width: 640px) {
-    .selector-config { grid-template-columns: 1fr 1fr; }
+  @media (min-width: 600px) {
+    .selector-modalidad { grid-template-columns: 1fr 1fr; }
   }
-  
-  .config-box label {
-    display: block;
-    font-size: 0.85em;
-    font-weight: 700;
-    color: var(--azul-uv);
-    margin-bottom: 4px;
+  .selector-group label {
+    display: block; font-weight: 700; color: var(--azul-uv-dark); font-size: 0.9em; margin-bottom: 6px;
   }
-  
-  .config-box select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-    background: #fff;
-    color: var(--azul-uv-dark);
-    font-weight: 600;
-    outline: none;
+  .selector-group select {
+    width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; background: #fff;
   }
-  .config-box select:focus { border-color: var(--azul-uv); }
 
-  .layout { display: grid; grid-template-columns: 1fr; }
+  .layout { display: grid; grid-template-columns: 1fr; gap: 0; }
   @media (min-width: 850px) { .layout { grid-template-columns: 380px 1fr; } }
 
-  .panel { padding: 20px; background: var(--gris-claro); border-right: 1px solid var(--border-color); }
-  .panel h2 { font-size: 1.1em; color: var(--azul-uv); margin-bottom: 14px; }
-
+  .panel { padding: 20px; background: var(--gris-claro); border-right: 1px solid #e2e8f0; }
+  .panel h2 { font-size: 1.1em; color: var(--azul-uv); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  
   .upload-zone {
-    border: 2px dashed var(--border-color);
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    background: #fff;
-    margin-bottom: 16px;
-    cursor: pointer;
-    transition: all 0.2s;
+    border: 2px dashed #cbd5e0; border-radius: 12px; padding: 18px; text-align: center; background: #fff;
+    margin-bottom: 16px; cursor: pointer; transition: all 0.2s;
   }
-  .upload-zone:hover { border-color: var(--azul-uv); background: var(--azul-uv-light); }
+  .upload-zone:hover { border-color: var(--azul-uv); background: #f0f4f9; }
   .upload-zone input[type="file"] { display: none; }
-  .upload-zone .icon { font-size: 1.8em; margin-bottom: 4px; }
+  .upload-zone .icon { font-size: 2em; margin-bottom: 6px; }
   .upload-zone p { font-size: 0.85em; color: #64748b; }
 
-  .lista-materias { max-height: 400px; overflow-y: auto; margin-bottom: 16px; }
+  .lista-materias { margin-top: 10px; max-height: 380px; overflow-y: auto; }
   .materia-item {
-    background: #fff;
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 10px;
-    font-size: 0.85em;
-    position: relative;
-    border-left: 5px solid var(--verde-uv);
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;
+    margin-bottom: 10px; font-size: 0.85em; position: relative; border-left: 4px solid var(--verde-uv);
   }
   .materia-item.choque { border-left-color: var(--alerta); background: var(--alerta-bg); }
-  .materia-item strong { display: block; color: var(--azul-uv); font-size: 1em; margin-bottom: 4px; }
-  .materia-item .meta { color: #475569; display: block; font-size: 0.85em; margin-bottom: 2px; }
-  .materia-item .horario-tag { color: var(--verde-uv-dark); font-weight: 700; display: block; margin-top: 6px; }
-
+  .materia-item strong { display: block; color: var(--azul-uv); margin-bottom: 4px; font-size: 1.05em; }
+  .materia-item .meta { color: #475569; display: block; margin-bottom: 2px; }
+  .materia-item .horario-texto { color: var(--verde-uv-dark); font-weight: 600; display: block; margin-top: 6px; font-size: 0.9em; }
+  
   .btn-agregar {
-    width: 100%; margin-top: 8px; padding: 8px; background: var(--azul-uv); color: #fff;
-    border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.85em;
+    width: 100%; margin-top: 10px; padding: 8px; background: var(--azul-uv); color: #fff;
+    border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;
   }
   .btn-eliminar {
     position: absolute; top: 8px; right: 8px; background: none; border: none;
-    color: var(--alerta); font-size: 1.2em; cursor: pointer;
+    color: var(--alerta); font-size: 1.3em; cursor: pointer; padding: 4px;
   }
 
-  /* Grid del Horario */
+  .alerta-choque {
+    background: var(--alerta-bg); color: var(--alerta); padding: 12px; border-radius: 8px;
+    margin-bottom: 16px; font-size: 0.9em; display: none; border: 1px solid var(--alerta); font-weight: 600;
+  }
+  .alerta-choque.activo { display: block; }
+
   .horario-container { padding: 20px; overflow-x: auto; }
-  
   .horario-grid {
-    display: grid;
-    gap: 1px;
-    background: #cbd5e1;
-    border: 1px solid #cbd5e1;
-    min-width: 650px;
+    display: grid; grid-template-columns: 60px repeat(5, 1fr); grid-template-rows: 40px repeat(14, 50px);
+    gap: 1px; background: #e2e8f0; border: 1px solid #e2e8f0; min-width: 650px;
   }
-
-  /* Grid Escolarizado (5 días) */
-  .grid-escolarizado {
-    grid-template-columns: 65px repeat(5, 1fr);
-    grid-template-rows: 40px repeat(14, 45px);
-  }
-
-  /* Grid Abierto (5 bloques sabatinos) */
-  .grid-abierto {
-    grid-template-columns: 140px 1fr;
-    grid-template-rows: 40px repeat(5, 80px);
-  }
-
-  .grid-header {
-    background: var(--azul-uv);
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.85em;
-    text-align: center;
-    padding: 4px;
-  }
-
-  .grid-time {
-    background: var(--gris-claro);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75em;
-    color: #475569;
-    font-weight: 700;
-    padding: 4px;
-  }
-
+  .grid-header { background: var(--azul-uv); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85em; }
+  .grid-time { background: var(--gris-claro); display: flex; align-items: center; justify-content: center; font-size: 0.75em; color: #64748b; font-weight: 600; }
   .grid-cell { background: #fff; position: relative; }
-
+  
   .clase-bloque {
     position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
     background: var(--verde-uv); color: #fff; border-radius: 6px; padding: 4px;
-    font-size: 0.72em; display: flex; flex-direction: column; justify-content: center;
-    align-items: center; text-align: center; overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10;
+    font-size: 0.7em; display: flex; flex-direction: column; justify-content: center;
+    align-items: center; text-align: center; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10;
   }
   .clase-bloque.choque { background: var(--alerta); }
-  .clase-bloque strong { display: block; font-size: 1.05em; margin-bottom: 2px; }
 
-  .alerta-box {
-    background: var(--alerta-bg); color: var(--alerta); padding: 10px 14px;
-    border-radius: 8px; margin-bottom: 12px; font-size: 0.85em; font-weight: 600;
-    display: none; border: 1px solid var(--alerta);
-  }
-  .alerta-box.activo { display: block; }
+  .btn-limpiar { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 16px; background: #ef4444; color: #fff; }
+  .btn-print { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 8px; background: #64748b; color: #fff; }
 
-  .btn-action {
-    width: 100%; padding: 10px; border: none; border-radius: 8px; font-weight: 600;
-    cursor: pointer; margin-top: 8px; font-size: 0.9em;
-  }
-  .btn-print { background: #64748b; color: #fff; }
-  .btn-clear { background: var(--alerta); color: #fff; }
-
-  footer {
-    text-align: center; padding: 16px; background: var(--gris-claro);
-    font-size: 0.8em; color: #64748b; border-top: 3px solid var(--verde-uv);
-  }
+  footer { text-align: center; padding: 16px; background: var(--gris-claro); font-size: 0.8em; color: #64748b; border-top: 3px solid var(--verde-uv); }
 
   @media print {
     body { background: #fff; padding: 0; }
-    .panel, .selector-config, footer, .btn-agregar, .btn-eliminar, .upload-zone { display: none !important; }
+    .selector-modalidad, .panel, footer, .btn-agregar, .btn-eliminar, .btn-limpiar, .btn-print, .upload-zone { display: none !important; }
     .container { box-shadow: none; max-width: 100%; }
     .layout { grid-template-columns: 1fr; }
     .horario-container { overflow: visible; }
@@ -227,62 +142,59 @@
 </style>
 </head>
 <body>
-
 <div class="container">
   <header>
     <div class="uv-badge">UNIVERSIDAD VERACRUZANA</div>
     <h1>📅 Planeador de Horarios LCC</h1>
-    <p>Facultad de Ciencias y Técnicas de la Comunicación · Agosto 2026 - Enero 2027</p>
+    <p>Licenciatura en Ciencias de la Comunicación (Agosto 2026 - Enero 2027)</p>
   </header>
 
-  <!-- Selector de Modalidad y Plan -->
-  <div class="selector-config">
-    <div class="config-box">
-      <label for="selectModalidad">1. Selecciona la Modalidad:</label>
+  <!-- Paso 1: Selección de Modalidad y Plan -->
+  <div class="selector-modalidad">
+    <div class="selector-group">
+      <label for="selectModalidad">1. Selecciona tu Modalidad:</label>
       <select id="selectModalidad" onchange="cambiarConfiguracion()">
-        <option value="escolarizado">Escolarizada (Lunes a Viernes)</option>
-        <option value="abierto">Abierta (Sábados por Bloques)</option>
+        <option value="escolarizado">Escolarizado (Lunes a Viernes)</option>
+        <option value="abierto">Abierto (Sábados por Bloques)</option>
       </select>
     </div>
-    <div class="config-box">
+    <div class="selector-group">
       <label for="selectPlan">2. Selecciona tu Plan de Estudios:</label>
       <select id="selectPlan" onchange="cambiarConfiguracion()">
-        <option value="2004">Plan 2004</option>
-        <option value="2025">Plan 2025</option>
+        <option value="2025">Plan 2025 (Nuevo Plan)</option>
+        <option value="2004">Plan 2004 (Vigente)</option>
       </select>
     </div>
   </div>
 
   <div class="layout">
-    <!-- Panel de Selección -->
     <div class="panel">
-      <h2>📚 Oferta Académica</h2>
+      <h2>📂 Cargar Oferta Académica</h2>
       
-      <div class="alerta-box" id="alertaChoque">
-        ⚠️ ¡Choque de horario detectado en tu planeación!
+      <div class="alerta-choque" id="alertaChoque">
+        ⚠️ ¡Choque de horario detectado! Revisa las materias marcadas en rojo.
       </div>
 
       <label class="upload-zone" for="fileInput">
-        <div class="icon">📁</div>
-        <strong>Cargar/Actualizar Excel de Oferta</strong>
-        <p id="txtArchivoSugerido">Arrastra aquí el archivo de oferta correspondiente</p>
-        <input type="file" id="fileInput" accept=".xlsx, .xls" onchange="cargarExcelManual(this)">
+        <div class="icon">📊</div>
+        <strong>Cargar Excel de Oferta (SYRPRAC)</strong>
+        <p id="textoArchivoRecomendado">Selecciona el archivo Excel correspondiente</p>
+        <input type="file" id="fileInput" accept=".xlsx, .xls" onchange="procesarExcelUV(this)">
       </label>
 
       <div id="listaOferta" class="lista-materias">
         <p style="text-align:center; color:#64748b; font-style:italic; padding:20px;">
-          Cargando oferta académica...
+          Carga el archivo Excel para ver las materias disponibles.
         </p>
       </div>
 
-      <button class="btn-action btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
-      <button class="btn-action btn-clear" onclick="limpiarHorario()">🗑️ Limpiar Mi Horario</button>
+      <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+      <button class="btn-limpiar" onclick="limpiarTodo()">🗑️ Limpiar Mi Horario</button>
 
-      <h3 style="font-size:1em; color:var(--azul-uv); margin-top:20px; margin-bottom:10px;">📋 Tu Horario Seleccionado</h3>
-      <div class="lista-materias" id="listaSeleccionadas"></div>
+      <h3 style="font-size:1em; color:var(--azul-uv); margin-top:24px; margin-bottom:10px;">📚 Tu Horario Seleccionado</h3>
+      <div class="lista-materias" id="listaMaterias"></div>
     </div>
 
-    <!-- Cuadrícula de Horario -->
     <div class="horario-container">
       <div class="horario-grid" id="horarioGrid"></div>
     </div>
@@ -290,243 +202,156 @@
 
   <footer>
     Facultad de Ciencias y Técnicas de la Comunicación · Universidad Veracruzana · 2026<br>
-    <small>Herramienta orientativa. La inscripción oficial se realiza en el portal de la UV.</small>
+    <small>Herramienta de apoyo no oficial. Consulta siempre la plataforma de la UV.</small>
   </footer>
 </div>
 
 <script>
-// Configuración de Horarios e Interfaces
-const horasEscolarizado = [];
-for (let h = 7; h <= 20; h++) horasEscolarizado.push(`${h.toString().padStart(2, '0')}:00`);
-const diasEscolarizado = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+let horas = [];
+for (let h = 7; h <= 20; h++) horas.push(`${h.toString().padStart(2, '0')}:00`);
 
-const bloquesAbierto = [
-  { id: 10, nombre: "Bloque 1", horas: "08:00 - 13:00 / 14:00 - 18:00" },
-  { id: 11, nombre: "Bloque 2", horas: "08:00 - 13:00 / 14:00 - 18:00" },
-  { id: 12, nombre: "Bloque 3", horas: "08:00 - 13:00 / 14:00 - 18:00" },
-  { id: 13, nombre: "Bloque 4", horas: "08:00 - 13:00 / 14:00 - 18:00" },
-  { id: 14, nombre: "Bloque 5", horas: "08:00 - 13:00 / 14:00 - 18:00" }
-];
-
-let ofertaCargada = [];
-let miHorario = JSON.parse(localStorage.getItem('miHorarioUV') || '[]');
+let diasSemana = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+let materiasEnHorario = JSON.parse(localStorage.getItem('horarioLCC_V3') || '[]');
+let ofertaProcesada = [];
 
 function cambiarConfiguracion() {
   const mod = document.getElementById('selectModalidad').value;
   const plan = document.getElementById('selectPlan').value;
+  const infoTxt = document.getElementById('textoArchivoRecomendado');
   
-  const sugerencia = `Archivo sugerido: SYRPRAC-CSCO-${plan === '2004' ? '04' : '25'}-${mod === 'escolarizado' ? 'E' : 'A'}-CR-202701.xlsx`;
-  document.getElementById('txtArchivoSugerido').textContent = sugerencia;
-
-  // Intentar autofetch del archivo correspondiente alojado en la raíz
-  const nombreArchivo = `SYRPRAC-CSCO-${plan === '2004' ? '04' : '25'}-${mod === 'escolarizado' ? 'E' : 'A'}-CR-202701.xlsx`;
-  
-  fetch(nombreArchivo)
-    .then(res => { if (!res.ok) throw new Error(); return res.arrayBuffer(); })
-    .then(data => procesarExcel(data))
-    .catch(() => {
-      document.getElementById('listaOferta').innerHTML = `
-        <p style="text-align:center; color:#64748b; padding:15px; font-size:0.85em;">
-          Sube el archivo <code>${nombreArchivo}</code> para visualizar las materias disponibles.
-        </p>`;
-    });
-
-  renderizarGrid();
+  if (mod === 'abierto') {
+    diasSemana = ['', 'Bloque 1', 'Bloque 2', 'Bloque 3', 'Bloque 4', 'Bloque 5'];
+    infoTxt.textContent = `Sube el archivo SYRPRAC-CSCO-${plan==='2004'?'04':'25'}-A-CR-202701.xlsx`;
+  } else {
+    diasSemana = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+    infoTxt.textContent = `Sube el archivo SYRPRAC-CSCO-${plan==='2004'?'04':'25'}-E-CR-202701.xlsx`;
+  }
+  generarGrid();
+  renderizar();
 }
 
-function cargarExcelManual(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => procesarExcel(e.target.result);
-  reader.readAsArrayBuffer(file);
-}
-
-function normalizarHora(val) {
-  if (!val || val === "0") return null;
-  let str = String(val).trim();
-  let m = str.match(/^(\d{1,2})(\d{2})$/);
-  if (m) {
-    let h = m[1].padStart(2, '0');
-    let min = m[2] === "59" ? "00" : m[2];
-    let hNum = m[2] === "59" ? parseInt(h) + 1 : parseInt(h);
-    return `${hNum.toString().padStart(2, '0')}:${min}`;
+function normalizarHora(valor) {
+  if (!valor || valor === "0" || valor === 0) return null;
+  let str = String(valor).trim();
+  let match = str.match(/^(\d{1,2})(\d{2})$/);
+  if (match) {
+    let h = match[1].padStart(2, '0');
+    let m = match[2];
+    if (m === "59") {
+      let hNum = parseInt(h) + 1;
+      return `${hNum.toString().padStart(2, '0')}:00`;
+    }
+    return `${h}:${m}`;
   }
   return null;
 }
 
-function procesarExcel(arrayBuffer) {
-  const mod = document.getElementById('selectModalidad').value;
-  const workbook = XLSX.read(new Uint8Array(arrayBuffer), { type: 'array' });
-  const sheet = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
+function procesarExcelUV(input) {
+  const file = input.files[0];
+  if (!file) return;
 
-  const mapa = {};
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
 
-  sheet.forEach(row => {
-    const nrc = String(row.SSBSECT_CRN || "").trim();
-    if (!nrc || nrc === "SSBSECT_CRN") return;
+      const cursosAgrupados = {};
 
-    if (!mapa[nrc]) {
-      mapa[nrc] = {
-        nrc,
-        titulo: String(row.TITULO || "Sin Título").trim(),
-        docente: String(row.NOMBRED || "Por asignar").trim(),
-        aula: String(row.SSRMEET_ROOM_CODE || "").trim(),
-        edificio: String(row.SSRMEET_BLDG_CODE || "").trim(),
-        bloque: row.SWBSEIL_PTRM_CODE ? parseInt(row.SWBSEIL_PTRM_CODE) : 10,
-        horarios: []
-      };
+      jsonData.forEach(row => {
+        const nrc = String(row.SSBSECT_CRN || "").trim();
+        if (!nrc || nrc === "undefined" || nrc === "SSBSECT_CRN") return;
+
+        if (!cursosAgrupados[nrc]) {
+          cursosAgrupados[nrc] = {
+            nrc: nrc,
+            titulo: String(row.TITULO || "Sin nombre").trim(),
+            docente: String(row.NOMBRED || "Por asignar").trim(),
+            aula: String(row.SSRMEET_ROOM_CODE || "").trim(),
+            edificio: String(row.SSRMEET_BLDG_CODE || "").trim(),
+            horarios: []
+          };
+        }
+
+        const agregarSiExiste = (dia, inicioVal, finVal) => {
+          const inicio = normalizarHora(inicioVal);
+          const fin = normalizarHora(finVal);
+          if (inicio && fin) {
+            const yaExiste = cursosAgrupados[nrc].horarios.some(h => h.dia === dia && h.inicio === inicio);
+            if (!yaExiste) cursosAgrupados[nrc].horarios.push({ dia, inicio, fin });
+          }
+        };
+
+        agregarSiExiste(1, row.IL, row.FL);
+        agregarSiExiste(2, row.IM, row.FM);
+        agregarSiExiste(3, row.II, row.FI);
+        agregarSiExiste(4, row.IJ, row.FJ);
+        agregarSiExiste(5, row.IV, row.FV);
+        
+        // Soporte adicional si el día sábado viene en columna IS/FS
+        if (row.IS && row.FS) agregarSiExiste(1, row.IS, row.FS);
+      });
+
+      ofertaProcesada = Object.values(cursosAgrupados);
+      mostrarOfertaEnLista();
+      alert(`✅ Se cargaron ${ofertaProcesada.length} experiencias educativas correctamente.`);
+    } catch (error) {
+      console.error(error);
+      alert('Error al leer el archivo Excel.');
     }
-
-    if (mod === 'escolarizado') {
-      const addH = (dia, i, f) => {
-        let inicio = normalizarHora(i), fin = normalizarHora(f);
-        if (inicio && fin) mapa[nrc].horarios.push({ dia, inicio, fin });
-      };
-      addH(1, row.IL, row.FL);
-      addH(2, row.IM, row.FM);
-      addH(3, row.II, row.FI);
-      addH(4, row.IJ, row.FJ);
-      addH(5, row.IV, row.FV);
-    } else {
-      let inicio = normalizarHora(row.IS || row.IL), fin = normalizarHora(row.FS || row.FL);
-      if (inicio && fin) {
-        mapa[nrc].horarios.push({ dia: 6, inicio, fin });
-      }
-    }
-  });
-
-  ofertaCargada = Object.values(mapa);
-  mostrarListaOferta();
+  };
+  reader.readAsArrayBuffer(file);
 }
 
-function mostrarListaOferta() {
-  const cont = document.getElementById('listaOferta');
-  cont.innerHTML = '';
-  const mod = document.getElementById('selectModalidad').value;
-
-  if (ofertaCargada.length === 0) {
-    cont.innerHTML = '<p style="text-align:center; padding:15px; color:#64748b;">No se encontraron materias.</p>';
+function mostrarOfertaEnLista() {
+  const contenedor = document.getElementById('listaOferta');
+  contenedor.innerHTML = '';
+  if (ofertaProcesada.length === 0) {
+    contenedor.innerHTML = '<p style="text-align:center; color:#dc2626; padding:20px;">No se encontraron materias válidas.</p>';
     return;
   }
 
-  ofertaCargada.forEach((m, idx) => {
-    let txtHorario = "";
-    if (mod === 'escolarizado') {
-      txtHorario = m.horarios.map(h => `${diasEscolarizado[h.dia].substring(0,3)} ${h.inicio}-${h.fin}`).join(' | ');
-    } else {
-      let bNom = bloquesAbierto.find(b => b.id === m.bloque)?.nombre || "Bloque 1";
-      txtHorario = `${bNom} (Sábado) | ${m.horarios[0]?.inicio || ''} - ${m.horarios[0]?.fin || ''}`;
-    }
+  ofertaProcesada.forEach((m, idx) => {
+    m.horarios.sort((a, b) => a.dia - b.dia);
+    const textoHorario = m.horarios.map(h => `${diasSemana[h.dia] || 'Día '+h.dia} ${h.inicio}-${h.fin}`).join(' | ');
 
     const div = document.createElement('div');
     div.className = 'materia-item';
     div.innerHTML = `
       <strong>${m.titulo}</strong>
       <span class="meta">🔑 NRC: ${m.nrc} | 👤 ${m.docente}</span>
-      <span class="meta">🏫 Aula: ${m.edificio} - ${m.aula}</span>
-      <span class="horario-tag">🕒 ${txtHorario}</span>
-      <button class="btn-agregar" onclick="agregarAMiHorario(${idx})">+ Agregar a Mi Horario</button>
+      <span class="meta">🏫 ${m.edificio} ${m.aula}</span>
+      <span class="horario-texto">🕒 ${textoHorario}</span>
+      <button class="btn-agregar" onclick="agregarDesdeOferta(${idx})">+ Agregar al Horario</button>
     `;
-    cont.appendChild(div);
+    contenedor.appendChild(div);
   });
 }
 
-function agregarAMiHorario(idx) {
-  const m = ofertaCargada[idx];
-  if (miHorario.some(item => item.nrc === m.nrc)) {
-    alert('Esta materia ya está agregada.');
+function agregarDesdeOferta(idx) {
+  const m = ofertaProcesada[idx];
+  if (materiasEnHorario.some(mat => mat.nrc === m.nrc)) {
+    alert('⚠️ Esta materia ya está en tu horario.');
     return;
   }
-  miHorario.push(m);
-  renderizarGrid();
+  materiasEnHorario.push({ ...m, choque: false });
+  renderizar();
 }
 
-function eliminarDeMiHorario(idx) {
-  miHorario.splice(idx, 1);
-  renderizarGrid();
-}
+function eliminarMateria(idx) { materiasEnHorario.splice(idx, 1); renderizar(); }
+function limpiarTodo() { if (confirm('¿Borrar todo tu horario?')) { materiasEnHorario = []; renderizar(); } }
 
-function limpiarHorario() {
-  if (confirm('¿Deseas vaciar tu horario seleccionado?')) {
-    miHorario = [];
-    renderizarGrid();
-  }
-}
-
-function renderizarGrid() {
-  const mod = document.getElementById('selectModalidad').value;
+function generarGrid() {
   const grid = document.getElementById('horarioGrid');
   grid.innerHTML = '';
-
-  if (mod === 'escolarizado') {
-    grid.className = 'horario-grid grid-escolarizado';
-    grid.appendChild(crearCelda('grid-header', 'Hora'));
-    for (let i = 1; i <= 5; i++) grid.appendChild(crearCelda('grid-header', diasEscolarizado[i]));
-
-    horasEscolarizado.forEach((h, rowIdx) => {
-      grid.appendChild(crearCelda('grid-time', h));
-      for (let d = 1; d <= 5; d++) {
-        grid.appendChild(crearCelda('grid-cell', '', `cell-${d}-${rowIdx}`));
-      }
-    });
-  } else {
-    grid.className = 'horario-grid grid-abierto';
-    grid.appendChild(crearCelda('grid-header', 'Bloque / Horas'));
-    grid.appendChild(crearCelda('grid-header', 'Sábados (Modalidad Abierta)'));
-
-    bloquesAbierto.forEach(b => {
-      let divTime = document.createElement('div');
-      divTime.className = 'grid-time';
-      divTime.innerHTML = `<strong>${b.nombre}</strong><small>${b.horas}</small>`;
-      grid.appendChild(divTime);
-      grid.appendChild(crearCelda('grid-cell', '', `cell-bloque-${b.id}`));
-    });
-  }
-
-  // Dibujar Clases en Grid y Renderizar Lista Lateral
-  const contSel = document.getElementById('listaSeleccionadas');
-  contSel.innerHTML = '';
-
-  miHorario.forEach((m, idx) => {
-    // Lista lateral
-    const item = document.createElement('div');
-    item.className = 'materia-item';
-    item.innerHTML = `
-      <button class="btn-eliminar" onclick="eliminarDeMiHorario(${idx})">&times;</button>
-      <strong>${m.titulo}</strong>
-      <span class="meta">NRC: ${m.nrc} | ${m.aula}</span>
-    `;
-    contSel.appendChild(item);
-
-    // Dibujar en cuadrícula
-    if (mod === 'escolarizado') {
-      m.horarios.forEach(h => {
-        let startH = parseInt(h.inicio.split(':')[0]) - 7;
-        let endH = parseInt(h.fin.split(':')[0]) - 7;
-        let dur = Math.max(1, endH - startH);
-        let cell = document.getElementById(`cell-${h.dia}-${startH}`);
-        if (cell) {
-          let b = document.createElement('div');
-          b.className = 'clase-bloque';
-          b.style.height = `calc(${dur * 45}px - 4px)`;
-          b.innerHTML = `<strong>${m.titulo}</strong><span>${h.inicio}-${h.fin}</span><span>${m.aula}</span>`;
-          cell.appendChild(b);
-        }
-      });
-    } else {
-      let cell = document.getElementById(`cell-bloque-${m.bloque || 10}`);
-      if (cell) {
-        let b = document.createElement('div');
-        b.className = 'clase-bloque';
-        b.style.height = 'calc(80px - 4px)';
-        b.innerHTML = `<strong>${m.titulo}</strong><span>${m.horarios[0]?.inicio || ''} - ${m.horarios[0]?.fin || ''}</span><span>Aula: ${m.aula}</span>`;
-        cell.appendChild(b);
-      }
-    }
+  grid.appendChild(crearCelda('grid-header', 'Hora'));
+  for (let i = 1; i <= 5; i++) grid.appendChild(crearCelda('grid-header', diasSemana[i]));
+  
+  horas.forEach((h, index) => {
+    grid.appendChild(crearCelda('grid-time', h));
+    for (let i = 1; i <= 5; i++) grid.appendChild(crearCelda('grid-cell', '', `cell-${i}-${index}`));
   });
-
-  localStorage.setItem('miHorarioUV', JSON.stringify(miHorario));
 }
 
 function crearCelda(clase, texto, id = '') {
@@ -535,6 +360,72 @@ function crearCelda(clase, texto, id = '') {
   div.textContent = texto;
   if (id) div.id = id;
   return div;
+}
+
+function horaAIndex(hora) {
+  const partes = hora.split(':');
+  return (parseInt(partes[0]) - 7) + (parseInt(partes[1]) >= 30 ? 0.5 : 0);
+}
+
+function detectarChoques() {
+  let hayChoque = false;
+  materiasEnHorario.forEach(m => m.choque = false);
+
+  for (let i = 0; i < materiasEnHorario.length; i++) {
+    for (let j = i + 1; j < materiasEnHorario.length; j++) {
+      const m1 = materiasEnHorario[i], m2 = materiasEnHorario[j];
+      const diasComunes = m1.horarios.filter(h1 => m2.horarios.some(h2 => h2.dia === h1.dia));
+      
+      diasComunes.forEach(dia => {
+        const h1 = m1.horarios.find(h => h.dia === dia.dia);
+        const h2 = m2.horarios.find(h => h.dia === dia.dia);
+        if (horaAIndex(h1.inicio) < horaAIndex(h2.fin) && horaAIndex(h2.inicio) < horaAIndex(h1.fin)) {
+          m1.choque = true; m2.choque = true; hayChoque = true;
+        }
+      });
+    }
+  }
+  document.getElementById('alertaChoque').classList.toggle('activo', hayChoque);
+}
+
+function renderizar() {
+  generarGrid();
+  detectarChoques();
+  const lista = document.getElementById('listaMaterias');
+  lista.innerHTML = '';
+
+  materiasEnHorario.forEach((m, idx) => {
+    const item = document.createElement('div');
+    item.className = `materia-item ${m.choque ? 'choque' : ''}`;
+    const textoHorario = m.horarios.map(h => `${diasSemana[h.dia] || 'Día '+h.dia} ${h.inicio}-${h.fin}`).join(', ');
+    
+    item.innerHTML = `
+      <button class="btn-eliminar" onclick="eliminarMateria(${idx})">&times;</button>
+      <strong>${m.titulo}</strong>
+      <span class="meta">NRC: ${m.nrc} | ${m.aula}</span>
+      <span class="horario-texto">${textoHorario}</span>
+      ${m.choque ? '<span style="color:#dc2626;font-weight:bold;font-size:0.85em;">⚠️ CHOQUE</span>' : ''}
+    `;
+    lista.appendChild(item);
+
+    m.horarios.forEach(h => {
+      const inicioIdx = horaAIndex(h.inicio);
+      const finIdx = horaAIndex(h.fin);
+      const duracion = Math.max(0.5, finIdx - inicioIdx);
+      
+      const cellId = `cell-${h.dia}-${Math.floor(inicioIdx)}`;
+      const cell = document.getElementById(cellId);
+      if (cell) {
+        const bloque = document.createElement('div');
+        bloque.className = `clase-bloque ${m.choque ? 'choque' : ''}`;
+        bloque.style.height = `calc(${duracion * 50}px - 4px)`;
+        bloque.innerHTML = `<strong>${m.titulo.substring(0, 14)}...</strong><span>${h.inicio}-${h.fin}</span><span>${m.aula}</span>`;
+        cell.appendChild(bloque);
+      }
+    });
+  });
+
+  localStorage.setItem('horarioLCC_V3', JSON.stringify(materiasEnHorario));
 }
 
 // Inicialización
