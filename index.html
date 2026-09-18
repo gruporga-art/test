@@ -1,435 +1,1037 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Planeador de Horarios LCC | Universidad Veracruzana</title>
-<script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
-<style>
-  :root {
-    --azul-uv: #18529D;
-    --azul-uv-dark: #0f3a73;
-    --verde-uv: #28AD56;
-    --verde-uv-dark: #1d8240;
-    --alerta: #dc2626;
-    --alerta-bg: #fef2f2;
-    --gris-claro: #f5f7fa;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, var(--azul-uv) 0%, var(--verde-uv) 100%);
-    min-height: 100vh;
-    padding: 16px;
-    color: #333;
-  }
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    overflow: hidden;
-  }
-  header {
-    background: var(--azul-uv);
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 4px solid var(--verde-uv);
-  }
-  header h1 { font-size: 1.4em; margin-bottom: 4px; }
-  header p { opacity: 0.9; font-size: 0.9em; }
-  header .uv-badge {
-    display: inline-block;
-    background: var(--verde-uv);
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.75em;
-    margin-bottom: 8px;
-    font-weight: 700;
-  }
-
-  /* Selector de Modalidad y Plan */
-  .selector-modalidad {
-    padding: 20px;
-    background: #e8f0fa;
-    border-bottom: 2px solid var(--azul-uv);
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  @media (min-width: 600px) {
-    .selector-modalidad { grid-template-columns: 1fr 1fr; }
-  }
-  .selector-group label {
-    display: block; font-weight: 700; color: var(--azul-uv-dark); font-size: 0.9em; margin-bottom: 6px;
-  }
-  .selector-group select {
-    width: 100%; padding: 10px; border: 2px solid #cbd5e0; border-radius: 8px; font-size: 16px; background: #fff;
-  }
-
-  .layout { display: grid; grid-template-columns: 1fr; gap: 0; }
-  @media (min-width: 850px) { .layout { grid-template-columns: 380px 1fr; } }
-
-  .panel { padding: 20px; background: var(--gris-claro); border-right: 1px solid #e2e8f0; }
-  .panel h2 { font-size: 1.1em; color: var(--azul-uv); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-  
-  .upload-zone {
-    border: 2px dashed #cbd5e0; border-radius: 12px; padding: 18px; text-align: center; background: #fff;
-    margin-bottom: 16px; cursor: pointer; transition: all 0.2s;
-  }
-  .upload-zone:hover { border-color: var(--azul-uv); background: #f0f4f9; }
-  .upload-zone input[type="file"] { display: none; }
-  .upload-zone .icon { font-size: 2em; margin-bottom: 6px; }
-  .upload-zone p { font-size: 0.85em; color: #64748b; }
-
-  .lista-materias { margin-top: 10px; max-height: 380px; overflow-y: auto; }
-  .materia-item {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;
-    margin-bottom: 10px; font-size: 0.85em; position: relative; border-left: 4px solid var(--verde-uv);
-  }
-  .materia-item.choque { border-left-color: var(--alerta); background: var(--alerta-bg); }
-  .materia-item strong { display: block; color: var(--azul-uv); margin-bottom: 4px; font-size: 1.05em; }
-  .materia-item .meta { color: #475569; display: block; margin-bottom: 2px; }
-  .materia-item .horario-texto { color: var(--verde-uv-dark); font-weight: 600; display: block; margin-top: 6px; font-size: 0.9em; }
-  
-  .btn-agregar {
-    width: 100%; margin-top: 10px; padding: 8px; background: var(--azul-uv); color: #fff;
-    border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.9em;
-  }
-  .btn-eliminar {
-    position: absolute; top: 8px; right: 8px; background: none; border: none;
-    color: var(--alerta); font-size: 1.3em; cursor: pointer; padding: 4px;
-  }
-
-  .alerta-choque {
-    background: var(--alerta-bg); color: var(--alerta); padding: 12px; border-radius: 8px;
-    margin-bottom: 16px; font-size: 0.9em; display: none; border: 1px solid var(--alerta); font-weight: 600;
-  }
-  .alerta-choque.activo { display: block; }
-
-  .horario-container { padding: 20px; overflow-x: auto; }
-  .horario-grid {
-    display: grid; grid-template-columns: 60px repeat(5, 1fr); grid-template-rows: 40px repeat(14, 50px);
-    gap: 1px; background: #e2e8f0; border: 1px solid #e2e8f0; min-width: 650px;
-  }
-  .grid-header { background: var(--azul-uv); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.85em; }
-  .grid-time { background: var(--gris-claro); display: flex; align-items: center; justify-content: center; font-size: 0.75em; color: #64748b; font-weight: 600; }
-  .grid-cell { background: #fff; position: relative; }
-  
-  .clase-bloque {
-    position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px;
-    background: var(--verde-uv); color: #fff; border-radius: 6px; padding: 4px;
-    font-size: 0.7em; display: flex; flex-direction: column; justify-content: center;
-    align-items: center; text-align: center; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); z-index: 10;
-  }
-  .clase-bloque.choque { background: var(--alerta); }
-
-  .btn-limpiar { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 16px; background: #ef4444; color: #fff; }
-  .btn-print { width: 100%; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-top: 8px; background: #64748b; color: #fff; }
-
-  footer { text-align: center; padding: 16px; background: var(--gris-claro); font-size: 0.8em; color: #64748b; border-top: 3px solid var(--verde-uv); }
-
-  @media print {
-    body { background: #fff; padding: 0; }
-    .selector-modalidad, .panel, footer, .btn-agregar, .btn-eliminar, .btn-limpiar, .btn-print, .upload-zone { display: none !important; }
-    .container { box-shadow: none; max-width: 100%; }
-    .layout { grid-template-columns: 1fr; }
-    .horario-container { overflow: visible; }
-    .horario-grid { min-width: 100%; }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeador de Horarios Facico | Universidad Veracruzana</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .uv {
+            color: #764ba2;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        
+        .selection-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .selection-group {
+            margin-bottom: 20px;
+        }
+        
+        .selection-group h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .main-content {
+            display: none;
+        }
+        
+        .main-content.active {
+            display: block;
+        }
+        
+        .toolbar {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: #f8f9fa;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .grid-container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 80px repeat(5, 1fr);
+            gap: 2px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        
+        .grid-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        
+        .time-slot {
+            background: #f8f9fa;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.85em;
+            font-weight: 600;
+            border-radius: 5px;
+        }
+        
+        .course-cell {
+            min-height: 80px;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .course-cell:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .course-cell.conflict {
+            background: #dc3545 !important;
+            color: white;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .course-info {
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .course-nrc {
+            font-size: 0.75em;
+            opacity: 0.9;
+        }
+        
+        .course-block {
+            font-size: 0.75em;
+            opacity: 0.85;
+            margin-top: 3px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 900px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .modal-header h2 {
+            color: #667eea;
+        }
+        
+        .close-modal {
+            font-size: 2em;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+        }
+        
+        .close-modal:hover {
+            color: #333;
+        }
+        
+        .course-list {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .course-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .course-item:hover {
+            background: #e9ecef;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+        
+        .course-item.added {
+            background: #d4edda;
+            border-color: #28a745;
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .course-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .course-details {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert.active {
+            display: block;
+        }
+        
+        .alert-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+        
+        .alert-danger {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .info-box a {
+            color: #1976D2;
+            text-decoration: underline;
+        }
+        
+        .footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .toolbar, .selection-panel, .btn {
+                display: none !important;
+            }
+            
+            .grid-container {
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .schedule-grid {
+                grid-template-columns: 60px repeat(5, 1fr);
+                font-size: 0.8em;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <div class="uv-badge">UNIVERSIDAD VERACRUZANA</div>
-    <h1>📅 Planeador de Horarios LCC</h1>
-    <p>Licenciatura en Ciencias de la Comunicación (Agosto 2026 - Enero 2027)</p>
-  </header>
-
-  <!-- Paso 1: Selección de Modalidad y Plan -->
-  <div class="selector-modalidad">
-    <div class="selector-group">
-      <label for="selectModalidad">1. Selecciona tu Modalidad:</label>
-      <select id="selectModalidad" onchange="cambiarConfiguracion()">
-        <option value="escolarizado">Escolarizado (Lunes a Viernes)</option>
-        <option value="abierto">Abierto (Sábados por Bloques)</option>
-      </select>
-    </div>
-    <div class="selector-group">
-      <label for="selectPlan">2. Selecciona tu Plan de Estudios:</label>
-      <select id="selectPlan" onchange="cambiarConfiguracion()">
-        <option value="2025">Plan 2025 (Nuevo Plan)</option>
-        <option value="2004">Plan 2004 (Vigente)</option>
-      </select>
-    </div>
-  </div>
-
-  <div class="layout">
-    <div class="panel">
-      <h2>📂 Cargar Oferta Académica</h2>
-      
-      <div class="alerta-choque" id="alertaChoque">
-        ⚠️ ¡Choque de horario detectado! Revisa las materias marcadas en rojo.
-      </div>
-
-      <label class="upload-zone" for="fileInput">
-        <div class="icon">📊</div>
-        <strong>Cargar Excel de Oferta (SYRPRAC)</strong>
-        <p id="textoArchivoRecomendado">Selecciona el archivo Excel correspondiente</p>
-        <input type="file" id="fileInput" accept=".xlsx, .xls" onchange="procesarExcelUV(this)">
-      </label>
-
-      <div id="listaOferta" class="lista-materias">
-        <p style="text-align:center; color:#64748b; font-style:italic; padding:20px;">
-          Carga el archivo Excel para ver las materias disponibles.
-        </p>
-      </div>
-
-      <button class="btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
-      <button class="btn-limpiar" onclick="limpiarTodo()">🗑️ Limpiar Mi Horario</button>
-
-      <h3 style="font-size:1em; color:var(--azul-uv); margin-top:24px; margin-bottom:10px;">📚 Tu Horario Seleccionado</h3>
-      <div class="lista-materias" id="listaMaterias"></div>
-    </div>
-
-    <div class="horario-container">
-      <div class="horario-grid" id="horarioGrid"></div>
-    </div>
-  </div>
-
-  <footer>
-    Facultad de Ciencias y Técnicas de la Comunicación · Universidad Veracruzana · 2026<br>
-    <small>Herramienta de apoyo no oficial. Consulta siempre la plataforma de la UV.</small>
-  </footer>
-</div>
-
-<script>
-let horas = [];
-for (let h = 7; h <= 20; h++) horas.push(`${h.toString().padStart(2, '0')}:00`);
-
-let diasSemana = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-let materiasEnHorario = JSON.parse(localStorage.getItem('horarioLCC_V3') || '[]');
-let ofertaProcesada = [];
-
-function cambiarConfiguracion() {
-  const mod = document.getElementById('selectModalidad').value;
-  const plan = document.getElementById('selectPlan').value;
-  const infoTxt = document.getElementById('textoArchivoRecomendado');
-  
-  if (mod === 'abierto') {
-    diasSemana = ['', 'Bloque 1', 'Bloque 2', 'Bloque 3', 'Bloque 4', 'Bloque 5'];
-    infoTxt.textContent = `Sube el archivo SYRPRAC-CSCO-${plan==='2004'?'04':'25'}-A-CR-202701.xlsx`;
-  } else {
-    diasSemana = ['', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
-    infoTxt.textContent = `Sube el archivo SYRPRAC-CSCO-${plan==='2004'?'04':'25'}-E-CR-202701.xlsx`;
-  }
-  generarGrid();
-  renderizar();
-}
-
-function normalizarHora(valor) {
-  if (!valor || valor === "0" || valor === 0) return null;
-  let str = String(valor).trim();
-  let match = str.match(/^(\d{1,2})(\d{2})$/);
-  if (match) {
-    let h = match[1].padStart(2, '0');
-    let m = match[2];
-    if (m === "59") {
-      let hNum = parseInt(h) + 1;
-      return `${hNum.toString().padStart(2, '0')}:00`;
-    }
-    return `${h}:${m}`;
-  }
-  return null;
-}
-
-function procesarExcelUV(input) {
-  const file = input.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const data = new Uint8Array(e.target.result);
-      const workbook = XLSX.read(data, { type: 'array' });
-      const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
-
-      const cursosAgrupados = {};
-
-      jsonData.forEach(row => {
-        const nrc = String(row.SSBSECT_CRN || "").trim();
-        if (!nrc || nrc === "undefined" || nrc === "SSBSECT_CRN") return;
-
-        if (!cursosAgrupados[nrc]) {
-          cursosAgrupados[nrc] = {
-            nrc: nrc,
-            titulo: String(row.TITULO || "Sin nombre").trim(),
-            docente: String(row.NOMBRED || "Por asignar").trim(),
-            aula: String(row.SSRMEET_ROOM_CODE || "").trim(),
-            edificio: String(row.SSRMEET_BLDG_CODE || "").trim(),
-            horarios: []
-          };
-        }
-
-        const agregarSiExiste = (dia, inicioVal, finVal) => {
-          const inicio = normalizarHora(inicioVal);
-          const fin = normalizarHora(finVal);
-          if (inicio && fin) {
-            const yaExiste = cursosAgrupados[nrc].horarios.some(h => h.dia === dia && h.inicio === inicio);
-            if (!yaExiste) cursosAgrupados[nrc].horarios.push({ dia, inicio, fin });
-          }
-        };
-
-        agregarSiExiste(1, row.IL, row.FL);
-        agregarSiExiste(2, row.IM, row.FM);
-        agregarSiExiste(3, row.II, row.FI);
-        agregarSiExiste(4, row.IJ, row.FJ);
-        agregarSiExiste(5, row.IV, row.FV);
+    <div class="container">
+        <div class="header">
+            <h1>📅 Planeador de Horarios Facico</h1>
+            <div class="uv">UNIVERSIDAD VERACRUZANA</div>
+            <p style="margin-top: 10px; color: #666;">Periodo Agosto 2026 - Enero 2027</p>
+        </div>
         
-        // Soporte adicional si el día sábado viene en columna IS/FS
-        if (row.IS && row.FS) agregarSiExiste(1, row.IS, row.FS);
-      });
+        <div class="selection-panel" id="selectionPanel">
+            <div class="selection-group">
+                <h3>¿En qué modalidad estudias la Licenciatura en Ciencias de la Comunicación?</h3>
+                <p style="margin-bottom: 15px; color: #666;">La Facultad ofrece la Licenciatura en Ciencias de la Comunicación en dos modalidades distintas Escolarizado y Abierto.</p>
+                <div class="button-group">
+                    <button class="btn" onclick="selectModality('escolarizado')">
+                        <strong>Escolarizado</strong><br>
+                        <small>Clases de Lunes a Viernes, en horarios fijos durante todo el periodo.</small>
+                    </button>
+                    <button class="btn" onclick="selectModality('abierto')">
+                        <strong>Abierto</strong><br>
+                        <small>Clases los Sábados, organizadas en bloques matutinos y vespertinos, según el calendario oficial.</small>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="selection-group" id="planSelection" style="display: none;">
+                <h3>¿A qué plan de estudios perteneces?</h3>
+                <p style="margin-bottom: 15px; color: #666;">Esto determina qué Experiencias Educativas verás disponibles para armar tu horario.</p>
+                <div class="button-group">
+                    <button class="btn" onclick="selectPlan('2004')">
+                        <strong>Plan 2004</strong><br>
+                        <small>Si te inscribiste a la Facultad de Ciencias y Técnicas de la Comunicación en <strong>2024 o antes</strong>. Podrás ver, además, la equivalencia de cada Experiencia Educativa en el nuevo Plan 2025.</small>
+                    </button>
+                    <button class="btn" onclick="selectPlan('2025')">
+                        <strong>Plan 2025</strong><br>
+                        <small>Si te inscribiste a la Facultad <strong>a partir del 2025</strong>. Verás únicamente las Experiencias Educativas vigentes en el Plan 2025.</small>
+                    </button>
+                </div>
+                <button class="btn" onclick="backToModality()" style="margin-top: 15px;">← Cambiar modalidad</button>
+            </div>
+        </div>
+        
+        <div class="main-content" id="mainContent">
+            <div class="info-box">
+                <strong> En modalidad Abierto</strong> cada Experiencia Educativa se imparte en un <strong>bloque</strong> (Del 1 a 5, matutino o vespertino) durante <strong>tres sábados</strong>. Consulta las fechas exactas de cada bloque en el 
+                <a href="https://www.uv.mx/escolar/calendarios/2026/comunicacion.html" target="_blank">calendario oficial de la facultad</a>.
+            </div>
+            
+            <div class="toolbar">
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-label"> Oferta Académica</div>
+                        <div class="stat-value" id="totalCourses">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Experiencias Educativas</div>
+                        <div class="stat-value" id="selectedCourses">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Créditos</div>
+                        <div class="stat-value" id="totalCredits">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Horas/Semana</div>
+                        <div class="stat-value" id="totalHours">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">⚠️ Choques</div>
+                        <div class="stat-value" id="conflictCount">0</div>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-primary" onclick="openCourseModal()">➕ Agregar Experiencia Educativa</button>
+                    <button class="btn" onclick="exportToPDF()">🖨️ Imprimir / Guardar PDF</button>
+                    <button class="btn btn-danger" onclick="clearSchedule()">️ Limpiar Mi Horario</button>
+                </div>
+            </div>
+            
+            <div class="alert alert-warning" id="warningAlert">
+                <strong>️ ¡Choque de horario detectado!</strong> Quita una de las Experiencias Educativas marcadas en rojo tocándola en la cuadrícula.
+            </div>
+            
+            <div class="grid-container">
+                <h3 style="margin-bottom: 15px; color: #333;">👆 Toca una Experiencia Educativa en la cuadrícula para quitarla de tu horario.</h3>
+                <div id="scheduleGrid" class="schedule-grid"></div>
+            </div>
+        </div>
+        
+        <div class="modal" id="courseModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>➕ Agregar Experiencia Educativa</h2>
+                    <span class="close-modal" onclick="closeCourseModal()">&times;</span>
+                </div>
+                <div id="courseList" class="course-list"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Facultad de Ciencias y Técnicas de la Comunicación · Universidad Veracruzana · 2026</strong></p>
+            <p>Verifica siempre la oferta oficial en la plataforma de la UV (<a href="https://www.uv.mx/veracruz/fcc/programacion-academica" style="color: white; text-decoration: underline;">www.uv.mx/veracruz/fcc/programacion-academica</a>).</p>
+            <p>Herramienta de apoyo diseñada por el docente <a href="mailto:alfreyes@tuv.mx" style="color: white; text-decoration: underline;">Dr. Alfredo Reyes Gutiérrez</a> para sus Tutorados.</p>
+        </div>
+    </div>
 
-      ofertaProcesada = Object.values(cursosAgrupados);
-      mostrarOfertaEnLista();
-      alert(`✅ Se cargaron ${ofertaProcesada.length} experiencias educativas correctamente.`);
-    } catch (error) {
-      console.error(error);
-      alert('Error al leer el archivo Excel.');
-    }
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function mostrarOfertaEnLista() {
-  const contenedor = document.getElementById('listaOferta');
-  contenedor.innerHTML = '';
-  if (ofertaProcesada.length === 0) {
-    contenedor.innerHTML = '<p style="text-align:center; color:#dc2626; padding:20px;">No se encontraron materias válidas.</p>';
-    return;
-  }
-
-  ofertaProcesada.forEach((m, idx) => {
-    m.horarios.sort((a, b) => a.dia - b.dia);
-    const textoHorario = m.horarios.map(h => `${diasSemana[h.dia] || 'Día '+h.dia} ${h.inicio}-${h.fin}`).join(' | ');
-
-    const div = document.createElement('div');
-    div.className = 'materia-item';
-    div.innerHTML = `
-      <strong>${m.titulo}</strong>
-      <span class="meta">🔑 NRC: ${m.nrc} | 👤 ${m.docente}</span>
-      <span class="meta">🏫 ${m.edificio} ${m.aula}</span>
-      <span class="horario-texto">🕒 ${textoHorario}</span>
-      <button class="btn-agregar" onclick="agregarDesdeOferta(${idx})">+ Agregar al Horario</button>
-    `;
-    contenedor.appendChild(div);
-  });
-}
-
-function agregarDesdeOferta(idx) {
-  const m = ofertaProcesada[idx];
-  if (materiasEnHorario.some(mat => mat.nrc === m.nrc)) {
-    alert('⚠️ Esta materia ya está en tu horario.');
-    return;
-  }
-  materiasEnHorario.push({ ...m, choque: false });
-  renderizar();
-}
-
-function eliminarMateria(idx) { materiasEnHorario.splice(idx, 1); renderizar(); }
-function limpiarTodo() { if (confirm('¿Borrar todo tu horario?')) { materiasEnHorario = []; renderizar(); } }
-
-function generarGrid() {
-  const grid = document.getElementById('horarioGrid');
-  grid.innerHTML = '';
-  grid.appendChild(crearCelda('grid-header', 'Hora'));
-  for (let i = 1; i <= 5; i++) grid.appendChild(crearCelda('grid-header', diasSemana[i]));
-  
-  horas.forEach((h, index) => {
-    grid.appendChild(crearCelda('grid-time', h));
-    for (let i = 1; i <= 5; i++) grid.appendChild(crearCelda('grid-cell', '', `cell-${i}-${index}`));
-  });
-}
-
-function crearCelda(clase, texto, id = '') {
-  const div = document.createElement('div');
-  div.className = clase;
-  div.textContent = texto;
-  if (id) div.id = id;
-  return div;
-}
-
-function horaAIndex(hora) {
-  const partes = hora.split(':');
-  return (parseInt(partes[0]) - 7) + (parseInt(partes[1]) >= 30 ? 0.5 : 0);
-}
-
-function detectarChoques() {
-  let hayChoque = false;
-  materiasEnHorario.forEach(m => m.choque = false);
-
-  for (let i = 0; i < materiasEnHorario.length; i++) {
-    for (let j = i + 1; j < materiasEnHorario.length; j++) {
-      const m1 = materiasEnHorario[i], m2 = materiasEnHorario[j];
-      const diasComunes = m1.horarios.filter(h1 => m2.horarios.some(h2 => h2.dia === h1.dia));
-      
-      diasComunes.forEach(dia => {
-        const h1 = m1.horarios.find(h => h.dia === dia.dia);
-        const h2 = m2.horarios.find(h => h.dia === dia.dia);
-        if (horaAIndex(h1.inicio) < horaAIndex(h2.fin) && horaAIndex(h2.inicio) < horaAIndex(h1.fin)) {
-          m1.choque = true; m2.choque = true; hayChoque = true;
+    <script>
+        let currentModality = '';
+        let currentPlan = '';
+        let selectedCoursesList = [];
+        let allCourses = [];
+        let nrcBlockMap = {}; // Mapa para almacenar NRC -> Bloque desde el archivo NRC-SIN-BLOQUE.xlsx
+        
+        // Días de la semana
+        const days = ['LUN', 'MAR', 'MIE', 'JUE', 'VIE'];
+        
+        // Horarios (6:00 a 22:00)
+        const timeSlots = [];
+        for (let hour = 6; hour <= 22; hour++) {
+            timeSlots.push(`${hour.toString().padStart(2, '0')}:00`);
         }
-      });
-    }
-  }
-  document.getElementById('alertaChoque').classList.toggle('activo', hayChoque);
-}
 
-function renderizar() {
-  generarGrid();
-  detectarChoques();
-  const lista = document.getElementById('listaMaterias');
-  lista.innerHTML = '';
+        // Función para cargar el archivo NRC-SIN-BLOQUE.xlsx
+        async function loadNRCBlockMap() {
+            try {
+                const response = await fetch('NRC-SIN-BLOQUE.xlsx');
+                const data = await response.arrayBuffer();
+                const workbook = XLSX.read(data, { type: 'array' });
+                
+                // Determinar qué hoja leer según el plan
+                const sheetName = currentPlan === '2004' ? '2004' : '2025';
+                
+                if (workbook.Sheets[sheetName]) {
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                    
+                    // Limpiar el mapa anterior
+                    nrcBlockMap = {};
+                    
+                    // Procesar los datos (asumiendo que la primera columna es NRC y la segunda es Bloque)
+                    for (let i = 1; i < jsonData.length; i++) { // Empezar en 1 para saltar encabezados
+                        const row = jsonData[i];
+                        if (row && row[0] && row[1]) {
+                            const nrc = String(row[0]).trim();
+                            const bloque = String(row[1]).trim();
+                            nrcBlockMap[nrc] = bloque;
+                        }
+                    }
+                    
+                    console.log(`NRC-SIN-BLOQUE cargado: ${Object.keys(nrcBlockMap).length} NRCs encontrados para Plan ${currentPlan}`);
+                } else {
+                    console.warn(`Hoja '${sheetName}' no encontrada en NRC-SIN-BLOQUE.xlsx`);
+                }
+            } catch (error) {
+                console.error('Error cargando NRC-SIN-BLOQUE.xlsx:', error);
+                // Si no existe el archivo, continuar sin él
+                nrcBlockMap = {};
+            }
+        }
 
-  materiasEnHorario.forEach((m, idx) => {
-    const item = document.createElement('div');
-    item.className = `materia-item ${m.choque ? 'choque' : ''}`;
-    const textoHorario = m.horarios.map(h => `${diasSemana[h.dia] || 'Día '+h.dia} ${h.inicio}-${h.fin}`).join(', ');
-    
-    item.innerHTML = `
-      <button class="btn-eliminar" onclick="eliminarMateria(${idx})">&times;</button>
-      <strong>${m.titulo}</strong>
-      <span class="meta">NRC: ${m.nrc} | ${m.aula}</span>
-      <span class="horario-texto">${textoHorario}</span>
-      ${m.choque ? '<span style="color:#dc2626;font-weight:bold;font-size:0.85em;">⚠️ CHOQUE</span>' : ''}
-    `;
-    lista.appendChild(item);
+        // Función para obtener el bloque de un NRC
+        function getBlockForNRC(nrc, courseData) {
+            // Primero intentar obtener el bloque de los datos del curso (SYRSEIL)
+            if (courseData && courseData.bloque) {
+                return courseData.bloque;
+            }
+            
+            // Si no está en SYRSEIL, buscar en el archivo NRC-SIN-BLOQUE
+            if (nrcBlockMap[nrc]) {
+                return nrcBlockMap[nrc];
+            }
+            
+            // Si no se encuentra en ningún lado, retornar un valor por defecto
+            return 'N/A';
+        }
 
-    m.horarios.forEach(h => {
-      const inicioIdx = horaAIndex(h.inicio);
-      const finIdx = horaAIndex(h.fin);
-      const duracion = Math.max(0.5, finIdx - inicioIdx);
-      
-      const cellId = `cell-${h.dia}-${Math.floor(inicioIdx)}`;
-      const cell = document.getElementById(cellId);
-      if (cell) {
-        const bloque = document.createElement('div');
-        bloque.className = `clase-bloque ${m.choque ? 'choque' : ''}`;
-        bloque.style.height = `calc(${duracion * 50}px - 4px)`;
-        bloque.innerHTML = `<strong>${m.titulo.substring(0, 14)}...</strong><span>${h.inicio}-${h.fin}</span><span>${m.aula}</span>`;
-        cell.appendChild(bloque);
-      }
-    });
-  });
+        function selectModality(modality) {
+            currentModality = modality;
+            document.getElementById('planSelection').style.display = 'block';
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.selection-panel .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.btn').classList.add('active');
+        }
 
-  localStorage.setItem('horarioLCC_V3', JSON.stringify(materiasEnHorario));
-}
+        function backToModality() {
+            document.getElementById('planSelection').style.display = 'none';
+            currentPlan = '';
+        }
 
-// Inicialización
-cambiarConfiguracion();
-</script>
+        async function selectPlan(plan) {
+            currentPlan = plan;
+            document.getElementById('selectionPanel').style.display = 'none';
+            document.getElementById('mainContent').classList.add('active');
+            
+            // Cargar el archivo NRC-SIN-BLOQUE.xlsx
+            await loadNRCBlockMap();
+            
+            // Cargar datos según modalidad y plan
+            await loadCourseData();
+            
+            // Inicializar grid
+            renderScheduleGrid();
+            updateStats();
+        }
+
+        async function loadCourseData() {
+            allCourses = [];
+            
+            try {
+                let files = [];
+                
+                if (currentModality === 'abierto') {
+                    // Archivos para modalidad Abierto
+                    if (currentPlan === '2004') {
+                        files = ['SYRSEIL-CSCO-04-A-CR-202701.xlsx', 'SYRPRAC-CSCO-04-A-CR-202701.xlsx'];
+                    } else {
+                        files = ['SYRSEIL-CSCO-25-A-CR-202701.xlsx', 'SYRPRAC-CSCO-25-A-CR-202701.xlsx'];
+                    }
+                } else {
+                    // Archivos para modalidad Escolarizado
+                    if (currentPlan === '2004') {
+                        files = ['SYRSEIL-CSCO-04-E-CR-202701.xlsx', 'SYRPRAC-CSCO-04-E-CR-202701.xlsx'];
+                    } else {
+                        files = ['SYRSEIL-CSCO-25-E-CR-202701.xlsx', 'SYRPRAC-CSCO-25-E-CR-202701.xlsx'];
+                    }
+                }
+                
+                // Procesar archivos SYRSEIL
+                const syrseilFile = files[0];
+                const syrseilResponse = await fetch(syrseilFile);
+                const syrseilData = await syrseilResponse.arrayBuffer();
+                const syrseilWorkbook = XLSX.read(syrseilData, { type: 'array' });
+                const syrseilSheet = syrseilWorkbook.Sheets[syrseilWorkbook.SheetNames[0]];
+                const syrseilJson = XLSX.utils.sheet_to_json(syrseilSheet, { header: 1 });
+                
+                // Procesar archivos SYRPRAC
+                const syrpracFile = files[1];
+                const syrpracResponse = await fetch(syrpracFile);
+                const syrpracData = await syrpracResponse.arrayBuffer();
+                const syrpracWorkbook = XLSX.read(syrpracData, { type: 'array' });
+                const syrpracSheet = syrpracWorkbook.Sheets[syrpracWorkbook.SheetNames[0]];
+                const syrpracJson = XLSX.utils.sheet_to_json(syrpracSheet, { header: 1 });
+                
+                // Crear mapa de NRC a bloque desde SYRPRAC
+                const nrcToBlockMap = {};
+                for (let row of syrpracJson) {
+                    if (row[13]) { // NRC en columna 14 (índice 13)
+                        const nrc = String(row[13]).trim();
+                        // Buscar el bloque en las columnas de horario
+                        let bloque = 'N/A';
+                        
+                        if (currentModality === 'abierto') {
+                            // Para abierto, determinar el bloque basado en el día y hora
+                            // Las columnas de días están en índices diferentes según el archivo
+                            for (let i = 30; i < row.length; i++) {
+                                if (row[i] && String(row[i]).includes(':')) {
+                                    // Encontró un horario, determinar bloque
+                                    const time = String(row[i]);
+                                    const dayIndex = i - 30; // Ajustar según la estructura
+                                    if (dayIndex >= 0 && dayIndex < 5) {
+                                        const day = days[dayIndex];
+                                        // Determinar si es matutino o vespertino
+                                        const hour = parseInt(time.split(':')[0]);
+                                        const period = hour < 14 ? 'M' : 'V';
+                                        // Determinar número de bloque (1-5)
+                                        const blockNum = Math.floor((hour - 6) / 3.5) + 1;
+                                        bloque = `${period}${blockNum}`;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                        
+                        nrcToBlockMap[nrc] = bloque;
+                    }
+                }
+                
+                // Procesar cursos de SYRSEIL
+                for (let i = 1; i < syrseilJson.length; i++) {
+                    const row = syrseilJson[i];
+                    if (row[13]) { // NRC en columna 14 (índice 13)
+                        const nrc = String(row[13]).trim();
+                        const course = {
+                            nrc: nrc,
+                            subject: row[19] || '',
+                            number: row[20] || '',
+                            title: row[25] || '',
+                            credits: parseInt(row[21]) || 0,
+                            hours: parseInt(row[21]) || 0,
+                            teacher: row[24] || '',
+                            bloque: nrcToBlockMap[nrc] || 'N/A',
+                            schedule: parseSchedule(row, syrseilJson[0])
+                        };
+                        allCourses.push(course);
+                    }
+                }
+                
+                console.log(`Cursos cargados: ${allCourses.length}`);
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                alert('Error al cargar los datos de cursos. Verifica que los archivos Excel estén disponibles.');
+            }
+        }
+
+        function parseSchedule(row, header) {
+            const schedule = [];
+            
+            // Encontrar índices de columnas de días
+            const dayIndices = {};
+            if (header) {
+                for (let i = 0; i < header.length; i++) {
+                    const col = String(header[i]).toUpperCase().trim();
+                    if (col === 'LUN') dayIndices.LUN = i;
+                    else if (col === 'MAR') dayIndices.MAR = i;
+                    else if (col === 'MIE') dayIndices.MIE = i;
+                    else if (col === 'JUE') dayIndices.JUE = i;
+                    else if (col === 'VIE') dayIndices.VIE = i;
+                    else if (col === 'SAB') dayIndices.SAB = i;
+                }
+            }
+            
+            // Para modalidad abierto, solo considerar sábado
+            if (currentModality === 'abierto') {
+                if (dayIndices.SAB !== undefined && row[dayIndices.SAB]) {
+                    const timeStr = String(row[dayIndices.SAB]).trim();
+                    if (timeStr && timeStr.includes('-')) {
+                        const [start, end] = timeStr.split('-');
+                        schedule.push({
+                            day: 'SAB',
+                            startTime: start.trim(),
+                            endTime: end.trim()
+                        });
+                    }
+                }
+            } else {
+                // Para escolarizado, considerar LUN-VIE
+                for (const day of days) {
+                    if (dayIndices[day] !== undefined && row[dayIndices[day]]) {
+                        const timeStr = String(row[dayIndices[day]]).trim();
+                        if (timeStr && timeStr.includes('-')) {
+                            const [start, end] = timeStr.split('-');
+                            schedule.push({
+                                day: day,
+                                startTime: start.trim(),
+                                endTime: end.trim()
+                            });
+                        }
+                    }
+                }
+            }
+            
+            return schedule;
+        }
+
+        function renderScheduleGrid() {
+            const grid = document.getElementById('scheduleGrid');
+            grid.innerHTML = '';
+            
+            // Header
+            const cornerCell = document.createElement('div');
+            cornerCell.className = 'grid-header';
+            cornerCell.textContent = 'HORA';
+            grid.appendChild(cornerCell);
+            
+            for (const day of currentModality === 'abierto' ? ['SAB'] : days) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'grid-header';
+                dayCell.textContent = day;
+                grid.appendChild(dayCell);
+            }
+            
+            // Time slots
+            for (const time of timeSlots) {
+                const timeCell = document.createElement('div');
+                timeCell.className = 'time-slot';
+                timeCell.textContent = time;
+                grid.appendChild(timeCell);
+                
+                for (let d = 0; d < (currentModality === 'abierto' ? 1 : 5); d++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'course-cell';
+                    cell.dataset.time = time;
+                    cell.dataset.day = currentModality === 'abierto' ? 'SAB' : days[d];
+                    grid.appendChild(cell);
+                }
+            }
+            
+            // Render selected courses
+            renderSelectedCourses();
+        }
+
+        function renderSelectedCourses() {
+            // Clear all cells
+            document.querySelectorAll('.course-cell').forEach(cell => {
+                cell.innerHTML = '';
+                cell.style.background = '';
+                cell.classList.remove('conflict');
+            });
+            
+            // Check for conflicts
+            const conflicts = checkConflicts();
+            
+            // Render each course
+            selectedCoursesList.forEach((course, index) => {
+                const bloque = getBlockForNRC(course.nrc, course);
+                
+                course.schedule.forEach(slot => {
+                    if (currentModality === 'escolarizado' && !days.includes(slot.day)) return;
+                    if (currentModality === 'abierto' && slot.day !== 'SAB') return;
+                    
+                    const startRow = timeSlots.indexOf(slot.startTime) + 1;
+                    const endRow = timeSlots.indexOf(slot.endTime) + 1;
+                    const dayCol = currentModality === 'abierto' ? 1 : days.indexOf(slot.day) + 1;
+                    
+                    for (let row = startRow; row < endRow && row < timeSlots.length + 1; row++) {
+                        const cellIndex = row * (currentModality === 'abierto' ? 2 : 6) + dayCol - 1;
+                        const cell = document.querySelectorAll('.course-cell')[cellIndex];
+                        
+                        if (cell) {
+                            if (row === startRow) {
+                                const isConflict = conflicts.some(c => 
+                                    c.nrc === course.nrc && 
+                                    c.day === slot.day && 
+                                    c.time === slot.startTime
+                                );
+                                
+                                cell.style.background = isConflict ? '#dc3545' : getRandomColor(course.nrc);
+                                cell.style.color = 'white';
+                                cell.innerHTML = `
+                                    <div class="course-info">${course.title}</div>
+                                    <div class="course-nrc">NRC: ${course.nrc}</div>
+                                    <div class="course-block">Bloque: ${bloque}</div>
+                                `;
+                                cell.onclick = () => removeCourse(index);
+                                
+                                if (isConflict) {
+                                    cell.classList.add('conflict');
+                                }
+                            } else {
+                                cell.style.background = getRandomColor(course.nrc);
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        function getRandomColor(nrc) {
+            const colors = [
+                '#667eea', '#764ba2', '#f093fb', '#f5576c',
+                '#4facfe', '#00f2fe', '#43e97b', '#38f9d7',
+                '#fa709a', '#fee140', '#30cfd0', '#330867'
+            ];
+            let hash = 0;
+            for (let i = 0; i < nrc.length; i++) {
+                hash = nrc.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return colors[Math.abs(hash) % colors.length];
+        }
+
+        function checkConflicts() {
+            const conflicts = [];
+            const timeMap = {};
+            
+            selectedCoursesList.forEach(course => {
+                course.schedule.forEach(slot => {
+                    const key = `${slot.day}-${slot.startTime}`;
+                    if (timeMap[key]) {
+                        conflicts.push({
+                            nrc: course.nrc,
+                            day: slot.day,
+                            time: slot.startTime
+                        });
+                        conflicts.push({
+                            nrc: timeMap[key].nrc,
+                            day: slot.day,
+                            time: slot.startTime
+                        });
+                    } else {
+                        timeMap[key] = { nrc: course.nrc };
+                    }
+                });
+            });
+            
+            return conflicts;
+        }
+
+        function openCourseModal() {
+            const modal = document.getElementById('courseModal');
+            const list = document.getElementById('courseList');
+            list.innerHTML = '';
+            
+            // Filter courses not already added
+            const availableCourses = allCourses.filter(c => 
+                !selectedCoursesList.find(sc => sc.nrc === c.nrc)
+            );
+            
+            availableCourses.forEach(course => {
+                const bloque = getBlockForNRC(course.nrc, course);
+                const item = document.createElement('div');
+                item.className = 'course-item';
+                item.innerHTML = `
+                    <div class="course-title">${course.title}</div>
+                    <div class="course-details">
+                        NRC: ${course.nrc} | ${course.subject} ${course.number} | 
+                        ${course.credits} créditos | ${course.hours} hrs | 
+                        Prof: ${course.teacher} | Bloque: ${bloque}
+                    </div>
+                `;
+                item.onclick = () => addCourse(course);
+                list.appendChild(item);
+            });
+            
+            modal.classList.add('active');
+        }
+
+        function closeCourseModal() {
+            document.getElementById('courseModal').classList.remove('active');
+        }
+
+        function addCourse(course) {
+            selectedCoursesList.push(course);
+            renderSelectedCourses();
+            updateStats();
+            closeCourseModal();
+        }
+
+        function removeCourse(index) {
+            selectedCoursesList.splice(index, 1);
+            renderSelectedCourses();
+            updateStats();
+        }
+
+        function updateStats() {
+            document.getElementById('totalCourses').textContent = allCourses.length;
+            document.getElementById('selectedCourses').textContent = selectedCoursesList.length;
+            
+            const totalCredits = selectedCoursesList.reduce((sum, c) => sum + c.credits, 0);
+            document.getElementById('totalCredits').textContent = totalCredits;
+            
+            const totalHours = selectedCoursesList.reduce((sum, c) => sum + c.hours, 0);
+            document.getElementById('totalHours').textContent = totalHours;
+            
+            const conflicts = checkConflicts();
+            const uniqueConflicts = new Set(conflicts.map(c => c.nrc)).size;
+            document.getElementById('conflictCount').textContent = uniqueConflicts;
+            
+            const alert = document.getElementById('warningAlert');
+            if (uniqueConflicts > 0) {
+                alert.classList.add('active');
+            } else {
+                alert.classList.remove('active');
+            }
+        }
+
+        function clearSchedule() {
+            if (confirm('¿Estás seguro de que deseas limpiar todo tu horario?')) {
+                selectedCoursesList = [];
+                renderSelectedCourses();
+                updateStats();
+            }
+        }
+
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'mm', 'letter');
+            
+            // Title
+            doc.setFontSize(20);
+            doc.text('Mi Horario - Universidad Veracruzana', 15, 20);
+            doc.setFontSize(12);
+            doc.text(`Facultad de Ciencias y Técnicas de la Comunicación`, 15, 30);
+            doc.text(`Plan ${currentPlan} - Modalidad ${currentModality === 'escolarizado' ? 'Escolarizado' : 'Abierto'}`, 15, 38);
+            doc.text(`Periodo: Agosto 2026 - Enero 2027`, 15, 46);
+            
+            // Courses table
+            let y = 60;
+            doc.setFontSize(14);
+            doc.text('Experiencias Educativas Seleccionadas:', 15, y);
+            y += 10;
+            
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'bold');
+            doc.text('NRC', 15, y);
+            doc.text('Materia', 40, y);
+            doc.text('Créditos', 120, y);
+            doc.text('Horario', 145, y);
+            doc.text('Bloque', 220, y);
+            y += 7;
+            
+            doc.setFont(undefined, 'normal');
+            selectedCoursesList.forEach(course => {
+                const bloque = getBlockForNRC(course.nrc, course);
+                if (y > 180) {
+                    doc.addPage();
+                    y = 20;
+                }
+                doc.text(course.nrc, 15, y);
+                doc.text(course.title.substring(0, 25), 40, y);
+                doc.text(String(course.credits), 120, y);
+                doc.text(course.schedule.map(s => `${s.day} ${s.startTime}-${s.endTime}`).join(', '), 145, y);
+                doc.text(bloque, 220, y);
+                y += 7;
+            });
+            
+            // Summary
+            y += 10;
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'bold');
+            doc.text(`Total de materias: ${selectedCoursesList.length}`, 15, y);
+            y += 7;
+            doc.text(`Total de créditos: ${document.getElementById('totalCredits').textContent}`, 15, y);
+            y += 7;
+            doc.text(`Total de horas: ${document.getElementById('totalHours').textContent}`, 15, y);
+            
+            doc.save(`Horario_LCC_Plan_${currentPlan}_${currentModality}.pdf`);
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('courseModal');
+            if (event.target === modal) {
+                closeCourseModal();
+            }
+        }
+    </script>
 </body>
 </html>
